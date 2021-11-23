@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: webserver
+          uri: http://localhost:8081/
+          ## 意思是对http://localhost:8080/webserver/**的请求进行拦截，转发至http://localhost:8081/**
+          predicates:
+            - Path=/webserver/**
+          ## 表示在将请求发送到下游之前从请求中剥离的路径个数，剥离1个，即http://localhost:8081/**
+          filters:
+            - StripPrefix=1
+
+        - id: webclient
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/webclient/**

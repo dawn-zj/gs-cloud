@@ -17,38 +17,34 @@
 
 	<modules>
 		<module>gs-webserver</module>
+		<module>gs-gateway</module>
 	</modules>
 
 	<properties>
 		<java.version>1.8</java.version>
 		<springboot.version>2.3.0.RELEASE</springboot.version>
+		<gateway.version>2.2.1.RELEASE</gateway.version>
 	</properties>
 
 	<!--父子全局依赖-->
-<!--	<dependencies>-->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter</artifactId>-->
-<!--			<version>${springboot.version}</version>-->
-<!--		</dependency>-->
-
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-test</artifactId>-->
-<!--			<version>${springboot.version}</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
-
-<!--	</dependencies>-->
+	<dependencies>
+	</dependencies>
 
 
 	<!--预先定义依赖，统一管理版本号，子项目中定义该依赖才生效-->
 	<dependencyManagement>
 		<dependencies>
+			<!--web模块-->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
 				<version>${springboot.version}</version>
+			</dependency>
+			<!-- spring cloud gateway 依赖 -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-gateway</artifactId>
+				<version>${gateway.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
