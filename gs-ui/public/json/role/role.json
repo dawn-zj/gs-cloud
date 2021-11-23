@@ -1,0 +1,51 @@
+{
+  "total": 2,
+  "rows": [
+    {
+      "searchValue": null,
+      "createBy": null,
+      "createTime": "2020-11-20 19:29:43",
+      "updateBy": null,
+      "updateTime": null,
+      "remark": "超级管理员",
+      "params": {},
+      "roleId": 1,
+      "roleName": "超级管理员",
+      "roleKey": "admin",
+      "roleSort": "1",
+      "dataScope": "1",
+      "menuCheckStrictly": true,
+      "deptCheckStrictly": true,
+      "status": "0",
+      "delFlag": "0",
+      "flag": false,
+      "menuIds": null,
+      "deptIds": null,
+      "admin": true
+    },
+    {
+      "searchValue": null,
+      "createBy": null,
+      "createTime": "2020-11-20 19:29:43",
+      "updateBy": null,
+      "updateTime": null,
+      "remark": "普通角色",
+      "params": {},
+      "roleId": 2,
+      "roleName": "普通角色",
+      "roleKey": "common",
+      "roleSort": "2",
+      "dataScope": "2",
+      "menuCheckStrictly": true,
+      "deptCheckStrictly": true,
+      "status": "0",
+      "delFlag": "0",
+      "flag": false,
+      "menuIds": null,
+      "deptIds": null,
+      "admin": false
+    }
+  ],
+  "code": 200,
+  "msg": null
+}

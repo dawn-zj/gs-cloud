@@ -1,0 +1,106 @@
+{
+  "msg": "操作成功",
+  "code": 200,
+  "data": [
+    {
+      "name": "System",
+      "path": "/system",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统管理",
+        "icon": "system",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "User",
+          "path": "user",
+          "hidden": false,
+          "component": "system/user/index",
+          "meta": {
+            "title": "用户管理",
+            "icon": "user",
+            "noCache": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tool",
+      "path": "/tool",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统工具",
+        "icon": "tool",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "BuildForm",
+          "path": "buildForm",
+          "hidden": false,
+          "component": "tool/buildForm/index",
+          "meta": {
+            "title": "表单构建",
+            "icon": "build",
+            "noCache": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Log",
+      "path": "/log",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "日志管理",
+        "icon": "log",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "Operlog",
+          "path": "operlog",
+          "hidden": false,
+          "component": "log/operlog/index",
+          "meta": {
+            "title": "操作日志",
+            "icon": "form",
+            "noCache": false
+          }
+        },
+        {
+          "name": "Logininfor",
+          "path": "logininfor",
+          "hidden": false,
+          "component": "log/logininfor/index",
+          "meta": {
+            "title": "登录日志",
+            "icon": "logininfor",
+            "noCache": false
+          }
+        },
+        {
+          "name": "SystemLog",
+          "path": "systemLog",
+          "hidden": false,
+          "component": "log/systemLog/index",
+          "meta": {
+            "title": "系统日志",
+            "icon": "textarea",
+            "noCache": false
+          }
+        }
+      ]
+    }
+  ]
+}
