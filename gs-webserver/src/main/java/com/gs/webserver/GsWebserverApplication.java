@@ -1,4 +1,4 @@
-package com.gs.gswebserver;
+package com.gs.webserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
