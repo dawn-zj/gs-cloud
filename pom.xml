@@ -22,6 +22,9 @@
 	</modules>
 
 	<properties>
+		<!-- 打包跳过单元测试 -->
+		<skipTests>true</skipTests>
+
 		<java.version>1.8</java.version>
 		<springboot.version>2.3.0.RELEASE</springboot.version>
 		<gateway.version>2.2.1.RELEASE</gateway.version>
@@ -29,13 +32,19 @@
 
 	<!--父子全局依赖-->
 	<dependencies>
+		<!-- 单元测试Junit5 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${springboot.version}</version>
+		</dependency>
 	</dependencies>
 
 
 	<!--预先定义依赖，统一管理版本号，子项目中定义该依赖才生效-->
 	<dependencyManagement>
 		<dependencies>
-			<!--web模块-->
+			<!-- web模块 -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
@@ -49,14 +58,5 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

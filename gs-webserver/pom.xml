@@ -25,23 +25,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!--重点4：打包，使用maven的插件进行打包时：可指定主类的类路径、并把依赖的包打进jar-->
+			<!--重点4：打包，使用maven的插件进行打包时：可指定主类的类路径、并把依赖的包打进jar
+			重点5：跳过单元测试，正常打包。在父项目properties标签里定义<skipTests>true</skipTests>
+			-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<!--指定主类-->
-					<mainClass>cn.com.infosec.netseal.webserver.WebserverApplication</mainClass>
+					<mainClass>com.gs.webserver.GsWebserverApplication</mainClass>
 				</configuration>
 <!--				<executions>-->
 <!--					<execution>-->
@@ -51,15 +47,6 @@
 <!--						</goals>-->
 <!--					</execution>-->
 <!--				</executions>-->
-			</plugin>
-			<!--重点5：关掉单元测试，否则项目无法正常启动-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18.1</version>
-				<configuration>
-					<skipTests>true</skipTests>    <!--默认关掉单元测试 -->
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
