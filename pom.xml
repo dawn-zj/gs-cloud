@@ -28,6 +28,7 @@
 		<java.version>1.8</java.version>
 		<springboot.version>2.3.0.RELEASE</springboot.version>
 		<gateway.version>2.2.1.RELEASE</gateway.version>
+		<common.version>1.0.0-SNAPSHOT</common.version>
 	</properties>
 
 	<!--父子全局依赖-->
@@ -55,6 +56,13 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-gateway</artifactId>
 				<version>${gateway.version}</version>
+			</dependency>
+
+			<!--模块依赖-->
+			<dependency>
+				<groupId>com.gs</groupId>
+				<artifactId>gs-common</artifactId>
+				<version>${common.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
