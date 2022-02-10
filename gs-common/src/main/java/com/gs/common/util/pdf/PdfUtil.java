@@ -131,8 +131,8 @@ public class PdfUtil {
 	 * @param pageNumber 页码
 	 * @param x          x坐标
 	 * @param y          y坐标
-	 * @param w          图片宽度
-	 * @param h          图片高度
+	 * @param w          图片宽度，单位英寸
+	 * @param h          图片高度，单位英寸
 	 */
 	public static byte[] pdfAddImage(byte[] pdfData, byte[] photoData, int pageNumber, float x, float y, float w, float h) throws Exception {
 		PdfReader reader = null;
@@ -154,10 +154,17 @@ public class PdfUtil {
 			float widthPage = document.getPageSize().getWidth();
 			float heightPage = document.getPageSize().getHeight();
 
+			/**
+			 * 通常手机、电脑上照片默认分辨率是72或96
+			 * 实际尺寸(英寸)=像素/分辨率
+			 * 1 英寸 = 2.54 厘米
+			 * 1 厘米 = 1/2.54 英寸
+			 */
 			// Image处理
+			// todo 图片宽高入参支持厘米，由厘米转为英寸
 			Image img = Image.getInstance(photoData);
 			if (w == 0) {
-				w = img.getWidth() * 72f / 96;
+				w = img.getWidth() * 72f / 96; // 分辨率从72改为96
 			}
 			if (h == 0) {
 				h = img.getHeight() * 72f / 96;
