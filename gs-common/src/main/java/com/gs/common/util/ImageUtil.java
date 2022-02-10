@@ -31,6 +31,7 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public static byte[] cleanBGColor(byte[] bs) throws Exception {
+		// todo 去白色背景还有锯齿瑕疵，待优化
 		int imgR = 255;
 		int imgG = 255;
 		int imgB = 255;
