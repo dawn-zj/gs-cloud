@@ -22,7 +22,7 @@ public class Constants {
 	public static final String CER_SUFFIX = ".cer"; // cert文件后缀
 
 	// 项目资源
-	public static final String CONTEXT_PATH = "E:/Idea/GS/library/src/gsJar";// 项目目录相对路径
+	public static final String CONTEXT_PATH = "E:/Idea/GS/gs-cloud";// 项目目录相对路径
 	public static final String FILE_PATH = CONTEXT_PATH + "/file/";// 项目内测文件相对路径
 	public static final String FILE_OUT_PATH = CONTEXT_PATH + "/file/out/";// 项目内测输出文件相对路径
 
