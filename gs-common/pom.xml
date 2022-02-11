@@ -25,12 +25,18 @@
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.60</version>
         </dependency>
-        <!--操作PDF-->
+        <!--操作PDF itextpdf + itext-asian联合使用-->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
             <version>5.5.13</version>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext-asian</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+
 
 
         <!--系统监控：sigar下载不下来，且不同平台适用性不好-->
