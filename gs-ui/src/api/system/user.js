@@ -1,13 +1,14 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/ruoyi";
+import {loadJsonFile} from "@/utils/ruoyi";
 
 // 查询用户列表
 export function listUser(query) {
-  return request({
-    url: '/json/user/userList.json',
-    method: 'get',
-    params: query
-  })
+  return loadJsonFile('/json/user/userList.json')
+  // return request({
+  //   url: '/json/user/userList.json',
+  //   method: 'get',
+  //   params: query
+  // })
 }
 
 // 查询用户详细
