@@ -18,11 +18,13 @@ public class Circle {
     private int fix = 5;// 图章修正，画布比图章大一圈
     private String company = "电子签章管理系统系统系统";
     private String name = "测试章";
+    private String number = "5301000082888";//5301000082888
 
     private String fontType = "宋体";
 
     private Integer companySize = 20;
     private Integer nameSize = 12;
+    private Integer numberSize = 12;
 
     private Color borderColor = Color.RED;
     private Color companyColor = Color.RED;
@@ -41,6 +43,26 @@ public class Circle {
      * 单位字体的宽度缩放比率(百分比).此参数可以使字体看起来瘦长
      */
     private float companyScale = 0.7F;
+
+    public Circle() {
+
+    }
+
+    public Circle(int width, int height, String company,Integer companySize, String name, Integer nameSize,
+                  String number, Integer numberSize) {
+        this.width = width;
+        this.height = height;
+
+        this.company = company;
+        this.companySize = companySize;
+
+        this.name = name;
+        this.nameSize = nameSize;
+
+        this.number = number;
+        this.numberSize = numberSize;
+    }
+
 
     /**
      * 画圆
@@ -102,6 +124,41 @@ public class Circle {
             float x = r - h;// 绘制字符的x坐标为半径减去字高度
             g2d.translate(x, 0);// 移动到此位置,此时字的上下方向和x轴垂直
             g2d.rotate(vr);// 旋转90度,让字平行于x轴
+            g2d.scale(companyScale, 1);// 缩放字体宽度
+            g2d.drawString(String.valueOf(c), -cw / 2, 0);// 此点为字的中心点
+
+            // 将所有设置还原,等待绘制下一个
+            g2d.scale(1 / companyScale, 1);
+            g2d.rotate(-vr);
+            g2d.translate(-x, 0);
+            g2d.rotate(-radians);
+        }
+
+        // -------绘制图章单位-------
+        g2d.setFont(new Font(fontType, Font.BOLD, numberSize));
+        g2d.setColor(companyColor);
+        fm = g2d.getFontMetrics();
+        h = fm.getHeight();// 字高度
+
+        // 印章编码角度区域为8点-4点方向，共120度, 计算每个数字的旋转角度，挨个绘制
+        count = number.length();// 字数
+        // int r = width / 2;// 半径
+        angle = 100 / (count - 1);
+        start = 90 + 100 / 2 - angle / 2;// 以x轴正向为0,顺时针旋转
+        vr = Math.toRadians(-90);// 垂直旋转弧度
+        chars = number.toCharArray();
+        // for (int i = count - 1; i >= 0; i--) {
+        for (int i = 0; i < count; i++) {
+            char c = chars[i];// 需要绘制的字符
+            int cw = fm.charWidth(c);// 此字符宽度
+
+            float a = start - angle * i;// 现在角度
+            double radians = Math.toRadians(a);
+            g2d.rotate(radians);// 旋转坐标系,让要绘制的字符处于x正轴
+
+            float x = r - 5;// 绘制字符的x坐标为半径减去字高度
+            g2d.translate(x, 0);// 移动到此位置,此时字的上下方向和x轴垂直
+            g2d.rotate(vr);// 逆时针旋转90度,让字平行于x轴
             g2d.scale(companyScale, 1);// 缩放字体宽度
             g2d.drawString(String.valueOf(c), -cw / 2, 0);// 此点为字的中心点
 
