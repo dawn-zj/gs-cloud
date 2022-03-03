@@ -25,6 +25,17 @@
             "icon": "user",
             "noCache": false
           }
+        },
+        {
+          "name": "GenStamp",
+          "path": "genStamp",
+          "hidden": false,
+          "component": "system/genStamp/index",
+          "meta": {
+            "title": "制图管理",
+            "icon": "user",
+            "noCache": false
+          }
         }
       ]
     },
