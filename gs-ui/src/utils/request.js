@@ -5,10 +5,12 @@ import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
-// 创建axios实例
+
+// 创建访问后台的axios实例
 const service = axios.create({
-  // axios中请求配置有baseURL选项，表示请求URL公共部分，若读取的是本地json文件则不需要配置
-  baseURL: process.env.NODE_ENV === "production" ?  process.env.VUE_APP_BASE_API : "/",
+  // axios中请求配置有baseURL选项，表示请求URL公共部分，配置为后台项目名
+  // 开发环境，则配置虚拟项目名，走代理转发；生产环境，配置为后台实际项目名
+  baseURL: process.env.VUE_APP_WEB_API,
   // 超时
   timeout: 10000
 })
