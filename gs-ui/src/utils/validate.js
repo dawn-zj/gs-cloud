@@ -81,3 +81,68 @@ export function isArray(arg) {
   }
   return Array.isArray(arg)
 }
+
+/**
+ * 校验字节长度，不指定message时根据min和max自动生成提示，不指定min和max时默认0-50个字节
+ * @param rule
+ * @param value
+ * @param callback
+ */
+export function validateByteSize(rule, value, callback) {
+  if (!value) {
+    callback()
+    return
+  }
+
+  // 有值再校验
+  value = value.replace(/[^\u0000-\u00ff]/g,"***") // 中文及中文类字符转为3个字节，和Java UTF8下的字符长度保持一致
+  let min = rule.min || 0
+  let max = rule.max || 50
+  if (value.length < min || value.length > max) {
+    if (rule.message) {
+      callback(new Error(rule.message))
+    } else {
+      if (min > 0) {
+        callback(new Error('长度在 ' + min + ' 到  '+ max + ' 个字节'))
+      } else {
+        callback(new Error('长度不超过 ' + max + ' 个字节'))
+      }
+    }
+  } else {
+    callback()
+  }
+}
+
+/**
+ * 校验数字，不指定message时根据min和max自动生成提示，不指定min和max时默认0-50
+ * @param rule
+ * @param value
+ * @param callback
+ */
+export function validateNumber(rule, value, callback) {
+  const reg = /^[0-9]+$/
+  if (!value) {
+    callback()
+    return
+  }
+
+  // 有值再校验
+  if (!reg.test(value))
+    return callback(new Error('请输入有效数字'))
+
+  let min = rule.min || 0
+  let max = rule.max || 50
+  if (value < min || value > max) {
+    if (rule.message) {
+      callback(new Error(rule.message))
+    } else {
+      if (min > 0) {
+        callback(new Error('数字范围在 ' + min + ' 到  '+ max))
+      } else {
+        callback(new Error('数字不能大于 ' + max))
+      }
+    }
+  } else {
+    callback()
+  }
+}
