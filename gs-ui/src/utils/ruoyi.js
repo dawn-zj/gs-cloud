@@ -3,6 +3,7 @@
  * Copyright (c) 2019 ruoyi
  */
 
+
 const baseURL = process.env.VUE_APP_BASE_API
 
 // 日期格式化
@@ -150,7 +151,7 @@ export function handleTree(data, id, parentId, children, rootId) {
 export function loadTextFile(name) {
   const xhr = new XMLHttpRequest()
   const okStatus = document.location.protocol === 'file:' ? 0 : 200
-  xhr.open('GET', name, false)
+  xhr.open('GET', name, false)// 同步请求
   xhr.overrideMimeType('text/html;charset=utf-8')// 默认为utf-8
   xhr.send(null)
   return xhr.status === okStatus ? xhr.responseText : null
@@ -159,4 +160,18 @@ export function loadTextFile(name) {
 export function loadJsonFile(name) {
   const response = loadTextFile(name)
   return JSON.parse(response)
+}
+
+export function loadFile(name, callback) {
+  const xhr = new XMLHttpRequest()
+  // const okStatus = document.location.protocol === 'file:' ? 0 : 200
+  xhr.open('GET', name, true) // 异步请求
+  xhr.setRequestHeader("Content-Type", "'text/html;charset=utf-8")
+  xhr.send(null)
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        const json = JSON.parse(xhr.responseText)
+        callback(json)
+      }
+    }
 }
