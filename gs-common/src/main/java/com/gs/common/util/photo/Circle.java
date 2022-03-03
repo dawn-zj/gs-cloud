@@ -48,10 +48,10 @@ public class Circle {
 
     }
 
-    public Circle(int width, int height, String company,Integer companySize, String name, Integer nameSize,
+    public Circle(int r, String company,Integer companySize, String name, Integer nameSize,
                   String number, Integer numberSize) {
-        this.width = width;
-        this.height = height;
+        this.width = r;
+        this.height = r;
 
         this.company = company;
         this.companySize = companySize;
