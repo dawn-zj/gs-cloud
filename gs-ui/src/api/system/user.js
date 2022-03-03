@@ -1,19 +1,18 @@
 import request from '@/utils/request'
-import {loadJsonFile} from "@/utils/ruoyi";
+import requestVue from '@/utils/requestLocal'
 
 // 查询用户列表
 export function listUser(query) {
-  return loadJsonFile('/json/user/userList.json')
-  // return request({
-  //   url: '/json/user/userList.json',
-  //   method: 'get',
-  //   params: query
-  // })
+  return requestVue({
+    url: '/json/user/userList.json',
+    method: 'get',
+    params: query
+  })
 }
 
 // 查询用户详细
 export function getUser(userId) {
-  return request({
+  return requestVue({
     url: '/json/user/userInfo.json',
     method: 'get'
   })

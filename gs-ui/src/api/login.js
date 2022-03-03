@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import axios from 'axios'
+import requestVue from '@/utils/requestLocal'
 
 // 登录方法
 export function login(username, password, code, uuid) {
@@ -18,7 +18,7 @@ export function login(username, password, code, uuid) {
 
 // 获取用户详细信息
 export function getInfo() {
-  return request({
+  return requestVue({
     // url: '/getInfo',
     url: '/json/userInfo.json',
     method: 'get'
@@ -27,7 +27,7 @@ export function getInfo() {
 
 // 退出方法
 export function logout() {
-  return request({
+  return requestVue({
     // url: '/logout',
     // method: 'post'
     url: '/json/common.json',

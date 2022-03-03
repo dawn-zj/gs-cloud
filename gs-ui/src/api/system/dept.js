@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import requestVue from '@/utils/requestLocal'
 
 // 查询部门列表
 export function listDept(query) {
@@ -27,7 +28,7 @@ export function getDept(deptId) {
 
 // 查询部门下拉树结构
 export function treeselect() {
-  return request({
+  return requestVue({
     url: '/json/dept/treeselect.json',
     method: 'get'
   })
