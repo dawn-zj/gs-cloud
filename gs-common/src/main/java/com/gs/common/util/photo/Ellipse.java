@@ -16,63 +16,67 @@ import java.io.ByteArrayOutputStream;
  * @date 2021-11-17 14:22
  * @Description 绘制椭圆图章
  */
-public class Ellipse {
+public class Ellipse extends Base {
 
-    private int width = 150;// 图章宽度
-    private int height = 100;// 图章高度
-    private int fix = 5;// 图章修正，画布比图章大一圈
-
-    private String fontType = "宋体";
-    /**
-     * 单位字体的宽度缩放比率(百分比).此参数可以使字体看起来瘦长
-     */
-    private float companyScale = 0.7F;
-
-    /**
-     * 边框线宽
-     */
-    private float borderWidth = 4F;
-    private Color borderColor = Color.RED;
-
-    /**
-     * 五角星线宽
-     */
-    private float starBorderWidth = 3F;
-    private Color starColor = Color.RED;
-    private float starR = 15f;// 五角星外接圆半径
-
-    /**
-     * 图章所属单位
-     * 起始角度,以6点钟方向为中心,向两个方向平均扩展
-     */
-    private String company = "电子签章管理系统";
-    private Color companyColor = Color.RED;
-    private Integer companySize = 18;
-    private Integer companyAngle = 160;
-
-    /**
-     * 图章名称
-     */
-    private String name = "测试章";
-    private Color nameColor = Color.RED;
-    private Integer nameSize = 12;
-    private Integer nameMarginBottom = 0; // name距离底部距离
-
-    /**
-     * 图章副名
-     */
-    private String label = "(1)";
-    private Color labelColor = Color.RED;
-    private Integer labelSize = 10;
-    private Integer labelMarginBottom = 15; // 副名距离底部距离
-
-    /**
-     * 图章编码
-     * 角度范围,以6点钟方向为中心,向两个方向平均扩展
-     */
-    private String number = "5301000082888";//5301000082888
-    private Integer numberSize = 12;
-    private Integer numberAngle = 100;
+    // private int width = 150;// 图章宽度
+    // private int height = 100;// 图章高度
+    // private int fix = 5;// 图章修正，画布比图章大一圈
+    //
+    // private String fontType = "宋体";
+    // /**
+    //  * 单位字体的宽度缩放比率(百分比).此参数可以使字体看起来瘦长
+    //  */
+    // private float companyScale = 0.7F;
+    //
+    // /**
+    //  * 边框线宽
+    //  */
+    // private float borderWidth = 4F;
+    // private Color borderColor = Color.RED;
+    //
+    // /**
+    //  * 五角星线宽
+    //  */
+    // private float starBorderWidth = 3F;
+    // private Color starColor = Color.RED;
+    // private float starR = 15f;// 五角星外接圆半径
+    //
+    // /**
+    //  * 图章所属单位
+    //  * 起始角度,以6点钟方向为中心,向两个方向平均扩展
+    //  */
+    // private String company = "电子签章管理系统";
+    // private Color companyColor = Color.RED;
+    // private Integer companySize = 18;
+    // private Integer companyAngle = 160;
+    //
+    // /**
+    //  * 图章名称
+    //  */
+    // private String name = "测试章";
+    // private Color nameColor = Color.RED;
+    // private Integer nameSize = 12;
+    // private Integer nameMarginBottom = 0; // name距离底部距离
+    //
+    // /**
+    //  * 图章副名
+    //  */
+    // private String label = "(1)";
+    // private Color labelColor = Color.RED;
+    // private Integer labelSize = 10;
+    // private Integer labelMarginBottom = 15; // 副名距离底部距离
+    //
+    // /**
+    //  * 图章编码
+    //  * 角度范围,以6点钟方向为中心,向两个方向平均扩展
+    //  */
+    // private String number = "5301000082888";//5301000082888
+    // private Integer numberSize = 12;
+    // private Integer numberAngle = 100;
+    public Ellipse() {
+        super.starR = 15;
+        super.nameMarginBottom = 0;
+    }
 
     /**
      * 画圆
@@ -156,44 +160,6 @@ public class Ellipse {
             num++;
         }
 
-    }
-
-    private void drawStar(Graphics2D g2d, float radius) {
-        if (radius <= 0)
-            throw new NetGSRuntimeException("五角星外接圆半径不能小于0");
-
-        float lradius = radius * 0.381966f;// 根据radius求内圆半径
-        double halfpi = Math.PI / 180f;
-        Point[] points = new Point[10]; // 画10个点，依次连接就是一个五角星
-        for (int i = 0; i < points.length; i++) {
-            if (i % 2 == 1) // 奇数
-                points[i] = new Point((int) (Math.sin(halfpi * 36 * i) * radius), (int) (Math.cos(halfpi * 36 * i) * radius));
-            else
-                points[i] = new Point((int) (Math.sin(halfpi * 36 * i) * lradius), (int) (Math.cos(halfpi * 36 * i) * lradius));
-        }
-        Polygon polygon = new Polygon();
-        for (Point p : points) {
-            polygon.addPoint(p.x, p.y);
-        }
-
-        if (starColor != null) {
-            g2d.setColor(starColor);
-            g2d.fill(polygon);
-        }
-
-        // 绘制五角星边框
-        g2d.setStroke(new BasicStroke(starBorderWidth));
-        g2d.setColor(starColor);
-        g2d.draw(polygon);
-    }
-
-    private void drawName(Graphics2D g2d, String name, Integer size, Integer marginBottom, Color color) {
-        g2d.setFont(new Font(fontType, Font.BOLD, size));
-        g2d.setColor(color);
-        FontMetrics fm = g2d.getFontMetrics();
-        int w = fm.stringWidth(name);// 名称宽度
-        int h = fm.getHeight();// 名称高度
-        g2d.drawString(name, - w / 2, height / 2 - h - marginBottom); // 字体到底部的距离
     }
 
     public static void main(String[] args) throws Exception {
