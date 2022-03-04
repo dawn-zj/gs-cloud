@@ -1,50 +1,95 @@
 <template>
   <div class="app-container">
-    <el-form ref="stampForm" class="form-NTP" :model="stampForm" :rules="stampRules" label-width="140px">
-      <el-form-item label="图章样式">
-        <el-select v-model="stampForm.stampStyle" @change="getValue">
-          <el-option
-            v-for="item in stampStyleList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="图章宽度" prop="width">
-        <el-input v-model="stampForm.width" />
-      </el-form-item>
-      <el-form-item label="图章高度" prop="height">
-        <el-input v-model="stampForm.height" :disabled="disabledHeight" />
-      </el-form-item>
-      <el-form-item label="图章字体">
-        <el-select v-model="stampForm.fontType">
-          <el-option
-            v-for="item in fontList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="图章名称(预览)" prop="name">
-        <el-input v-model="stampForm.name" />
-      </el-form-item>
-      <el-form-item label="图章名称字体大小" prop="nameFontSize">
-        <el-input v-model="stampForm.nameFontSize" />
-      </el-form-item>
-      <el-form-item label="正文名称(预览)" prop="company">
-        <el-input v-model="stampForm.company" :disabled="disabledCompany" />
-      </el-form-item>
-      <el-form-item label="正文名称字体大小" prop="companyFontSize">
-        <el-input v-model="stampForm.companyFontSize" :disabled="disabledCompany" />
-      </el-form-item>
-      <el-form-item label="图章编码(预览)" prop="number">
-        <el-input v-model="stampForm.number" :disabled="disabledCompany" />
-      </el-form-item>
-      <el-form-item label="图章编码字体大小" prop="numberFontSize">
-        <el-input v-model="stampForm.numberFontSize" :disabled="disabledCompany" />
-      </el-form-item>
+    <el-form ref="stampForm" class="form" :model="stampForm" :rules="stampRules" label-width="140px">
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="图章样式">
+            <el-select v-model="stampForm.stampStyle" @change="getValue" style="width: 100%">
+              <el-option
+                v-for="item in stampStyleList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="图章字体">
+            <el-select v-model="stampForm.fontType" style="width: 100%">
+              <el-option
+                v-for="item in fontList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="图章宽度" prop="width">
+            <el-input v-model="stampForm.width" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="图章高度" prop="height">
+            <el-input v-model="stampForm.height" :disabled="disabledHeight" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="正文名称(预览)" prop="company">
+            <el-input v-model="stampForm.company" :disabled="disabledCompany" />
+          </el-form-item>
+          <el-form-item label="正文名称字体大小" prop="companyFontSize">
+            <el-input-number v-model="stampForm.companyFontSize" :disabled="disabledCompany" style="width: 100%"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="图章编码(预览)" prop="number">
+            <el-input v-model="stampForm.number" :disabled="disabledCompany" />
+          </el-form-item>
+          <el-form-item label="图章编码字体大小" prop="numberFontSize">
+            <el-input-number v-model="stampForm.numberFontSize" :disabled="disabledCompany" style="width: 100%"/>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="图章名称(预览)" prop="name">
+            <el-input v-model="stampForm.name" />
+          </el-form-item>
+          <el-form-item label="图章名称字体大小" prop="nameFontSize">
+            <el-input-number v-model="stampForm.nameFontSize" style="width: 100%"/>
+          </el-form-item>
+          <el-form-item label="图章名称底部距离" prop="nameMarginBottom">
+            <el-input-number v-model="stampForm.nameMarginBottom" style="width: 100%"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="图章副名(预览)" prop="label">
+            <el-input v-model="stampForm.label" />
+          </el-form-item>
+          <el-form-item label="图章副名字体大小" prop="labelFontSize">
+            <el-input-number v-model="stampForm.labelFontSize" style="width: 100%"/>
+          </el-form-item>
+          <el-form-item label="图章副名底部距离" prop="labelMarginBottom">
+            <el-input-number v-model="stampForm.labelMarginBottom" style="width: 100%"/>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+
+
+
+
+
       <!--      <el-form-item label="图章文字文件">-->
       <!--        <el-upload-->
       <!--          class="upload-demo"-->
@@ -66,7 +111,7 @@
         <el-image v-loading="loading" :src="url" fit="fill" />
       </el-form-item>
       <div class="form-footer">
-        <el-button type="primary" @click="">制作图章</el-button>
+<!--        <el-button type="primary" @click="">制作图章</el-button>-->
       </div>
     </el-form>
   </div>
@@ -95,6 +140,10 @@ export default {
         fontType: '',
         name: '测试专用章',
         nameFontSize: '12',
+        nameMarginBottom: '20',
+        label: '(1)',
+        labelFontSize: '10',
+        labelMarginBottom: '10',
         company: '电子签章系统测试',
         companyFontSize: '20',
         number: '1234567890123',
@@ -323,9 +372,9 @@ export default {
 </script>
 
 <style scoped>
-  .form-footer{
-    text-align: center;
-    margin: 20px 0;
+  .form{
+    width: 70%;
+    margin: 20px auto;
   }
 
 </style>

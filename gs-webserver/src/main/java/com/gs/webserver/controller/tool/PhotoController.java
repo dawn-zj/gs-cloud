@@ -15,7 +15,9 @@ public class PhotoController {
     @PostMapping("viewStamp")
     public ResponseTo viewStamp(@RequestBody PhotoTo photoTo) throws Exception {
         Circle circle = new Circle(photoTo.getWidth(), photoTo.getCompany(), photoTo.getCompanyFontSize(),
-                photoTo.getName(), photoTo.getNameFontSize(), photoTo.getNumber(), photoTo.getNumberFontSize());
+                photoTo.getName(), photoTo.getNameFontSize(), photoTo.getNameMarginBottom(),
+                photoTo.getLabel(), photoTo.getLabelFontSize(), photoTo.getLabelMarginBottom(),
+                photoTo.getNumber(), photoTo.getNumberFontSize());
         byte[] photoData = circle.draw();
         return ResponseTo.success(photoData);
     }
