@@ -48,7 +48,7 @@ public class Ellipse {
     private String company = "电子签章管理系统";
     private Color companyColor = Color.RED;
     private Integer companySize = 18;
-    private Integer companyAngle = 150;
+    private Integer companyAngle = 160;
 
     /**
      * 图章名称
@@ -120,92 +120,42 @@ public class Ellipse {
         int count = company.length();// 字数
         int rx = width / 2;// 长半轴
         int ry = height / 2;// 短半轴
-        int angle = (360 - companyAngle) / (count - 1);
-        int startAngle = 90 + companyAngle / 2;// 以x轴正向为0,顺时针旋转
-        startAngle = -90 - (360 - companyAngle) / 2;
+        int angle = (360 - (companyAngle - 90) * 2)  / (count - 1);
+        int startAngle = companyAngle;
         char[] chars = company.toCharArray();
-
-        // 与画圆不同的是，很难得出原点到椭圆任意点的距离，放弃旋转坐标轴的方法
-        // 思路：计算8点-4点方向的总弧长，分尽可能多的点，计算两点之间的线段，最后总和即为总弧长
-        double len = 0.0;
-        // 步进2,240°分120份
-        int step = 2;
-        double angR = startAngle * Math.PI / 180.0;
-        double lastX = rx * Math.cos(angR);
-        double laxtY =ry * Math.sin(angR);
-        double accArcLen = 0.0;
-
-        // int num = 0;
-        // for (int i = startAngle + step; num < 120; i+=step) {
-        //     // 弧长=角度 x π / 180
-        //     angR = i * Math.PI / 180.0;
-        //     double x1 = rx * Math.cos(angR);
-        //     double y1 = ry * Math.sin(angR);
-        //     // System.out.println(String.format("角度：%s，坐标：(%f, %f)", i, x1, y1));
-        //     accArcLen += Math.sqrt((lastX - x1) * (lastX - x1) + (laxtY - y1) * (laxtY - y1));
-        //     lastX = x1;
-        //     laxtY = y1;
-        //     num++;
-        // }
-        // System.out.println(accArcLen);
-
-        // 每个字对应的弧度
-        // double arcPer = accArcLen / count;
-
-        Point center = new Point(width / 100, width / 100);// 中心点
 
         int num = 0;
         for (int i = 0; i < count; i++) {
             float ang = startAngle + angle * i;// 现在角度
-            // 弧长=角度 x π / 180
-            angR = ang * Math.PI / 180.0;
+            // 弧长 = 角度 * π / 180
+            double angR = ang * Math.PI / 180.0;
             float x = (float) (rx * Math.cos(angR));
             float y = (float) (ry * Math.sin(angR));
             double qxang = Math.atan2(rx * Math.cos(angR), -rx * Math.sin(angR)),
                     fxang = qxang + Math.PI / 2.0;
-            System.out.println(String.format("角度：%s，弧度：%s，坐标：(%s, %s)", ang, angR, x, y));
+            // System.out.println(String.format("角度：%s，弧度：%s，坐标：(%s, %s)", ang, angR, x, y));
 
             String c = String.valueOf(chars[num]);// 需要绘制的字符
             int cw = fm.stringWidth(c);// 此字符宽度
             int ch = fm.getHeight();// 字高度
 
-            // 此时x2,y2字体绘制完在圆弧外测，同比例缩放一下
+            // 此时x2,y2字体绘制完在圆弧外测，同比例缩放一下，重点1
             x += ch * 0.95f * (float) Math.cos(fxang);
             y += ch * 0.95f * (float) Math.sin(fxang);
             x += -cw / 2f * (float) Math.cos(qxang);
             y += -cw / 2f * (float) Math.sin(qxang);
 
-
-
-            // 旋转
+            // 旋转，重点1
             AffineTransform affineTransform = new AffineTransform();
             affineTransform.rotate(Math.toRadians((fxang * 180.0 / Math.PI - 90)), 0, 0);
             Font f2 = companyFont.deriveFont(affineTransform);
             g2d.setFont(f2);
-            g2d.drawString(c, x, y);// 此点为字的中心点
 
-            // 将所有设置还原,等待绘制下一个
-            // g2d.scale(1 / companyScale, 1);
+            g2d.drawString(c, x, y);// 此点为字的中心点
 
             num++;
         }
 
-        // for (int i = 1; i <= count; i++) {
-        //     char c = chars[i-1];// 需要绘制的字符
-        //     int cw = fm.charWidth(c);// 此字符宽度
-        //
-        //     double arcL = i * arcPer;
-        //     Float x2 = (float) (rx * (float) Math.cos(arcL));
-        //     Float y2 = (float) (ry * (float) Math.sin(arcL));
-        //     System.out.println(String.format("文字：%s，坐标：(%f, %f)", i, x2, y2));
-        //     float x = x2 > 0 ? x2 - h : x2 + h;// 绘制字符的x坐标为半径减去字高度
-        //     float y = y2 > 0 ? y2 - h : y2 + h;// 绘制字符的x坐标为半径减去字高度
-        //     g2d.scale(companyScale, 1);// 缩放字体宽度
-        //     g2d.drawString(String.valueOf(c), x, y);// 此点为字的中心点
-        //
-        //     // 将所有设置还原,等待绘制下一个
-        //     g2d.scale(1 / companyScale, 1);
-        // }
     }
 
     private void drawStar(Graphics2D g2d, float radius) {
