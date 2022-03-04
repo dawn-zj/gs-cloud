@@ -29,6 +29,7 @@
 		<springboot.version>2.3.0.RELEASE</springboot.version>
 		<gateway.version>2.2.1.RELEASE</gateway.version>
 		<common.version>1.0.0-SNAPSHOT</common.version>
+		<lombok.version>1.16.20</lombok.version>
 	</properties>
 
 	<!--父子全局依赖-->
@@ -63,6 +64,14 @@
 				<groupId>com.gs</groupId>
 				<artifactId>gs-common</artifactId>
 				<version>${common.version}</version>
+			</dependency>
+
+			<!--版本统一管理-->
+			<!--lombok-->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
