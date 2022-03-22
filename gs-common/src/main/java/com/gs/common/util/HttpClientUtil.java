@@ -12,67 +12,110 @@ import java.security.cert.X509Certificate;
 public class HttpClientUtil {
 
 	/**
+	 * get请求
+	 * @param url
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] get(String url) throws Exception {
+		return get(url, "");
+	}
+
+	/**
+	 * get请求
+	 * @param url
+	 * @param message
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] get(String url, String message) throws Exception {
+		byte[] result = null;
+		try {
+			if (url.startsWith("https")) {
+				result = httpsSend(url, "GET", message);
+
+			} else if (url.startsWith("http")) {
+				result = httpSend(url,"GET", message);
+			} else {
+				throw new Exception("url error, " + url);
+			}
+		} catch (Exception e) {
+			throw new Exception("request error, " + e.getMessage());
+		}
+		return result;
+	}
+
+	/**
+	 * post请求
+	 * @param url
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] post(String url) throws Exception {
+		return post(url, "");
+	}
+
+	/**
 	 * post请求
 	 * @param url
 	 * @param message
 	 * @return
 	 * @throws Exception
 	 */
-	public static String post(String url, String message) throws Exception {
-		String result = null;
+	public static byte[] post(String url, String message) throws Exception {
+		byte[] result = null;
 		try {
-
 			if (url.startsWith("https")) {
-				result = httpsPost(url, message);
-
+				result = httpsSend(url, "POST", message);
 			} else if (url.startsWith("http")) {
-				result = httpPost(url, message);
+				result = httpSend(url,"POST", message);
 			} else {
 				throw new Exception("url error, " + url);
 			}
 		} catch (Exception e) {
-			throw new Exception("http request error, " + e.getMessage());
+			throw new Exception("request error, " + e.getMessage());
 
 		}
 		return result;
 	}
 
 	/**
-	 * http协议-post
-	 * @param url
-	 * @param message
-	 * @return
+	 *
+	 * @param url url
+	 * @param methodType get/post
+	 * @param isSendMessage 发送消息
+	 * @return byte[]
 	 * @throws Exception
 	 */
-	private static String httpPost(String url, String message) throws Exception {
-		HttpURLConnection conn = null;
-		String result = null;
+	private static byte[] httpSend(String url, String methodType, String message) throws Exception {
+		HttpURLConnection connection = null;
+		byte[] result = null;
 		try {
-			// 获取HttpURLConnection对象
-			URL uRL = new URL(url);
-			conn = (HttpURLConnection) uRL.openConnection();
-
+			URL urlInstance = new URL(url);
+			connection = (HttpURLConnection) urlInstance.openConnection();
 			// 设置属性
-			conn.setRequestMethod("POST");// 请求方式
-			conn.setReadTimeout(30000);// 超时时间 30秒
-			conn.setConnectTimeout(10000);
-			conn.setDoOutput(true);
-			conn.setDoInput(true);
+			connection.setRequestMethod(methodType);
+			connection.setReadTimeout(30000);
+			connection.setConnectTimeout(10000);
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
 
 			// 设置http请求头
-			conn.setRequestProperty("Connection", "keep-alive"); // http1.1
-			conn.setRequestProperty("Content-type", "application/json;charset=utf-8");
+			connection.setRequestProperty("Connection", "keep-alive"); // http1.1
+			connection.setRequestProperty("Content-type", "application/json;charset=utf-8");
+			connection.setRequestProperty("Content-Length", "0");
 
-			// 把提交的数据以输出流的形式提交到服务器
-			OutputStream os = conn.getOutputStream();
-			os.write(message.getBytes("utf-8"));
-			os.flush();
-			os.close();
+			// 发送消息
+			if (StringUtil.isNotBlank(message)) {
+				// 把提交的数据以输出流的形式提交到服务器
+				OutputStream os = connection.getOutputStream();
+				os.write(message.getBytes("utf-8"));
+			}
 
 			// 通过响应码来判断是否连接成功
-			if (conn.getResponseCode() == 200) {
+			if (connection.getResponseCode() == 200) {
 				// 获得服务器返回的字节流
-				InputStream is = conn.getInputStream();
+				InputStream is = connection.getInputStream();
 
 				// 内存输出流,适合数据量比较小的字符串 和 图片
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -83,53 +126,63 @@ public class HttpClientUtil {
 				}
 				is.close();
 				// 可使用 toByteArray() 和 toString() 获取数据。
-				result = baos.toString("utf-8");
+				result = baos.toByteArray();
 			} else {
-				throw new Exception("response code error, " + conn.getResponseCode() + ", url:" + url);
+				throw new Exception("response code error, " + connection.getResponseCode());
 			}
 		} catch (Exception e) {
-			throw e;
+			throw new Exception(e.getMessage());
 		} finally {
-			if (conn != null)
-				conn.disconnect();
+			if (connection != null)
+				connection.disconnect();
 		}
 
 		return result;
 	}
 
-	private static String httpsPost(String url, String message) throws Exception {
-		HttpsURLConnection conn = null;
-		String result = null;
+	/**
+	 *
+	 * @param url url
+	 * @param methodType get/post
+	 * @param isSendMessage 发送消息
+	 * @return byte[]
+	 * @throws Exception
+	 */
+	private static byte[] httpsSend(String url, String methodType, String message) throws Exception {
+		HttpsURLConnection connection = null;
+		byte[] result = null;
 		try {
+
+			URL urlInstance = new URL(url);
+			connection = (HttpsURLConnection) urlInstance.openConnection();
+			// 设置属性
+			connection.setRequestMethod(methodType);
+			connection.setReadTimeout(30000);
+			connection.setConnectTimeout(10000);
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+
+			// 设置http请求头
+			connection.setRequestProperty("Connection", "keep-alive"); // http1.1
+			connection.setRequestProperty("Content-type", "application/json;charset=utf-8");
+			connection.setRequestProperty("Content-Length", "0");
+
+			// https
 			SSLContext sc = SSLContext.getInstance("TLS");
 			sc.init(null, new TrustManager[] { new TrustAnyTrustManager() }, new java.security.SecureRandom());
+			connection.setSSLSocketFactory(sc.getSocketFactory());
 
-			// 获取HttpsURLConnection对象
-			URL console = new URL(url);
-			conn = (HttpsURLConnection) console.openConnection();
+			// 发送消息
+			if (StringUtil.isNotBlank(message)) {
+				// 把提交的数据以输出流的形式提交到服务器
+				OutputStream os = connection.getOutputStream();
+				os.write(message.getBytes("utf-8"));
+			}
 
-			// 设置属性
-			conn.setRequestMethod("POST");
-			conn.setReadTimeout(30000);
-			conn.setConnectTimeout(10000);
-			conn.setDoOutput(true);
-			conn.setDoInput(true);
-			conn.setSSLSocketFactory(sc.getSocketFactory());
-			conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
-
-			// 设置http请求头
-			conn.setRequestProperty("Connection", "keep-alive"); // http1.1
-			conn.setRequestProperty("Content-type", "application/json;charset=utf-8");
-
-			// 把提交的数据以输出流的形式提交到服务器
-			OutputStream os = conn.getOutputStream();
-			os.write(message.getBytes("utf-8"));
-			os.flush();
-			os.close();
 			// 通过响应码来判断是否连接成功
-			if (conn.getResponseCode() == 200) {
+			if (connection.getResponseCode() == 200) {
 				// 获得服务器返回的字节流
-				InputStream is = conn.getInputStream();
+				InputStream is = connection.getInputStream();
 
 				// 内存输出流,适合数据量比较小的字符串 和 图片
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -140,20 +193,19 @@ public class HttpClientUtil {
 				}
 				is.close();
 				// 可使用 toByteArray() 和 toString() 获取数据。
-				result = baos.toString("utf-8");
+				result = baos.toByteArray();
 			} else {
-				throw new Exception("response code error, " + conn.getResponseCode() + ", url:" + url);
+				throw new Exception("response code error, " + connection.getResponseCode());
 			}
 		} catch (Exception e) {
-			throw e;
+			throw new Exception(e.getMessage());
 		} finally {
-			if (conn != null)
-				conn.disconnect();
+			if (connection != null)
+				connection.disconnect();
 		}
+
 		return result;
 	}
-
-
 
 	private static class TrustAnyTrustManager implements X509TrustManager {
 
@@ -172,5 +224,11 @@ public class HttpClientUtil {
 		public boolean verify(String hostname, SSLSession session) {
 			return true;
 		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		String url = "https://www.baidu.com";
+		byte[] bytes = get(url);
+		System.out.println(StringUtil.getString(bytes));
 	}
 }
