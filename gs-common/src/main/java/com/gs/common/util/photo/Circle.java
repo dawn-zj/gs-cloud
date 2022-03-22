@@ -1,6 +1,6 @@
 package com.gs.common.util.photo;
 
-import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.common.entity.Photo;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.StringUtil;
 
@@ -19,6 +19,13 @@ public class Circle extends Base {
     public Circle() {
         this.width = 150;
         this.height = 150;
+    }
+
+    public Circle(Photo photo) {
+        this(photo.getWidth(), photo.getCompany(), photo.getCompanyFontSize(),
+                photo.getName(), photo.getNameFontSize(), photo.getNameMarginBottom(),
+                photo.getLabel(), photo.getLabelFontSize(), photo.getLabelMarginBottom(),
+                photo.getNumber(), photo.getNumberFontSize());
     }
 
     public Circle(int r, String company, Integer companySize,

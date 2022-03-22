@@ -1,9 +1,8 @@
 package com.gs.common.util.photo;
 
-import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.common.entity.Photo;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.StringUtil;
-import sun.awt.image.IntegerInterleavedRaster;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,64 +17,38 @@ import java.io.ByteArrayOutputStream;
  */
 public class Ellipse extends Base {
 
-    // private int width = 150;// 图章宽度
-    // private int height = 100;// 图章高度
-    // private int fix = 5;// 图章修正，画布比图章大一圈
-    //
-    // private String fontType = "宋体";
-    // /**
-    //  * 单位字体的宽度缩放比率(百分比).此参数可以使字体看起来瘦长
-    //  */
-    // private float companyScale = 0.7F;
-    //
-    // /**
-    //  * 边框线宽
-    //  */
-    // private float borderWidth = 4F;
-    // private Color borderColor = Color.RED;
-    //
-    // /**
-    //  * 五角星线宽
-    //  */
-    // private float starBorderWidth = 3F;
-    // private Color starColor = Color.RED;
-    // private float starR = 15f;// 五角星外接圆半径
-    //
-    // /**
-    //  * 图章所属单位
-    //  * 起始角度,以6点钟方向为中心,向两个方向平均扩展
-    //  */
-    // private String company = "电子签章管理系统";
-    // private Color companyColor = Color.RED;
-    // private Integer companySize = 18;
-    // private Integer companyAngle = 160;
-    //
-    // /**
-    //  * 图章名称
-    //  */
-    // private String name = "测试章";
-    // private Color nameColor = Color.RED;
-    // private Integer nameSize = 12;
-    // private Integer nameMarginBottom = 0; // name距离底部距离
-    //
-    // /**
-    //  * 图章副名
-    //  */
-    // private String label = "(1)";
-    // private Color labelColor = Color.RED;
-    // private Integer labelSize = 10;
-    // private Integer labelMarginBottom = 15; // 副名距离底部距离
-    //
-    // /**
-    //  * 图章编码
-    //  * 角度范围,以6点钟方向为中心,向两个方向平均扩展
-    //  */
-    // private String number = "5301000082888";//5301000082888
-    // private Integer numberSize = 12;
-    // private Integer numberAngle = 100;
     public Ellipse() {
         super.starR = 15;
         super.nameMarginBottom = 0;
+    }
+
+    public Ellipse(Photo photo) {
+        this(photo.getWidth(), photo.getHeight(), photo.getCompany(), photo.getCompanyFontSize(),
+                photo.getName(), photo.getNameFontSize(), photo.getNameMarginBottom(),
+                photo.getLabel(), photo.getLabelFontSize(), photo.getLabelMarginBottom(),
+                photo.getNumber(), photo.getNumberFontSize());
+    }
+
+    public Ellipse(int width, int height, String company, Integer companySize,
+                  String name, Integer nameSize, Integer nameMarginBottom,
+                  String label, Integer labelSize, Integer labelMarginBottom,
+                  String number, Integer numberSize) {
+        this.width = width;
+        this.height = height;
+
+        this.company = company;
+        this.companySize = companySize;
+
+        this.number = number;
+        this.numberSize = numberSize;
+
+        this.name = name;
+        this.nameSize = nameSize;
+        this.nameMarginBottom = nameMarginBottom;
+
+        this.label = label;
+        this.labelSize = labelSize;
+        this.labelMarginBottom = labelMarginBottom;
     }
 
     /**
