@@ -36,6 +36,8 @@
 	</dependencies>
 
 	<build>
+		<!--war包名称-->
+		<finalName>webserver</finalName>
 		<plugins>
 			<!--重点4：打包，使用maven的插件进行打包时：可指定主类的类路径、并把依赖的包打进jar
 			重点5：跳过单元测试，正常打包。在父项目properties标签里定义<skipTests>true</skipTests>
@@ -44,17 +46,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<!--指定主类-->
-					<mainClass>com.gs.webserver.GsWebserverApplication</mainClass>
+					<!--war包地址-->
+					<outputDirectory>${project.basedir}/../NetTool/tomcat_web/webapps</outputDirectory>
 				</configuration>
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<goals>-->
-<!--							&lt;!&ndash;可以把依赖的包都打包到生成的Jar包中&ndash;&gt;-->
-<!--							<goal>repackage</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
 			</plugin>
 		</plugins>
 	</build>

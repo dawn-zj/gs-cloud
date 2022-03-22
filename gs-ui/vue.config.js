@@ -20,7 +20,7 @@ module.exports = {
   // publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
   publicPath: process.env.VUE_APP_BASE_API,
   // 在npm run build 或 yarn build 时 ，生成文件的目录名称（要和axios的baseUrl的生产环境路径一致)
-  outputDir: 'tool',
+  outputDir: './NetTool/tomcat_web/webapps/tool',
   // 用于放置生成的静态资源 (js、css、img、fonts) 的；（项目打包之后，静态资源会放在这个文件夹下）
   assetsDir: 'static',
   // 是否开启eslint保存检测，有效值：ture | false | 'error'
