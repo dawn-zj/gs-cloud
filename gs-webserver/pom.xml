@@ -29,6 +29,7 @@
 			<groupId>com.gs</groupId>
 			<artifactId>gs-common</artifactId>
 		</dependency>
+		<!-- lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
