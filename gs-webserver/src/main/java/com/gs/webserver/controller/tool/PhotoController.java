@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/tool/photo/")
+@RequestMapping("/tool/photo")
 public class PhotoController {
     @Autowired
     private IPhotoService photoService;
 
-    @PostMapping("viewStamp")
+    @PostMapping("/viewStamp")
     public ResponseTo viewStamp(@RequestBody PhotoTo photoTo) throws Exception {
         byte[] photoData = photoService.viewStamp(photoTo);
         return ResponseTo.success(photoData);
