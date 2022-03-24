@@ -79,6 +79,7 @@ public class NetWorkUtil {
         systemInfo.setJavaVersion(prop.getProperty("java.version"));
         systemInfo.setOsName(prop.getProperty("os.name"));
         systemInfo.setOsArch(prop.getProperty("os.arch"));
+        systemInfo.setUserDir(prop.getProperty("user.dir"));
 
         return systemInfo;
     }

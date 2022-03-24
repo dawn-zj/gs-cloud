@@ -1,8 +1,14 @@
 package com.gs.common.entity;
 
+import com.gs.common.util.date.DateUtil;
+
+import java.lang.management.ManagementFactory;
+
 public class ServerInfo {
     private String jvmName; // java.vm.name
     private String jvmVersion; // java.vm.version
+    private Long jvmStartTime;
+    private String jvmRunTime;
     private String javaVersion; // java.version
     private String javaHome; // java.home
 
@@ -11,6 +17,8 @@ public class ServerInfo {
 
     private String serverName; // InetAddress.getLocalHost().getHostName()
     private String serverIp; // InetAddress.getLocalHost().getHostAddress()
+
+    private String userDir; // user.dir
 
     public String getJvmName() {
         return jvmName;
@@ -76,4 +84,22 @@ public class ServerInfo {
         this.serverIp = serverIp;
     }
 
+    public Long getJvmStartTime() {
+        return ManagementFactory.getRuntimeMXBean().getStartTime();
+    }
+
+    public String getJvmRunTime() {
+        long startTime = ManagementFactory.getRuntimeMXBean().getStartTime();
+        long currentTime = DateUtil.getCurrentTime();
+
+        return DateUtil.formatDuring(currentTime - startTime);
+    }
+
+    public String getUserDir() {
+        return userDir;
+    }
+
+    public void setUserDir(String userDir) {
+        this.userDir = userDir;
+    }
 }

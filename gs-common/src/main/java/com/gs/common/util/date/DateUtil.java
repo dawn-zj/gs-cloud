@@ -84,4 +84,22 @@ public class DateUtil {
 	public static String getTimeStamp() {
 		return sdf_2.format(new Date());
 	}
+
+	/**
+	 * 毫秒转天
+	 * @param mss
+	 * @return
+	 */
+	public static String formatDuring(long mss) {
+		long nd = 1000 * 24 * 60 * 60;
+		long nh = 1000 * 60 * 60;
+		long nm = 1000 * 60;
+		// 计算差多少天
+		long day = mss / nd;
+		// 计算差多少小时
+		long hour = mss % nd / nh;
+		// 计算差多少分钟
+		long min = mss % nd % nh / nm;
+		return day + "天" + hour + "小时" + min + "分钟";
+	}
 }
