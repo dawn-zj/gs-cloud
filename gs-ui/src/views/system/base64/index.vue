@@ -1,41 +1,6 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col :span="12">
-        <el-card>
-          <div slot="header" class="clearfix">
-            <span>文件数据</span>
-          </div>
-          <el-form label-width="100px">
-            <el-form-item label="选择文件">
-              <el-upload
-                ref="upload"
-                class="pdf-upload"
-                name="fileList"
-                drag
-                action="#"
-                :auto-upload="false"
-                :file-list="fileList"
-                :on-remove="handleFileRemove"
-                :on-change="handleFileChange"
-              >
-                <i class="el-icon-upload" />
-                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              </el-upload>
-            </el-form-item>
-            <el-form-item label="文件Base64">
-              <el-input
-                v-model="fileBase64"
-                readonly
-                type="textarea"
-                :autosize="{ minRows: 5}"
-              />
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row class="mt20">
       <el-col :span="24">
         <el-card>
           <div slot="header" class="clearfix">
@@ -67,6 +32,41 @@
                 </el-form-item>
               </el-col>
             </el-row>
+          </el-form>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row class="mt20">
+      <el-col :span="12">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>文件数据</span>
+          </div>
+          <el-form label-width="100px">
+            <el-form-item label="选择文件">
+              <el-upload
+                ref="upload"
+                class="pdf-upload"
+                name="fileList"
+                drag
+                action="#"
+                :auto-upload="false"
+                :file-list="fileList"
+                :on-remove="handleFileRemove"
+                :on-change="handleFileChange"
+              >
+                <i class="el-icon-upload" />
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="文件Base64">
+              <el-input
+                v-model="fileBase64"
+                readonly
+                type="textarea"
+                :autosize="{ minRows: 5}"
+              />
+            </el-form-item>
           </el-form>
         </el-card>
       </el-col>
@@ -124,11 +124,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .form {
-    width: 70%;
-    margin: 20px auto;
-  }
-
-</style>
