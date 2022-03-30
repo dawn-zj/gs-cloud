@@ -54,8 +54,8 @@
 
               </el-col>
               <el-col :span="2" :offset="1">
-                <el-row><el-button class="mt10" @click="handleEncode">编码</el-button></el-row>
-                <el-row><el-button class="mt10" @click="handleDecode">编码</el-button></el-row>
+                <el-row><el-button type="primary" plain class="mt10" @click="handleEncode">编码</el-button></el-row>
+                <el-row><el-button type="success" plain class="mt10" @click="handleDecode">解码</el-button></el-row>
               </el-col>
               <el-col :span="10">
                 <el-form-item label="编码数据">
