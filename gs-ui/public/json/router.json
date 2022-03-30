@@ -36,6 +36,17 @@
             "icon": "user",
             "noCache": false
           }
+        },
+        {
+          "name": "Base64",
+          "path": "base64",
+          "hidden": false,
+          "component": "system/base64/index",
+          "meta": {
+            "title": "Base64",
+            "icon": "user",
+            "noCache": false
+          }
         }
       ]
     },
@@ -108,6 +119,32 @@
           "meta": {
             "title": "系统日志",
             "icon": "textarea",
+            "noCache": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Monitor",
+      "path": "/monitor",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统监控",
+        "icon": "tool",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "server",
+          "path": "server",
+          "hidden": false,
+          "component": "monitor/server/index",
+          "meta": {
+            "title": "服务监控",
+            "icon": "build",
             "noCache": false
           }
         }
