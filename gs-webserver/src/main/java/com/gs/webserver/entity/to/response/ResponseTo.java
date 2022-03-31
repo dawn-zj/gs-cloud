@@ -1,4 +1,4 @@
-package com.gs.webserver.entity.to;
+package com.gs.webserver.entity.to.response;
 
 import com.gs.common.util.StringUtil;
 

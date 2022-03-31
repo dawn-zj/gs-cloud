@@ -198,9 +198,14 @@
 	border-radius: 50%;
 }
 
-.img-lg {
+.img-md {
 	width: 120px;
 	height: 120px;
+}
+
+.img-lg {
+ width: 200px;
+ height: 200px;
 }
 
 .avatar-upload-preview {
@@ -224,4 +229,8 @@
 .top-right-btn {
 	position: relative;
 	float: right;
+}
+
+.m20auto {
+  margin: 20px auto;
 }

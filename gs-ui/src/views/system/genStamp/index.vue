@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="图章样式">
-            <el-select v-model="stampForm.stampStyle" @change="getValue" style="width: 100%">
+            <el-select v-model="stampForm.stampStyle" style="width: 100%" @change="getValue">
               <el-option
                 v-for="item in stampStyleList"
                 :key="item.value"
@@ -47,7 +47,7 @@
             <el-input v-model="stampForm.company" :disabled="disabledCompany" />
           </el-form-item>
           <el-form-item label="正文名称字体大小" prop="companyFontSize">
-            <el-input-number v-model="stampForm.companyFontSize" :disabled="disabledCompany" style="width: 100%"/>
+            <el-input-number v-model="stampForm.companyFontSize" :disabled="disabledCompany" style="width: 100%" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -55,7 +55,7 @@
             <el-input v-model="stampForm.number" :disabled="disabledCompany" />
           </el-form-item>
           <el-form-item label="图章编码字体大小" prop="numberFontSize">
-            <el-input-number v-model="stampForm.numberFontSize" :disabled="disabledCompany" style="width: 100%"/>
+            <el-input-number v-model="stampForm.numberFontSize" :disabled="disabledCompany" style="width: 100%" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -66,10 +66,10 @@
             <el-input v-model="stampForm.name" />
           </el-form-item>
           <el-form-item label="图章名称字体大小" prop="nameFontSize">
-            <el-input-number v-model="stampForm.nameFontSize" style="width: 100%"/>
+            <el-input-number v-model="stampForm.nameFontSize" style="width: 100%" />
           </el-form-item>
           <el-form-item label="图章名称底部距离" prop="nameMarginBottom">
-            <el-input-number v-model="stampForm.nameMarginBottom" style="width: 100%"/>
+            <el-input-number v-model="stampForm.nameMarginBottom" style="width: 100%" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -77,42 +77,16 @@
             <el-input v-model="stampForm.label" />
           </el-form-item>
           <el-form-item label="图章副名字体大小" prop="labelFontSize">
-            <el-input-number v-model="stampForm.labelFontSize" style="width: 100%"/>
+            <el-input-number v-model="stampForm.labelFontSize" style="width: 100%" />
           </el-form-item>
           <el-form-item label="图章副名底部距离" prop="labelMarginBottom">
-            <el-input-number v-model="stampForm.labelMarginBottom" style="width: 100%"/>
+            <el-input-number v-model="stampForm.labelMarginBottom" style="width: 100%" />
           </el-form-item>
         </el-col>
       </el-row>
-
-
-
-
-
-
-      <!--      <el-form-item label="图章文字文件">-->
-      <!--        <el-upload-->
-      <!--          class="upload-demo"-->
-      <!--          action="#"-->
-      <!--          accept=".txt"-->
-      <!--          :before-remove="beforeRemove"-->
-      <!--          multiple-->
-      <!--          :limit="1"-->
-      <!--          :http-request="uploadFile"-->
-      <!--          :on-exceed="handleExceed"-->
-      <!--          :file-list="fileList"-->
-      <!--        >-->
-      <!--          <el-button size="small" type="primary" icon="el-icon-upload">上传文字文件-->
-      <!--          </el-button>-->
-      <!--          <div slot="tip" class="el-upload__tip">{{ textFiletip }}</div>-->
-      <!--        </el-upload>-->
-      <!--      </el-form-item>-->
       <el-form-item label="实时预览">
         <el-image v-loading="loading" :src="url" fit="fill" />
       </el-form-item>
-      <div class="form-footer">
-<!--        <el-button type="primary" @click="">制作图章</el-button>-->
-      </div>
     </el-form>
   </div>
 
@@ -247,35 +221,13 @@ export default {
         if (valid) {
           viewStamp(this.stampForm).then(res => {
             this.loading = false
-            this.url = 'data:image/png;base64,' + res.data
+            this.url = 'data:image/png;base64,' + res.data.result
           }).catch(() => {
             this.loading = false
           })
         }
       })
     },
-    // 制作图章
-    // genStamp() {
-    //   this.$refs['stampForm'].validate((valid) => {
-    //     if (valid) {
-    //       if (this.fileBase64 == '') {
-    //         this.msgError('请上传图章文字文件')
-    //         return
-    //       }
-    //       genStamp({ StampVO: this.stampForm, fileBase64: this.fileBase64 }).then(res => {
-    //         this.stampPath = res.msg
-    //         this.downloadStamp()
-    //         this.reset()
-    //       })
-    //     }
-    //   })
-    // },
-    // // 下载zip文件
-    // downloadStamp() {
-    //   if (this.stampPath != '') {
-    //     this.download(this.stampPath)
-    //   }
-    // },
     // 下拉框的选择事件
     getValue(val) {
       if (val == 1 || val == 3) {

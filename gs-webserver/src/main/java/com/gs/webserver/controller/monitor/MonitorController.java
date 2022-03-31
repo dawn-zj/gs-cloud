@@ -1,7 +1,7 @@
 package com.gs.webserver.controller.monitor;
 
-import com.gs.webserver.entity.to.ResponseTo;
-import com.gs.webserver.entity.to.ServerTo;
+import com.gs.webserver.entity.to.response.ResponseTo;
+import com.gs.webserver.entity.to.request.ServerTo;
 import com.gs.webserver.service.IMonitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

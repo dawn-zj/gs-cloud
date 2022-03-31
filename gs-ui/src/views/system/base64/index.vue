@@ -70,6 +70,26 @@
           </el-form>
         </el-card>
       </el-col>
+      <el-col span="11" offset="1">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>制作二维码</span>
+          </div>
+          <el-form ref="barcodeForm" :model="barcodeFormData" label-width="100px">
+            <el-col span="20">
+              <el-form-item label="二维码内容">
+                <el-input v-model="barcodeFormData.content" />
+              </el-form-item>
+            </el-col>
+            <el-col span="1" offset="1">
+              <el-button type="primary" plain @click="handleBarcode">制作</el-button>
+            </el-col>
+          </el-form>
+          <div v-if="url" class="img-lg m20auto">
+            <el-image :src="url" />
+          </div>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 
@@ -77,7 +97,7 @@
 
 <script>
 import { getBase64 } from '@/utils/file'
-import { decode, encode } from '@/api/system/base64'
+import { decode, encode, genBarcode } from '@/api/system/tool'
 
 export default {
   name: 'Index',
@@ -88,9 +108,13 @@ export default {
       // 上传文件列表
       fileList: [],
       fileBase64: '',
+      url: '',
       formData: {
         content: '',
         contentB64: ''
+      },
+      barcodeFormData: {
+        content: ''
       }
     }
   },
@@ -111,14 +135,21 @@ export default {
     handleFileRemove(file, fileList) {
       this.$set(this, 'fileBase64', '')
     },
+    // 编码
     handleEncode() {
       encode(this.formData).then(response => {
         this.formData.contentB64 = response.data.result
       })
     },
+    // 解码
     handleDecode() {
       decode(this.formData).then(response => {
         this.formData.content = response.data.result
+      })
+    },
+    handleBarcode() {
+      genBarcode(this.barcodeFormData).then(response => {
+        this.url = 'data:image/png;base64,' + response.data.result
       })
     }
   }

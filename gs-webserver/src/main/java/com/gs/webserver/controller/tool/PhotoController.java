@@ -1,7 +1,11 @@
 package com.gs.webserver.controller.tool;
 
-import com.gs.webserver.entity.to.PhotoTo;
-import com.gs.webserver.entity.to.ResponseTo;
+import com.gs.common.util.ImageUtil;
+import com.gs.common.util.base64.Base64Util;
+import com.gs.webserver.entity.to.request.BaseTo;
+import com.gs.webserver.entity.to.response.CommonTo;
+import com.gs.webserver.entity.to.request.PhotoTo;
+import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.service.IPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +22,17 @@ public class PhotoController {
     @PostMapping("/viewStamp")
     public ResponseTo viewStamp(@RequestBody PhotoTo photoTo) throws Exception {
         byte[] photoData = photoService.viewStamp(photoTo);
-        return ResponseTo.success(photoData);
+        CommonTo commonTo = new CommonTo();
+        commonTo.setResult(Base64Util.encode(photoData));
+        return ResponseTo.success(commonTo);
+    }
+
+    @PostMapping("/genBarcode")
+    public ResponseTo genBarcode(@RequestBody BaseTo baseTo) throws Exception {
+        byte[] photoData = ImageUtil.genBarcodeImage(baseTo.getContent());
+        CommonTo commonTo = new CommonTo();
+        commonTo.setResult(Base64Util.encode(photoData));
+        return ResponseTo.success(commonTo);
     }
 
 }

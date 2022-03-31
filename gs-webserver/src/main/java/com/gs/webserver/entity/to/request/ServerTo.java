@@ -1,4 +1,4 @@
-package com.gs.webserver.entity.to;
+package com.gs.webserver.entity.to.request;
 
 import com.gs.common.entity.Cpu;
 import com.gs.common.entity.Memory;

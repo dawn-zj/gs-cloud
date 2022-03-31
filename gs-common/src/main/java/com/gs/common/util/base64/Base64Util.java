@@ -36,9 +36,14 @@ public class Base64Util {
 	 *            字节数组
 	 * @return 已被编码的byte[]
 	 */
-	public static byte[] encode(byte[] data) {
+	// public static byte[] encode(byte[] data) {
+	// 	Encoder enc = Base64.getEncoder();
+	// 	return enc.encode(data);
+	// }
+
+	public static String encode(byte[] data) {
 		Encoder enc = Base64.getEncoder();
-		return enc.encode(data);
+		return new String(enc.encode(data));
 	}
 
 	/**

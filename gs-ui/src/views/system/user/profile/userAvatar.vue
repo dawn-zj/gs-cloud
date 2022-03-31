@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="options.img" title="点击上传头像" class="img-circle img-lg" @click="editCropper()">
+    <img :src="options.img" title="点击上传头像" class="img-circle img-md" @click="editCropper()">
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body @opened="modalOpened">
       <el-row>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">

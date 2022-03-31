@@ -1,4 +1,4 @@
-package com.gs.webserver.entity.to;
+package com.gs.webserver.entity.to.request;
 
 public class Base64To {
 

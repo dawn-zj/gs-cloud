@@ -4,7 +4,7 @@ import com.gs.common.entity.Photo;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.photo.Circle;
 import com.gs.common.util.photo.Ellipse;
-import com.gs.webserver.entity.to.PhotoTo;
+import com.gs.webserver.entity.to.request.PhotoTo;
 import com.gs.webserver.service.IPhotoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

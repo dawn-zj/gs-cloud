@@ -274,8 +274,8 @@ public class UtilTest {
 		PublicKey publicKey = kayPair.getPublic();
 		PrivateKey privateKey = kayPair.getPrivate();
 		//得到base64编码的公钥/私钥字符串
-		String publicKeyString = new String(Base64Util.encode(publicKey.getEncoded()));
-		String privateKeyString = new String(Base64Util.encode(privateKey.getEncoded()));
+		String publicKeyString = Base64Util.encode(publicKey.getEncoded());
+		String privateKeyString = Base64Util.encode(privateKey.getEncoded());
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt", publicKeyString.getBytes());
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt", privateKeyString.getBytes());
 		System.out.println("RSA密钥对存储成功！");

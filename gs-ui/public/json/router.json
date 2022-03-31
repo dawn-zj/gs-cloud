@@ -43,7 +43,7 @@
           "hidden": false,
           "component": "system/base64/index",
           "meta": {
-            "title": "Base64",
+            "title": "小工具合集",
             "icon": "user",
             "noCache": false
           }

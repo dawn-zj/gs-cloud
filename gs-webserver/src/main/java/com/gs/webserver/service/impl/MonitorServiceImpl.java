@@ -1,7 +1,7 @@
 package com.gs.webserver.service.impl;
 
 import com.gs.common.util.NetWorkUtil;
-import com.gs.webserver.entity.to.ServerTo;
+import com.gs.webserver.entity.to.request.ServerTo;
 import com.gs.webserver.service.IMonitorService;
 import org.springframework.stereotype.Service;
 

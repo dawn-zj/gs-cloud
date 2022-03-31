@@ -17,3 +17,12 @@ export function decode(query) {
     data: query
   })
 }
+
+// 查询参数详细
+export function genBarcode(query) {
+  return request({
+    url: '/tool/photo/genBarcode',
+    method: 'post',
+    data: query
+  })
+}
