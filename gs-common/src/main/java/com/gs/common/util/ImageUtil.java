@@ -330,8 +330,12 @@ public class ImageUtil {
 		return null;
 	}
 
-	public static void genAuthCodeImage(String outPath) throws Exception{
-		new GenAuthCode(160, 160).write(outPath);
+	public static byte[] genAuthCodeImage() throws Exception{
+		return new GenAuthCode(160, 50).draw();
+	}
+
+	public static byte[] genAuthCodeImage(int width, int height) throws Exception{
+		return new GenAuthCode(width, height).draw();
 	}
 
 	public static void main(String[] args) throws Exception {
