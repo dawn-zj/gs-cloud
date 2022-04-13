@@ -38,10 +38,10 @@
           }
         },
         {
-          "name": "Base64",
-          "path": "base64",
+          "name": "Tool",
+          "path": "tool",
           "hidden": false,
-          "component": "system/base64/index",
+          "component": "system/tool/index",
           "meta": {
             "title": "小工具合集",
             "icon": "user",
