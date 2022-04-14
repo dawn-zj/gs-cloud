@@ -1,28 +1,19 @@
 package com.gs.common.util;
 
+import com.gs.common.define.Constants;
+import com.gs.common.exception.NetGSRuntimeException;
+
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.imageio.ImageIO;
-
-import com.gs.common.define.Constants;
-import com.gs.common.exception.NetGSRuntimeException;
 
 public class FileUtil {
 
@@ -333,7 +324,7 @@ public class FileUtil {
 	}
 
 	/**
-	 * 获取文件后缀名
+	 * 获取文件后缀拓展名
 	 *
 	 * @param fileName
 	 *            文件名
@@ -347,7 +338,7 @@ public class FileUtil {
 		if (index == -1) {
 			return "";
 		}
-		return fileName.substring(index + 1);
+		return fileName.substring(index);
 	}
 
 	/**
