@@ -9,7 +9,14 @@ import com.itextpdf.text.pdf.*;
 
 public class RemovePdfStampUtil {
 
+	/**
+	 * pdf撤章，默认撤最后一个
+	 * @param pdfData
+	 * @return
+	 * @throws Exception
+	 */
 	public static byte[] removeStamp(byte[] pdfData) throws Exception {
+		// [offset1,len1,offset2,len2]
 		List<Integer> rangeList = getPdfStampByteRange(pdfData);
 
 		switch (rangeList.size()) {
@@ -86,7 +93,7 @@ public class RemovePdfStampUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String pdfStamp = "f:/temp/stamp_2.pdf";
+		String pdfStamp = "f:/temp/stamp1.pdf";
 		byte[] data = RemovePdfStampUtil.removeStamp(FileUtil.getFile(pdfStamp));
 		FileUtil.storeFile("f:/temp/stamp_remove.pdf", data);
 	}
