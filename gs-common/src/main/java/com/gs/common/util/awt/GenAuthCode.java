@@ -1,14 +1,14 @@
 package com.gs.common.util.awt;
 
 import com.gs.common.define.Constants;
+import com.gs.common.util.FileUtil;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
@@ -29,8 +29,12 @@ public class GenAuthCode {
 	// 验证码
 	private String code = null;
 
-	private char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R',
-			'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+	private char[] codeSequence = {
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+			'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n',
+			'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+			'1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 	private BufferedImage bufferedImage = null;
 
@@ -97,16 +101,23 @@ public class GenAuthCode {
 		code = randomCode.toString();
 	}
 
-	public void write(String path) throws IOException {
-		OutputStream outputStream = new FileOutputStream(path);
-		this.write(outputStream);
-		outputStream.flush();
-		outputStream.close();
+	public byte[] draw() throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(getBufferedImage(), "png", baos);
+		return baos.toByteArray();
 	}
 
-	private void write(OutputStream outputStream) throws IOException {
-		ImageIO.write(getBufferedImage(), "png", outputStream);
-	}
+
+//	public void write(String path) throws IOException {
+//		OutputStream outputStream = new FileOutputStream(path);
+//		this.write(outputStream);
+//		outputStream.flush();
+//		outputStream.close();
+//	}
+//
+//	private void write(OutputStream outputStream) throws IOException {
+//		ImageIO.write(getBufferedImage(), "png", outputStream);
+//	}
 
 	public BufferedImage getBufferedImage() {
 		if (bufferedImage == null)
@@ -120,7 +131,9 @@ public class GenAuthCode {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new GenAuthCode(160, 160).write(Constants.FILE_OUT_PATH + "authCodeImage.jpg");
+		String path = Constants.FILE_OUT_PATH + "authCodeImage.jpg";
+		byte[] bytes = new GenAuthCode(160, 160).draw();
+		FileUtil.storeFile(path, bytes);
 		System.out.println("制作完成");
 	}
 

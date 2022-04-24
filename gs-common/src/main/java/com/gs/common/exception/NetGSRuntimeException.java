@@ -27,6 +27,11 @@ public class NetGSRuntimeException extends RuntimeException {
 		this.errMsg = msg;
 	}
 
+	public NetGSRuntimeException(String msg, Throwable e) {
+		super(msg, e);
+		this.errMsg = msg;
+	}
+
 	public NetGSRuntimeException(int errNum, String msg) {
 		super(msg);
 		this.errNum = errNum;

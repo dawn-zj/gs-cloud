@@ -19,7 +19,6 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
-import oshi.util.FormatUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -72,8 +71,11 @@ public class UtilTest {
 	 *
 	 * @throws Exception
 	 */
+	@Test
 	public void genAuthCodeTest() throws Exception {
-		ImageUtil.genAuthCodeImage(Constants.FILE_OUT_PATH + "authCodeImage.jpg");
+		String path = Constants.FILE_OUT_PATH + "authCodeImage.jpg";
+		byte[] bytes = ImageUtil.genAuthCodeImage(180, 50);
+		FileUtil.storeFile(path, bytes);
 		System.out.println("制作完成");
 	}
 
