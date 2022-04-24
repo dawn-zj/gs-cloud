@@ -13,6 +13,7 @@ import com.gs.common.util.crypto.RSAUtil;
 import com.gs.common.util.date.DateUtil;
 import com.gs.common.util.pdf.PdfStampUtil;
 import com.gs.common.util.pdf.PdfUtil;
+import com.gs.common.util.pdf.RemovePdfStampUtil;
 import com.gs.common.util.pkcs.KeyStoreUtil;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
@@ -351,7 +352,7 @@ public class UtilTest {
 		// 得到证书链
 		Certificate[] chain = ks.getCertificateChain(alias);
 
-		//签章
+		//签章: PDF的RSA签章 = 图片+签名，没有印章和签章结构
 		byte[] pdfData = FileUtil.getFile(Constants.FILE_PATH + "2页.pdf");
 		byte[] photoData = FileUtil.getFile(Constants.FILE_PATH + "999.png");
 		byte[] signedData = pdfUtil.sign(pdfData, photoData,1,100, 100, chain, pk, DigestAlgorithms.SHA1);
@@ -365,6 +366,14 @@ public class UtilTest {
 		PdfStampUtil pdfUtil = new PdfStampUtil();
 		boolean verify = pdfUtil.verifySign(pdfData);
 		System.out.println("验签结果：" + verify);
+	}
+
+	@Test
+	public void pdfStampRemoveTest() throws Exception {
+		String pdfStamp = "f:/temp/stamp1.pdf";
+		byte[] data = RemovePdfStampUtil.removeStamp(FileUtil.getFile(pdfStamp));
+		FileUtil.storeFile("f:/temp/stamp_remove.pdf", data);
+		System.out.println("撤章成功");
 	}
 
 }

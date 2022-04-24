@@ -101,10 +101,10 @@ public class PdfStampUtil {
      * @throws Exception
      */
     public boolean verifySign(byte[] pdfData) throws Exception {
-        System.out.println(pdfData.length);
         PdfReader reader = new PdfReader(pdfData);
         AcroFields fields = reader.getAcroFields();
         ArrayList<String> names = fields.getSignatureNames();
+        boolean result = true;
         for (int i = 0, size = names.size(); i < size; i++) {
             String signName = (String) names.get(i);
             PdfDictionary dictionary = fields.getSignatureDictionary(signName);
@@ -116,9 +116,13 @@ public class PdfStampUtil {
                 PdfPKCS7 pkcs7 = fields.verifySignature(signName);
 
                 X509Certificate x509Certificate = pkcs7.getSigningCertificate();
-                System.out.println(StringUtil.format("certDn: {}", x509Certificate.getSubjectDN()));
 
-                return pkcs7.verify();
+                boolean verify = pkcs7.verify();
+                if (!verify) {
+                    result = false;
+                }
+                System.out.println(StringUtil.format("certDn: {}", x509Certificate.getSubjectDN()));
+                System.out.println(StringUtil.format("verify: {}", verify));
 
             } else {
                 throw new NetGSRuntimeException("暂不支持的SubFilter类型：" + sub);
