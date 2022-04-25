@@ -1,5 +1,5 @@
 module.exports = {
-  title: '若依管理系统',
+  title: '简氏小工具',
 
   /**
    * 是否系统布局配置
