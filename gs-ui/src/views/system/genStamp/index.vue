@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form ref="stampForm" class="form" :model="stampForm" :rules="stampRules" label-width="140px">
       <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章样式">
             <el-select v-model="stampForm.stampStyle" style="width: 100%" @change="getValue">
               <el-option
@@ -14,7 +14,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章字体">
             <el-select v-model="stampForm.fontType" style="width: 100%">
               <el-option
@@ -29,12 +29,12 @@
       </el-row>
 
       <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章宽度" prop="width">
             <el-input v-model="stampForm.width" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章高度" prop="height">
             <el-input v-model="stampForm.height" :disabled="disabledHeight" />
           </el-form-item>
@@ -42,7 +42,7 @@
       </el-row>
 
       <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="正文名称(预览)" prop="company">
             <el-input v-model="stampForm.company" :disabled="disabledCompany" />
           </el-form-item>
@@ -50,7 +50,7 @@
             <el-input-number v-model="stampForm.companyFontSize" :disabled="disabledCompany" style="width: 100%" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章编码(预览)" prop="number">
             <el-input v-model="stampForm.number" :disabled="disabledCompany" />
           </el-form-item>
@@ -61,7 +61,7 @@
       </el-row>
 
       <el-row>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章名称(预览)" prop="name">
             <el-input v-model="stampForm.name" />
           </el-form-item>
@@ -72,7 +72,7 @@
             <el-input-number v-model="stampForm.nameMarginBottom" style="width: 100%" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章副名(预览)" prop="label">
             <el-input v-model="stampForm.label" />
           </el-form-item>
@@ -151,44 +151,17 @@ export default {
         ]
       },
       stampStyleList: [
-        {
-          label: '圆形',
-          value: 1
-        },
-        {
-          label: '椭圆形',
-          value: 2
-        },
-        {
-          label: '方形',
-          value: 3
-        },
-        {
-          label: '长方形',
-          value: 4
-        }
+        { label: '圆形', value: 1 },
+        { label: '椭圆形', value: 2 },
+        { label: '方形', value: 3 },
+        { label: '长方形', value: 4 }
       ],
       fontList: [
-        {
-          label: '宋体',
-          value: '宋体'
-        },
-        {
-          label: '楷体',
-          value: '楷体'
-        },
-        {
-          label: '隶书',
-          value: '隶书'
-        },
-        {
-          label: '新宋体',
-          value: '新宋体'
-        },
-        {
-          label: '幼圆',
-          value: '幼圆'
-        }
+        { label: '宋体', value: '宋体' },
+        { label: '楷体', value: '楷体' },
+        { label: '隶书', value: '隶书' },
+        { label: '新宋体', value: '新宋体' },
+        { label: '幼圆', value: '幼圆' }
       ]
     }
   },
@@ -230,19 +203,19 @@ export default {
     },
     // 下拉框的选择事件
     getValue(val) {
-      if (val == 1 || val == 3) {
+      if (val === 1 || val === 3) {
         this.disabled = true
       } else {
         this.disabled = false
       }
-      if (val == 3 || val == 4) {
+      if (val === 3 || val === 4) {
         this.disabledCompany = true
         this.textFiletip = '(txt文件格式：每个图章名称为一行,每次最多制作500个)'
       } else {
         this.disabledCompany = false
         this.textFiletip = '(txt文件格式：图章名称和正文用英文逗号分隔,每一行为一个图章,每次最多制作500个)'
       }
-      if (val == 1) {
+      if (val === 1) {
         this.stampForm.width = '150'
         this.stampForm.companyFontSize = '20'
         this.stampForm.height = '100'
@@ -252,7 +225,7 @@ export default {
         this.stampForm.company = '电子签章系统测试'
         this.disabledHeight = true
       }
-      if (val == 2) {
+      if (val === 2) {
         this.stampForm.width = '150'
         this.stampForm.companyFontSize = '16'
         this.stampForm.height = '100'
@@ -261,7 +234,7 @@ export default {
         this.stampForm.company = '电子签章系统测试'
         this.disabledHeight = false
       }
-      if (val == 3) {
+      if (val === 3) {
         this.stampForm.width = '150'
         this.stampForm.height = '100'
         this.stampForm.nameFontSize = '45'
@@ -270,7 +243,7 @@ export default {
         this.stampForm.company = '电子签章系统测试'
         this.disabledHeight = true
       }
-      if (val == 4) {
+      if (val === 4) {
         this.stampForm.width = '150'
         this.stampForm.height = '50'
         this.stampForm.nameFontSize = '25'
@@ -324,9 +297,17 @@ export default {
 </script>
 
 <style scoped>
-  .form{
-    width: 70%;
-    margin: 20px auto;
+  /*在使用min-width时，小的在前面，大的在后面；同理，如果使用max-width时，就是大的在前面，小的在后面*/
+  @media screen and (max-width:1200px){
+    .form{
+      width: 70%;
+      margin: 20px auto;
+    }
   }
-
+  @media screen{
+    .form{
+      width: 90%;
+      margin: 20px auto;
+    }
+  }
 </style>
