@@ -2,7 +2,7 @@
   <div>
     <el-form ref="form" :model="formData" label-width="80px">
       <el-row>
-        <el-col :span="10">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10">
           <el-form-item label="原文">
             <el-input
               v-model="formData.content"
@@ -12,11 +12,11 @@
           </el-form-item>
 
         </el-col>
-        <el-col :span="2" :offset="1">
+        <el-col :xs="24" :sm="24" :md="2" :lg="2" :offset="1">
           <el-row><el-button type="primary" plain class="mt10" @click="handleEncode">编码</el-button></el-row>
           <el-row><el-button type="success" plain class="mt10" @click="handleDecode">解码</el-button></el-row>
         </el-col>
-        <el-col :span="10">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10">
           <el-form-item label="编码数据">
             <el-input
               v-model="formData.contentB64"
