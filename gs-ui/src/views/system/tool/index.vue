@@ -7,7 +7,7 @@
       <el-radio-button label="left">left</el-radio-button>
     </el-radio-group>
 
-    <el-tabs :tab-position="tabPosition">
+    <el-tabs :tab-position="tabPosition" class="mt20">
       <el-tab-pane label="Base64">
         <el-row>
           <el-col :span="24">
