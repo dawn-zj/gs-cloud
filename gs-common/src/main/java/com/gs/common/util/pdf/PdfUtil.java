@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.gs.common.define.Constants;
+import com.gs.common.exception.BaseException;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.resource.ErrCode;
 import com.gs.common.util.FileUtil;
@@ -123,18 +124,32 @@ public class PdfUtil {
 		}
 	}
 
+	public static byte[] pdfAddImage(byte[] pdfData, byte[] photoData, int pageNumber, float x, float y, float w, float h, int type) throws Exception {
+		switch (type) {
+			case Constants.PHOTO_UNIT_CM:
+				// 厘米转像素
+				w = w / 2.54f * 72f;
+				h = h / 2.54f * 72f;
+				return pdfAddImage(pdfData, photoData, pageNumber, x, y, w, h);
+			case Constants.PHOTO_UNIT_PX:
+				return pdfAddImage(pdfData, photoData, pageNumber, x, y, w, h);
+			default:
+				throw new BaseException("不支持的图片单位：" + type);
+		}
+	}
+
 	/**
 	 * 给pdf的指定页码和坐标添加图片
 	 *
 	 * @param pdfData    pdf文件
 	 * @param photoData  图片
 	 * @param pageNumber 页码
-	 * @param x          x坐标
-	 * @param y          y坐标
-	 * @param w          图片宽度，单位英寸
-	 * @param h          图片高度，单位英寸
+	 * @param x          x坐标，像素
+	 * @param y          y坐标，像素
+	 * @param w          图片宽度，单位像素
+	 * @param h          图片高度，单位像素
 	 */
-	public static byte[] pdfAddImage(byte[] pdfData, byte[] photoData, int pageNumber, float x, float y, float w, float h) throws Exception {
+	private static byte[] pdfAddImage(byte[] pdfData, byte[] photoData, int pageNumber, float x, float y, float w, float h) throws Exception {
 		PdfReader reader = null;
 		PdfStamper stamper = null;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -157,7 +172,7 @@ public class PdfUtil {
 			/**
 			 * 通常手机、电脑上照片默认分辨率是72或96
 			 * 实际尺寸(英寸)=像素/分辨率
-			 * 1 英寸 = 2.54 厘米
+			 * 1 英寸 = 2.54 厘米 = 72磅
 			 * 1 厘米 = 1/2.54 英寸
 			 */
 			// Image处理

@@ -181,8 +181,10 @@ public class UtilTest {
 	public void pdfAddImageTest() throws Exception {
 		byte[] pdfData = FileUtil.getFile(Constants.FILE_PATH + "req_con.pdf");
 		byte[] photoData = FileUtil.getFile(Constants.FILE_PATH + "gs.png");
-		byte[] addImagePdf = PdfUtil.pdfAddImage(pdfData, photoData, 1, 100, 100, 100, 100);
-		FileUtil.storeFile(Constants.FILE_OUT_PATH + "个人信息_addImage.pdf", addImagePdf);
+		// 可指定图片大小和单位，1为厘米，2位像素
+		// byte[] addImagePdf = PdfUtil.pdfAddImage(pdfData, photoData, 1, 100, 100, 100, 100, 2);
+		byte[] addImagePdf = PdfUtil.pdfAddImage(pdfData, photoData, 1, 100, 100, 4.3f, 4.3f, 1);
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "个人信息_addImage2.pdf", addImagePdf);
 		System.out.println("ok");
 	}
 

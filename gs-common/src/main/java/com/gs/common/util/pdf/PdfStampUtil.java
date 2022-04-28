@@ -42,8 +42,8 @@ public class PdfStampUtil {
      * @param pdfData pdf数据
      * @param photoData 图片数据
      * @param pageNumber 页码
-     * @param x x坐标
-     * @param y y坐标
+     * @param x x坐标，单位像素
+     * @param y y坐标，单位像素
      * @param chain 证书链
      * @param privateKey 私钥
      * @param hashAlg 摘要算法
@@ -73,7 +73,8 @@ public class PdfStampUtil {
         sap.setRenderingMode(PdfSignatureAppearance.RenderingMode.GRAPHIC);
         // 1.3设置图章位置，页码，签名域名称，多次追加签名的时候，签名预名称不能一样 图片大小受表单域大小影响（过小导致压缩）
         // 签名的坐标，是图章相对于pdf页面的位置坐标，原点为pdf页面左下角
-        // 四个参数的分别是，图章左下角x，图章左下角y，图章右上角x，图章右上角y
+        // 四个参数单位均是像素，分别是，图章左下角x，图章左下角y，图章右上角x，图章右上角y。
+        // 分辨率调整：像素 / 72 = ? / dpi
         float imageWidth = image.getWidth() * 72f / Constants.DPI;
         float imageHeight = image.getHeight() * 72f / Constants.DPI;
         float ux = x + imageWidth;

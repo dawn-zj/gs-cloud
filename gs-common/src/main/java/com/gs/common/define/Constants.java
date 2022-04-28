@@ -42,6 +42,8 @@ public class Constants {
 
 	// 图片分辨率，分辨率越高，图片越小越清晰
 	public static final int DPI = 96;
+	public static final int PHOTO_UNIT_CM = 1; // 图片单位厘米
+	public static final int PHOTO_UNIT_PX = 2; // 图片单位像素
 
 	// 日志类型
 	public static final String LOG_OPTYPE_SYSUSER_LOGIN = "LOG_OPTYPE_SYSUSER_LOGIN";
