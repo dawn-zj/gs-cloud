@@ -5,6 +5,7 @@ import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.HexUtil;
 import com.gs.common.util.StringUtil;
+import com.gs.common.util.cert.CertUtil;
 import com.gs.common.util.crypto.KeyUtil;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
@@ -15,6 +16,7 @@ import org.bouncycastle.jce.provider.X509CertParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
@@ -81,12 +83,12 @@ public class PdfStampUtil {
         float uy = y + imageHeight;
         sap.setVisibleSignature(new Rectangle(x, y, ux, uy), pageNumber, StringUtil.genDigitRandom(10));
 
-        // 2.摘要算法
-        ExternalDigest digest = new BouncyCastleDigest();
+        // 2.摘要算法接口，会根据hashAlg匹配至相应摘要类，进行hash
+        ExternalDigest interfaceDigest = new BouncyCastleDigest();
         // 3.签名算法
-        ExternalSignature signature = new PrivateKeySignature(privateKey, hashAlg, null);
+        ExternalSignature externalSignature = new PrivateKeySignature(privateKey, hashAlg, null);
         // 签章
-        MakeSignature.signDetached(sap, digest, signature, chain,
+        MakeSignature.signDetached(sap, interfaceDigest, externalSignature, chain,
                 null, null, null, 0, MakeSignature.CryptoStandard.CADES);
 
         stamper.close();
@@ -131,6 +133,66 @@ public class PdfStampUtil {
         }
         return false;
     }
+
+    /**
+     * todo 未完待续，不好实现
+     * @param pdfData
+     * @param photoData
+     * @param pageNumber
+     * @param x
+     * @param y
+     * @param certData
+     * @param hashAlg
+     * @return
+     * @throws Exception
+     */
+    public byte[] stampWithoutSign(byte[] pdfData, byte[] photoData, int pageNumber, float x, float y,
+                                   byte[] certData, String hashAlg) throws Exception {
+        PdfReader reader = new PdfReader(pdfData);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfStamper stamper = PdfStamper.createSignature(reader, outputStream, '\0', null, true);
+
+        // 1.设置PdfSignatureAppearance
+        PdfSignatureAppearance sap = stamper.getSignatureAppearance();
+        Image image = Image.getInstance(photoData);
+        sap.setSignatureGraphic(image);
+        sap.setRenderingMode(PdfSignatureAppearance.RenderingMode.GRAPHIC);
+
+        float imageWidth = image.getWidth() * 72f / Constants.DPI;
+        float imageHeight = image.getHeight() * 72f / Constants.DPI;
+        float ux = x + imageWidth;
+        float uy = y + imageHeight;
+        sap.setVisibleSignature(new Rectangle(x, y, ux, uy), pageNumber, StringUtil.genDigitRandom(10));
+
+        X509Certificate x509Certificate = CertUtil.getX509Certificate(certData);
+        sap.setCertificate(x509Certificate);
+
+        // // 2.摘要算法接口
+        // ExternalDigest digest = new BouncyCastleDigest();
+        // // 3.签名算法
+        // ExternalSignature signature = new PrivateKeySignature(privateKey, hashAlg, null);
+        // // 签章
+        // MakeSignature.signDetached(sap, digest, signature, chain,
+        //         null, null, null, 0, MakeSignature.CryptoStandard.CADES);
+
+        stamper.close();
+        reader.close();
+        return outputStream.toByteArray();
+
+    }
+
+    public byte[] data2sign(byte[] toSignData, PrivateKey privateKey, String hashAlg) throws Exception {
+        ExternalSignature signature = new PrivateKeySignature(privateKey, hashAlg, null);
+        byte[] signed = signature.sign(toSignData);
+        return signed;
+    }
+
+    public byte[] pdfStampMerge(byte[] toSignData, byte[] signed) throws Exception {
+       // todo 将待签原文和签名值合并
+        return null;
+    }
+
 
 //    private byte[] parsePdfPlain(byte[] pdfData, PdfArray byteRange) throws Exception {
 //        if (byteRange.size() != 4) {
