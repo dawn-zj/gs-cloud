@@ -44,16 +44,18 @@ public class NetWorkUtil {
             Process p = runt.exec("ifconfig -a");
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                String tmp = line.trim();
-                if (tmp.startsWith(networkCard)) {
-                    int start = tmp.indexOf("HWaddr");
-                    int end = tmp.length();
-                    hWaddr = tmp.substring(start + 7, end);
-                    hWaddr = hWaddr.replace(":", "").toLowerCase();
-                }
-            }
+            // 开发环境测试
+            // File f = new File("E:/etc/ip-centos.txt");
+            // FileInputStream fis = new FileInputStream(f);
+            // BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+
+            if (FileUtil.checkPath("/etc/centos-release"))
+                hWaddr = getHostMacCentos(networkCard, reader);
+            else if (FileUtil.checkPath("/etc/neokylin-release"))
+                hWaddr = getHostMacNeoKylin(networkCard, reader);
+            else
+                throw new Exception("not support current os(must centos、neokylin)");
+
             return hWaddr;
         } else {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
@@ -65,6 +67,47 @@ public class NetWorkUtil {
             }
             throw new Exception("没有找到指定的网卡");
         }
+    }
+
+    private static String getHostMacCentos(String networkCard, BufferedReader reader) throws Exception {
+        String hWaddr = null;
+        // centos
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            String tmp = line.trim();
+            if (tmp.startsWith(networkCard)) {
+                int start = tmp.indexOf("HWaddr");
+                int end = tmp.length();
+                hWaddr = tmp.substring(start + 7, end);
+                hWaddr = hWaddr.replace(":", "").toLowerCase();
+            }
+        }
+        return hWaddr;
+    }
+
+    private static String getHostMacNeoKylin(String networkCard, BufferedReader reader) throws Exception {
+        String hWaddr = null;
+        // 中标麒麟
+        String section = "";
+        String temp = reader.readLine().trim();
+
+        while (temp != null) {
+            temp = temp.trim();
+            if (!temp.equalsIgnoreCase("")) {
+                section = section + temp + " ";
+            } else {
+                if (!"".equalsIgnoreCase(section) && section.startsWith(networkCard)) {
+                    int start = section.indexOf("ether ");
+                    int end = section.indexOf("txqueuelen");
+                    hWaddr = section.substring(start + 6, end);
+                    hWaddr = hWaddr.replace(":", "").toLowerCase().trim();
+                    break;
+                }
+                section = "";
+            }
+            temp = reader.readLine();
+        }
+        return hWaddr;
     }
 
     public static ServerInfo systemInfo() throws Exception {
