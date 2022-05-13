@@ -4,8 +4,8 @@ export function getBase64(file) {
     let reader = new FileReader();
     let imgResult = "";
     reader.readAsDataURL(file);
-    reader.onload = function () {
-      imgResult = reader.result;
+    reader.onload = function (e) {
+      imgResult = e.target.result; // 这种写法可兼容移动端
     };
     reader.onerror = function (error) {
       reject(error);
