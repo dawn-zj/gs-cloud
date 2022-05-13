@@ -54,6 +54,19 @@
           </el-col>
         </el-row>
       </el-tab-pane>
+      <el-tab-pane label="SM3摘要">
+        <el-row>
+          <el-col :span="24">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>SM3摘要测试</span>
+              </div>
+              <iframe src="https://101.43.242.145:8443/sm/index.html" width="100%" />
+            </el-card>
+          </el-col>
+        </el-row>
+
+      </el-tab-pane>
     </el-tabs>
   </div>
 
