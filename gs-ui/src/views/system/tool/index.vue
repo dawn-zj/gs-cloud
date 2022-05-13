@@ -67,6 +67,18 @@
         </el-row>
 
       </el-tab-pane>
+      <el-tab-pane label="水印">
+        <el-row>
+          <el-col :span="24">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>水印</span>
+              </div>
+              <watermark />
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
     </el-tabs>
   </div>
 
@@ -76,11 +88,12 @@
 import textBase64 from './base64/textBase64'
 import fileBase64 from './base64/fileBase64'
 import barcodeIndex from './barcode/index'
-import px2cmIndex from '@/views/system/tool/px2cm'
+import px2cmIndex from './px2cm/index'
+import watermark from './watermark/index'
 
 export default {
   name: 'Index',
-  components: { textBase64, fileBase64, barcodeIndex, px2cmIndex },
+  components: { textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark },
   data() {
     return {
       tabPosition: 'top'
