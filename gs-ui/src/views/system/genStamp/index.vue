@@ -220,6 +220,7 @@ export default {
         this.stampForm.companyFontSize = '20'
         this.stampForm.height = '100'
         this.stampForm.nameFontSize = '12'
+        this.stampForm.nameMarginBottom = '20'
         this.stampForm.companyFontSize = '20'
         this.stampForm.name = '测试专用章'
         this.stampForm.company = '电子签章系统测试'
@@ -230,6 +231,7 @@ export default {
         this.stampForm.companyFontSize = '16'
         this.stampForm.height = '100'
         this.stampForm.nameFontSize = '12'
+        this.stampForm.nameMarginBottom = '0'
         this.stampForm.name = '测试专用章'
         this.stampForm.company = '电子签章系统测试'
         this.disabledHeight = false
