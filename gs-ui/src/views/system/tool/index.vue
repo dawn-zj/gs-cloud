@@ -54,19 +54,6 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="SM3摘要">
-        <el-row>
-          <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>SM3摘要测试</span>
-              </div>
-              <iframe src="https://101.43.242.145:8443/sm/index.html" width="100%" />
-            </el-card>
-          </el-col>
-        </el-row>
-
-      </el-tab-pane>
       <el-tab-pane label="水印">
         <el-row>
           <el-col :span="24">
@@ -78,6 +65,14 @@
             </el-card>
           </el-col>
         </el-row>
+      </el-tab-pane>
+
+      <el-tab-pane label="外链项目">
+        <el-link href="https://101.43.242.145:8443/sm/index.html" target="_blank">SM3摘要：https://101.43.242.145:8443/sm/index.html</el-link>
+        <br>
+        <el-link href="https://101.43.242.145:8443/demo/index.html" target="_blank">demo 框架示例：https://101.43.242.145:8443/demo/index.html</el-link>
+        <br>
+
       </el-tab-pane>
     </el-tabs>
   </div>
