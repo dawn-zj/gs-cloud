@@ -1,23 +1,23 @@
 package com.gs.common.util;
 
-import com.gs.common.define.Constants;
-import com.gs.common.exception.NetGSRuntimeException;
-import com.gs.common.resource.ErrCode;
-import com.gs.common.util.awt.GenAuthCode;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.gs.common.define.Constants;
+import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.common.resource.ErrCode;
+import com.gs.common.util.awt.GenAuthCode;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 /**
  * 图片去底色工具类
@@ -31,12 +31,16 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public static byte[] cleanBGColor(byte[] bs) throws Exception {
+		ByteArrayInputStream bais = new ByteArrayInputStream(bs);
+		BufferedImage bi = ImageIO.read(bais);
+		return cleanBGColor(bi);
+	}
+
+	public static byte[] cleanBGColor(BufferedImage bi) throws Exception {
 		// todo 去白色背景还有锯齿瑕疵，待优化
 		int imgR = 255;
 		int imgG = 255;
 		int imgB = 255;
-		ByteArrayInputStream bais = new ByteArrayInputStream(bs);
-		BufferedImage bi = ImageIO.read(bais);
 		BufferedImage tmp = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		for (int i = 0, width = bi.getWidth(); i < width; i++) {
 			for (int j = 0, height = bi.getHeight(); j < height; j++) {
@@ -58,7 +62,6 @@ public class ImageUtil {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(tmp, "png", baos);
-
 		return baos.toByteArray();
 	}
 
