@@ -87,6 +87,9 @@
       <el-form-item label="实时预览">
         <el-image v-loading="loading" :src="url" fit="fill" />
       </el-form-item>
+      <div class="form-footer">
+        <el-button type="primary" @click="downloadFile">下载</el-button>
+      </div>
     </el-form>
   </div>
 
@@ -95,6 +98,7 @@
 <script>
 import { viewStamp } from '@/api/system/genStamp'
 import { validateByteSize, validateNumber } from '@/utils/validate'
+import { downloadBase64Photo } from '@/utils/file'
 export default {
   name: 'Index',
   data() {
@@ -271,6 +275,18 @@ export default {
       this.init()
       this.$set(this, 'fileList', [])
       this.resetForm('stampForm')
+    },
+    downloadFile() {
+      this.$refs['stampForm'].validate((valid) => {
+        if (valid) {
+          viewStamp(this.stampForm).then(res => {
+            this.loading = false
+            downloadBase64Photo(res.data.result, 'seal.png')
+          }).catch(() => {
+            this.loading = false
+          })
+        }
+      })
     }
     // handleExceed(files) {
     //   this.msgError('当前限制选择 1 个文件')
