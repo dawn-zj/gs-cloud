@@ -2,6 +2,7 @@ package com.gs.common.util.photo;
 
 import com.gs.common.entity.Photo;
 import com.gs.common.util.FileUtil;
+import com.gs.common.util.ImageUtil;
 import com.gs.common.util.StringUtil;
 
 import javax.imageio.ImageIO;
@@ -59,10 +60,13 @@ public class Circle extends Base {
         Graphics2D g2d = bi.createGraphics();
         drawPhoto(g2d);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bi, "png", baos);
+        // 去白色背景
+        byte[] data = ImageUtil.cleanBGColor(bi);
+        return data;
 
-        return baos.toByteArray();
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        ImageIO.write(bi, "png", baos);
+//        return baos.toByteArray();
     }
 
     private void drawPhoto(Graphics2D g2d) {
