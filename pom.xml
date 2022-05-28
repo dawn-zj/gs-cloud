@@ -16,6 +16,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>gs-ui</module>
 		<module>gs-webserver</module>
 		<module>gs-gateway</module>
 		<module>gs-common</module>
