@@ -3,8 +3,6 @@ package demo;
 import com.alibaba.fastjson.JSON;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.Cpu;
-import com.gs.common.entity.Memory;
-import com.gs.common.entity.ServerInfo;
 import com.gs.common.util.*;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
@@ -372,8 +370,6 @@ public class UtilTest {
 	 */
 	@Test
 	public void loadKeyTest() throws Exception {
-		String password = "11111111";
-		String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
 		PrivateKey pk = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
 		System.out.println("签名算法：" + pk.getAlgorithm());
 	}
