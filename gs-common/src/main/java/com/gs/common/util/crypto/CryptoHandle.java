@@ -12,12 +12,11 @@ public class CryptoHandle {
      * 公钥加密
      * @param pubKey
      * @param value
-     * @param hsmId
      * @param encAlg
      * @return
      * @throws Exception
      */
-    protected static byte[] encryptWithPubKey(PublicKey pubKey, byte[] value, int hsmId, String encAlg) throws Exception {
+    protected static byte[] encryptWithPubKey(PublicKey pubKey, byte[] value, String encAlg) throws Exception {
         if (pubKey == null)
             throw new Exception("pubKey is null");
 
@@ -38,12 +37,11 @@ public class CryptoHandle {
      * 私钥解密
      * @param priKey
      * @param value
-     * @param hsmId
      * @param encAlg
      * @return
      * @throws Exception
      */
-    protected static byte[] decryptWithPriKey(PrivateKey priKey, byte[] value, int hsmId, String encAlg) throws Exception {
+    protected static byte[] decryptWithPriKey(PrivateKey priKey, byte[] value, String encAlg) throws Exception {
         if (priKey == null)
             throw new Exception("priKey is null");
 
@@ -65,13 +63,12 @@ public class CryptoHandle {
      * @param pubKey 国密时使用
      * @param priKey 私钥
      * @param plain 原文
-     * @param hsmId 加密卡时使用
      * @param signAlg 签名哈希算法
      * @param id 国密时使用
      * @return
      * @throws Exception
      */
-    protected static byte[] signWithPriKey(PublicKey pubKey, PrivateKey priKey, byte[] plain, int hsmId, String signAlg, byte[] id) throws Exception {
+    protected static byte[] signWithPriKey(PublicKey pubKey, PrivateKey priKey, byte[] plain, String signAlg, byte[] id) throws Exception {
         if (priKey == null)
             throw new Exception("priKey is null");
 
@@ -106,13 +103,12 @@ public class CryptoHandle {
      * @param pubKey
      * @param priKey
      * @param hashData
-     * @param hsmId
      * @param signAlg
      * @param id
      * @return
      * @throws Exception
      */
-    public byte[] signHashWithPriKey(PublicKey pubKey, PrivateKey priKey, byte[] hashData, int hsmId, String signAlg, byte[] id) throws Exception {
+    public byte[] signHashWithPriKey(PublicKey pubKey, PrivateKey priKey, byte[] hashData, String signAlg, byte[] id) throws Exception {
         return null;
     }
 
@@ -121,13 +117,12 @@ public class CryptoHandle {
      * @param pubKey 验证签名的公钥(PublicKey bytearray )
      * @param plain 明文
      * @param signed 签名密文
-     * @param hsmId 加密卡id
      * @param signAlg 签名算法
      * @param id
      * @return 验证是否通过
      * @throws Exception
      */
-    protected static boolean signVerifyWithPubKey(PublicKey pubKey, byte[] plain, byte[] signed, int hsmId, String signAlg, byte[] id) throws Exception {
+    protected static boolean signVerifyWithPubKey(PublicKey pubKey, byte[] plain, byte[] signed, String signAlg, byte[] id) throws Exception {
         if (pubKey == null)
             throw new Exception("pubKey is null");
 
