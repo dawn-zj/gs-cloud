@@ -45,7 +45,7 @@ public class ITextTest {
         // 验签
         byte[] file = FileUtil.getFile(Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer");
         X509Certificate x509Certificate = CertUtil.getX509Certificate(file);
-        boolean result = KeyUtil.signVerifyWithPubKey(x509Certificate.getPublicKey(), "123".getBytes(), signed, -1, Constants.SHA1_RSA, "1".getBytes());
+        boolean result = KeyUtil.rawSignVerify(x509Certificate.getPublicKey(), "123".getBytes(), signed, -1, Constants.SHA1_RSA, "1".getBytes());
         System.out.println("itext签名验签完成，验签结果：" + result);
     }
 
