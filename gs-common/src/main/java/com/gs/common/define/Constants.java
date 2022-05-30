@@ -20,6 +20,7 @@ public class Constants {
 	public static final String TXT_SUFFIX = ".txt"; // txt文件后缀
 	public static final String CONF_SUFFIX = ".properties"; // properties文件后缀
 	public static final String CER_SUFFIX = ".cer"; // cert文件后缀
+	public static final String P7B_SUFFIX = ".p7b"; // cert文件后缀
 
 	// 项目资源
 	public static final String CONTEXT_PATH = "E:/Idea/GS/gs-cloud";// 项目目录相对路径
