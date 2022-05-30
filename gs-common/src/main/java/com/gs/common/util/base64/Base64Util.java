@@ -1,5 +1,7 @@
 package com.gs.common.util.base64;
 
+import com.gs.common.util.StringUtil;
+
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
@@ -24,9 +26,9 @@ public class Base64Util {
 	 *            字符串
 	 * @return 已被编码的byte[]
 	 */
-	public static byte[] encode(String str) {
+	public static String encode(String str) {
 		Encoder enc = Base64.getEncoder();
-		return enc.encode(str.getBytes());
+		return StringUtil.getString(enc.encode(str.getBytes()));
 	}
 
 	/**
@@ -43,7 +45,7 @@ public class Base64Util {
 
 	public static String encode(byte[] data) {
 		Encoder enc = Base64.getEncoder();
-		return new String(enc.encode(data));
+		return StringUtil.getString(enc.encode(data));
 	}
 
 	/**
