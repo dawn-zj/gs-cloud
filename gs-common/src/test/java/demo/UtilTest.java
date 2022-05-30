@@ -118,8 +118,8 @@ public class UtilTest {
 	public void base64Test() {
 		//编码
 		String str1 = "son";
-		byte[] b1 = Base64Util.encode(str1);
-		System.out.println(new String(b1));
+		String str = Base64Util.encode(str1);
+		System.out.println(str);
 
 		//解码
 		String str2 = "c29u";
@@ -307,11 +307,11 @@ public class UtilTest {
 	}
 
 	/**
-	 * RSA签名验签
+	 * RSA裸签名验签
 	 * @throws Exception
 	 */
 	@Test
-	public void rsaSignTest() throws Exception {
+	public void rsaRawSignTest1() throws Exception {
 		String plain = "plain";
 		System.out.println("签名开始，原文数据：" + plain);
 		// 加载RSA私钥
@@ -322,6 +322,26 @@ public class UtilTest {
 		// 加载RSA公钥
 		byte[] pubKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt");
 		PublicKey publicKey = RSAUtil.generateP8PublicKey(Base64Util.decode(pubKeyData));
+		boolean result = KeyUtil.signVerifyWithPubKey(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
+		System.out.println("验签完成，验签结果：" + result);
+	}
+
+	@Test
+	public void rsaRawSignTest2() throws Exception {
+		String plain = "plain";
+		System.out.println("签名开始，原文数据：" + plain);
+
+		String password = "11111111";
+		String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
+		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
+		System.out.println("签名算法：" + privateKey.getAlgorithm());
+		// 使用sha256做摘要
+		byte[] signed = KeyUtil.signWithPriKey(null, privateKey, plain.getBytes(), -1, Constants.SHA256_RSA, "1".getBytes());
+		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsa_sha256_sigend.txt", Base64Util.encode(signed).getBytes());
+
+		byte[] file = FileUtil.getFile(Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer");
+		X509Certificate x509Certificate = CertUtil.getX509Certificate(file);
+		PublicKey publicKey = x509Certificate.getPublicKey();
 		boolean result = KeyUtil.signVerifyWithPubKey(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
 		System.out.println("验签完成，验签结果：" + result);
 	}
@@ -378,6 +398,13 @@ public class UtilTest {
 		byte[] data = RemovePdfStampUtil.removeStamp(FileUtil.getFile(pdfStamp));
 		FileUtil.storeFile("f:/temp/stamp_remove.pdf", data);
 		System.out.println("撤章成功");
+	}
+
+	@Test
+	public void der2base64() {
+		String file = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer";
+		byte[] data = FileUtil.getFile(file);
+		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1_b64.cer", Base64Util.encode(data).getBytes());
 	}
 
 }
