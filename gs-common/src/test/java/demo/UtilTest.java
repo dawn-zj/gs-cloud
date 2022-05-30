@@ -380,9 +380,6 @@ public class UtilTest {
 	 */
 	@Test
 	public void pdfStampTest() throws Exception {
-		String password = "11111111";
-		String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
-
 		PdfStampUtil pdfUtil = new PdfStampUtil();
 		// 读取keystore ，获得私钥
 		KeyStore ks = KeyStore.getInstance("PKCS12");
