@@ -317,12 +317,12 @@ public class UtilTest {
 		// 加载RSA私钥
 		byte[] priKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt");
 		PrivateKey privateKey = RSAUtil.generateP8PrivateKey(Base64Util.decode(priKeyData));
-		byte[] signed = KeyUtil.signWithPriKey(null, privateKey, plain.getBytes(), -1, Constants.SHA256_RSA, "1".getBytes());
+		byte[] signed = KeyUtil.rawSign(null, privateKey, plain.getBytes(), -1, Constants.SHA256_RSA, "1".getBytes());
 
 		// 加载RSA公钥
 		byte[] pubKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt");
 		PublicKey publicKey = RSAUtil.generateP8PublicKey(Base64Util.decode(pubKeyData));
-		boolean result = KeyUtil.signVerifyWithPubKey(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
+		boolean result = KeyUtil.rawSignVerify(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
 		System.out.println("验签完成，验签结果：" + result);
 	}
 
@@ -336,13 +336,13 @@ public class UtilTest {
 		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
 		System.out.println("签名算法：" + privateKey.getAlgorithm());
 		// 使用sha256做摘要
-		byte[] signed = KeyUtil.signWithPriKey(null, privateKey, plain.getBytes(), -1, Constants.SHA256_RSA, "1".getBytes());
+		byte[] signed = KeyUtil.rawSign(null, privateKey, plain.getBytes(), -1, Constants.SHA256_RSA, "1".getBytes());
 		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsa_sha256_sigend.txt", Base64Util.encode(signed).getBytes());
 
 		byte[] file = FileUtil.getFile(Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer");
 		X509Certificate x509Certificate = CertUtil.getX509Certificate(file);
 		PublicKey publicKey = x509Certificate.getPublicKey();
-		boolean result = KeyUtil.signVerifyWithPubKey(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
+		boolean result = KeyUtil.rawSignVerify(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
 		System.out.println("验签完成，验签结果：" + result);
 	}
 
