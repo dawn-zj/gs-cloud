@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Properties;
 
 public class UtilTest {
+	private String password = "11111111";
+	private String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
+	private String pfxCertPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer";
 
 	@Test
 	public void genDerASN1() throws Exception {
@@ -297,12 +300,12 @@ public class UtilTest {
 		// 加载RSA公钥
 		byte[] pubKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt");
 		PublicKey publicKey = RSAUtil.generateP8PublicKey(Base64Util.decode(pubKeyData));
-		byte[] encrypt = KeyUtil.encryptWithPubKey(publicKey, plain.getBytes(), -1, Constants.RSA);
+		byte[] encrypt = KeyUtil.encrypt(publicKey, plain.getBytes(), Constants.RSA);
 
 		// 加载RSA私钥
 		byte[] priKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt");
 		PrivateKey privateKey = RSAUtil.generateP8PrivateKey(Base64Util.decode(priKeyData));
-		byte[] decrypt = KeyUtil.decryptWithPriKey(privateKey, encrypt, -1, Constants.RSA);
+		byte[] decrypt = KeyUtil.decrypt(privateKey, encrypt, Constants.RSA);
 		System.out.println("解密完成，解密数据：" + new String(decrypt));
 	}
 
@@ -317,12 +320,12 @@ public class UtilTest {
 		// 加载RSA私钥
 		byte[] priKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt");
 		PrivateKey privateKey = RSAUtil.generateP8PrivateKey(Base64Util.decode(priKeyData));
-		byte[] signed = KeyUtil.rawSign(null, privateKey, plain.getBytes(), -1, Constants.SHA256_RSA, "1".getBytes());
+		byte[] signed = KeyUtil.rawSign(null, privateKey, plain.getBytes(),  Constants.SHA256_RSA, "1".getBytes());
 
 		// 加载RSA公钥
 		byte[] pubKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt");
 		PublicKey publicKey = RSAUtil.generateP8PublicKey(Base64Util.decode(pubKeyData));
-		boolean result = KeyUtil.rawSignVerify(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
+		boolean result = KeyUtil.rawSignVerify(publicKey, plain.getBytes(), signed, Constants.SHA256_RSA, "1".getBytes());
 		System.out.println("验签完成，验签结果：" + result);
 	}
 
@@ -331,19 +334,36 @@ public class UtilTest {
 		String plain = "plain";
 		System.out.println("签名开始，原文数据：" + plain);
 
-		String password = "11111111";
-		String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
 		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
 		System.out.println("签名算法：" + privateKey.getAlgorithm());
 		// 使用sha256做摘要
-		byte[] signed = KeyUtil.rawSign(null, privateKey, plain.getBytes(), -1, Constants.SHA256_RSA, "1".getBytes());
-		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsa_sha256_sigend.txt", Base64Util.encode(signed).getBytes());
+		byte[] signed = KeyUtil.rawSign(null, privateKey, plain.getBytes(), Constants.SHA256_RSA, "1".getBytes());
+		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsa_sha256_rawSigned.txt", Base64Util.encode(signed).getBytes());
 
-		byte[] file = FileUtil.getFile(Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer");
+		byte[] file = FileUtil.getFile(pfxCertPath);
 		X509Certificate x509Certificate = CertUtil.getX509Certificate(file);
 		PublicKey publicKey = x509Certificate.getPublicKey();
-		boolean result = KeyUtil.rawSignVerify(publicKey, plain.getBytes(), signed, -1, Constants.SHA256_RSA, "1".getBytes());
+		boolean result = KeyUtil.rawSignVerify(publicKey, plain.getBytes(), signed, Constants.SHA256_RSA, "1".getBytes());
 		System.out.println("验签完成，验签结果：" + result);
+	}
+
+	@Test
+	public void detachedSignTest() throws Exception {
+		String plain = "plain";
+		System.out.println("签名开始，原文数据：" + plain);
+
+		byte[] file = FileUtil.getFile(pfxCertPath);
+		X509Certificate cert = CertUtil.getX509Certificate(file);
+		// 签名
+		byte[] signed = KeyUtil.detachedSign(plain.getBytes(), cert);
+		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsa_sha256_detachedSigned.txt", Base64Util.encode(signed).getBytes());
+
+
+		// 验签
+		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
+		byte[] data = KeyUtil.detachedVerify(signed, privateKey);
+
+		System.out.println("验签完成，解析原文：" + StringUtil.getString(data));
 	}
 
 	/**
