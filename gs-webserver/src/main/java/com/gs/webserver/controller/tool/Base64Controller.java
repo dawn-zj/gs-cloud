@@ -13,9 +13,9 @@ public class Base64Controller {
 
     @PostMapping("/encode")
     public ResponseTo encode(@RequestBody Base64To base64To) {
-        byte[] encode = Base64Util.encode(base64To.getContent());
+        String encode = Base64Util.encode(base64To.getContent());
         CommonTo commonTo = new CommonTo();
-        commonTo.setResult(StringUtil.getString(encode));
+        commonTo.setResult(encode);
         return ResponseTo.success(commonTo);
     }
 
