@@ -48,9 +48,9 @@
               <li>
                 <div>
                   <span>字体大小：</span>
-                  <el-input-number
+                  <el-input
                     v-model="item.size"
-                    type="text"
+                    type="number"
                     @input="set_form_size(item, index)"
                   />
                 </div>
