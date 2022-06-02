@@ -17,7 +17,7 @@
       </el-upload>
     </div>
     <el-row>
-      <el-col :span="6">
+      <el-col :span="4">
         <div>
           <div class="left-title">我的印章</div>
           <draggable v-model="mainImagelist" :group="{name:'itext',pull:'clone'}" :sort="false" @end="end">
@@ -30,9 +30,13 @@
         </div>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="14">
         <!-- pdf的预览 -->
-        <div>
+        <div style="overflow: scroll">
+          <div class="block">
+            <span class="demonstration">{{ scale*100 }}%</span>
+            <el-slider v-model="scale" :min="0.5" :max="2" :step="0.25" @change="queueRenderPage(pageNum)" />
+          </div>
           <div class="page">
             <button class="btn-outline-dark" @click="prevPage">上一页</button>
             <button class="btn-outline-dark" @click="nextPage">下一页</button>
@@ -90,7 +94,7 @@ export default {
       pdfDoc: null,
       numPages: 1,
       pageNum: 1,
-      scale: 1,
+      scale: 1.0, // 放大倍数
       pageRendering: false,
       pageNumPending: null,
       sealUrl: '',
