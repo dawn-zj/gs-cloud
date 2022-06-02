@@ -29,15 +29,7 @@ export function getFileType(fileName) {
 
 // 下载文件，base64图片下载
 export function downloadBase64Photo(base64Photo, fileName) {
-  var byteCharacters = atob(base64Photo);
-  var byteNumbers = new Array(byteCharacters.length);
-  for (var i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-  var byteArray = new Uint8Array(byteNumbers);
-  var blob = new Blob([byteArray], {
-    type: undefined,
-  });
+  var blob = base642blob(base64Photo)
   var a = document.createElement('a')
   var url = window.URL.createObjectURL(blob)
   a.href = url
@@ -57,4 +49,17 @@ export function downloadBase64Photo(base64Photo, fileName) {
   // }
   // xhr.send()
 
+}
+
+export function base642blob(base64) {
+  var byteCharacters = atob(base64);
+  var byteNumbers = new Array(byteCharacters.length);
+  for (var i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  var byteArray = new Uint8Array(byteNumbers);
+  var blob = new Blob([byteArray], {
+    type: undefined,
+  });
+  return blob;
 }
