@@ -124,8 +124,8 @@ export default {
   // 未渲染html页面时执行
   created: function() {
     var that = this
-    that.pdfUrl = '/show.pdf'
-    that.mainImagelist = [`http://${window.location.host}/` + 'sign.png', `http://${window.location.host}/` + 'seal.png']
+    that.pdfUrl = that.publicPath + '/show.pdf'
+    that.mainImagelist = [`http://${window.location.host}/` + that.publicPath + 'sign.png', `http://${window.location.host}/` + that.publicPath + 'seal.png']
     that.taskInfo = { 'title': '测试盖章', uname: '张三', endtime: '2021-09-01 17:59:59' }
   },
   // 事件方法

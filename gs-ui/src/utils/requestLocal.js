@@ -41,8 +41,7 @@ vueService.interceptors.response.use(res => {
         }
       ).then(() => {
         store.dispatch('LogOut').then(() => {
-          let publicPath = process.env.NODE_ENV === "production" ? process.env.VUE_APP_BASE_API : "";
-          location.href = publicPath + "/login";
+          location.href = this.publicPath + "/login";
         })
       })
     } else if (code === 500) {

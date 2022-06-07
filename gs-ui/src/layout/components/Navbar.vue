@@ -94,8 +94,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('LogOut').then(() => {
-          const publicPath = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : ''
-          location.href = publicPath + '/login'
+          location.href = this.publicPath + '/login'
         })
       })
     }
