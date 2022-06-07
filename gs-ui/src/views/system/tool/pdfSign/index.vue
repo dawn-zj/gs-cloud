@@ -250,7 +250,7 @@ export default {
     // 设置绘图区域宽高
     renderPdf(data) {
       this.whDatas = data
-      document.querySelector('.elesign').style.width = data.width + 'px'
+      // document.querySelector('.elesign').style.width = data.width + 'px'
     },
     /**
      *  展示PDF部分结束----------------------------------------------------------------
