@@ -9,6 +9,8 @@ Element.Dialog.props.closeOnClickModal.default = false
 Element.Dialog.props.closeOnPressEscape.default = false
 import './assets/styles/element-variables.scss'
 
+import draggable from 'vuedraggable'
+
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/ruoyi.scss' // ruoyi css
 import App from './App'
@@ -52,6 +54,7 @@ Vue.prototype.msgInfo = function (msg) {
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
+Vue.component('draggable', draggable)
 
 Vue.use(permission)
 
