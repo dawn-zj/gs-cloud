@@ -45,8 +45,11 @@
             <button class="btn-outline-dark" @click="cutover">跳转</button>
           </div>
 
+          <!-- PDF预览区域 -->
           <canvas id="the-canvas" />
         </div>
+        <!-- 拖拽盖章区域 -->
+        <canvas id="ele-canvas" />
       </el-col>
 
       <el-col :span="5" :offset="1">
@@ -82,8 +85,7 @@ import { base642blob, getBase64, getFileType } from '@/utils/file'
 
 const storage = window.localStorage
 
-const pdfjsLib = require('pdfjs-dist')
-pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.js')
+const pdfjsLib = window['pdfjs-dist/build/pdf']
 
 export default {
   name: 'IndexVue',
@@ -110,8 +112,15 @@ export default {
   },
   // 监听一个值的变化,然后执行相对应的函数。
   watch: {
+    whDatas: {
+      handler() {
+        if (this.whDatas) {
+          this.renderFabric()
+          this.canvasEvents()
+        }
+      }
+    },
     pdfUrl: function(val) {
-      console.log(val)
       this.$nextTick(() => {
         this.showpdf(val)
       })
@@ -259,7 +268,50 @@ export default {
     /**
      *  盖章部分开始----------------------------------------------------------------
      */
-    // 添加公章
+    // 监控预览区变化，生成拖拽绘图区域
+    renderFabric() {
+      const canvaEle = document.querySelector('#ele-canvas')
+
+      // 拖拽区域与PDF预览区域保持同样大小
+      canvaEle.width = this.whDatas.width
+      canvaEle.height = this.whDatas.height
+
+      // 使用绝对定位，拖拽区与预览区定在同一位置，实现视觉上的盖章
+      this.canvasEle = new fabric.Canvas(canvaEle)
+      const container = document.querySelector('.canvas-container')
+      container.style.position = 'absolute'
+      container.style.top = '90px'
+    },
+
+    // 相关事件操作哟
+    canvasEvents() {
+      // 拖拽边界 不能将图片拖拽到绘图区域外
+      this.canvasEle.on('object:moving', function(e) {
+        var obj = e.target
+        // if object is too big ignore
+        if (obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
+          return
+        }
+        obj.setCoords()
+        // top-left  corner
+        if (obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
+          obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top)
+          obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left)
+        }
+        // bot-right corner
+        if (obj.getBoundingRect().top + obj.getBoundingRect().height > obj.canvas.height || obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas.width) {
+          obj.top = Math.min(obj.top, obj.canvas.height - obj.getBoundingRect().height + obj.top - obj.getBoundingRect().top)
+          obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left)
+        }
+      })
+    },
+    // 拖拽触发
+    end(e) {
+      alert('x,y： ' + e.originalEvent.layerX + ',' + e.originalEvent.layerY)
+      console.log(e)
+      this.addSeal(this.mainImagelist[e.newIndex], e.originalEvent.layerX, e.originalEvent.layerY, e.newIndex)
+    },
+    // 拖拽添加公章
     addSeal(sealUrl, left, top, index) {
       fabric.Image.fromURL(
         sealUrl,
@@ -309,14 +361,12 @@ export default {
         caches[this.pageNum] = signDatas
       }
       storage.setItem('signs', JSON.stringify(caches)) // 对象转字符串后存储到缓存
-    },
+    }
 
     /**
      *  盖章部分结束----------------------------------------------------------------
      */
-    end(e) {
-      this.addSeal(this.mainImagelist[e.newDraggableIndex], e.originalEvent.layerX, e.originalEvent.layerY, e.newDraggableIndex)
-    }
+
   }
 }
 </script>
