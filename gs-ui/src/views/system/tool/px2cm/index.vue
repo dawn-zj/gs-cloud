@@ -16,6 +16,9 @@
           <el-form-item label="厘米(cm)">
             <span>{{ cm }}</span>
           </el-form-item>
+          <el-form-item label="磅(pt)">
+            <span>{{ inch * 72 }}</span>
+          </el-form-item>
         </el-form>
 
         <div class="mb20">
@@ -34,8 +37,9 @@
           <div class="mb20">
             汇总公式：<br>
             1. 像素->厘米：像素 / 分辨率 * 2.54<br>
-            2. 厘米->像素：厘米 / 2.54 * 分辨率
-            3. 厘米->磅：  厘米 / 2.54 * 72
+            2. 厘米->像素：厘米 / 2.54 * 分辨率<br>
+            3. 厘米->磅：  厘米 / 2.54 * 72<br>
+            4. 像素->磅：  像素 / 分辨率 * 72<br>
           </div>
 
         </div>
@@ -95,11 +99,11 @@ export default {
       activeName: 'px2cm',
       px2cmFormData: {
         px: '160',
-        dpi: '72'
+        dpi: '96'
       },
       cm2pxFormData: {
         cm: '21',
-        dpi: '72'
+        dpi: '96'
       },
       cm2ptFormData: {
         cm: '21'
