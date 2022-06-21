@@ -81,9 +81,9 @@
       </el-tab-pane>
 
       <el-tab-pane label="外链项目" name="6">
-        <el-link href="https://101.43.242.145:8443/sm/index.html" target="_blank">SM3摘要：https://101.43.242.145:8443/sm/index.html</el-link>
+        <el-link :href="gsConfig.url.smUrl" target="_blank">SM3摘要：{{ gsConfig.url.smUrl }}</el-link>
         <br>
-        <el-link href="https://101.43.242.145:8443/demo/index.html" target="_blank">demo 框架示例：https://101.43.242.145:8443/demo/index.html</el-link>
+        <el-link :href="gsConfig.url.demoUrl" target="_blank">demo 框架示例：{{ gsConfig.url.demoUrl }}</el-link>
         <br>
 
       </el-tab-pane>
@@ -107,8 +107,13 @@ export default {
     return {
       tabPosition: 'top',
       // 用于各tab里的组件点击tab时渲染
-      activeName: '1'
+      activeName: '1',
+      gsConfig: null
     }
+  },
+  created() {
+    this.gsConfig = window.gs
+    console.log(this.gsConfig)
   }
 }
 </script>
