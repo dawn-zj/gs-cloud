@@ -61,19 +61,61 @@
 
       <el-col :span="12" class="card-box">
         <el-card>
-<!--          <cpuChart />-->
+          <el-card>
+            <div slot="header">
+              <span>CPU信息</span>
+            </div>
+            <div class="el-table el-table--enable-row-hover el-table--medium">
+              <table cellspacing="0" style="width: 100%;">
+                <tbody>
+                <tr>
+                  <td><div class="cell">CPU核数</div></td>
+                  <td><div v-if="server.cpu" class="cell">{{ server.cpu.cpuNum }}</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">系统使用率</div></td>
+                  <td><div v-if="server.cpu" class="cell">{{ server.cpu.sys }}%</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">用户使用率</div></td>
+                  <td><div v-if="server.cpu" class="cell">{{ server.cpu.used }}%</div></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </el-card>
         </el-card>
       </el-col>
 
       <el-col :span="12" class="card-box">
         <el-card>
-<!--          <memoryChart />-->
+          <div slot="header">
+            <span>内存信息</span>
+          </div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <tbody>
+                <tr>
+                  <td><div class="cell">总内存</div></td>
+                  <td><div v-if="server.memory" class="cell">{{ server.memory.total }}GB</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">已用内存</div></td>
+                  <td><div v-if="server.memory" class="cell">{{ server.memory.free }}GB</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">剩余内存</div></td>
+                  <td><div v-if="server.memory" class="cell">{{ server.memory.used }}GB</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </el-card>
       </el-col>
 
       <el-col :span="24" class="card-box">
         <el-card>
-<!--          <diskChart />-->
+          <!--          <diskChart />-->
         </el-card>
       </el-col>
 
