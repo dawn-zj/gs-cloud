@@ -81,10 +81,9 @@
       </el-tab-pane>
 
       <el-tab-pane label="外链项目" name="6">
-        <el-link :href="gsConfig.url.smUrl" target="_blank">SM3摘要：{{ gsConfig.url.smUrl }}</el-link>
-        <br>
-        <el-link :href="gsConfig.url.demoUrl" target="_blank">demo 框架示例：{{ gsConfig.url.demoUrl }}</el-link>
-        <br>
+        <div v-for="(item,index) in gsConfig" :key="index" class="mb10">
+          {{ index + 1 }}.{{ item.describe }}：<el-link :href="item.url" target="_blank">{{ item.url }}</el-link>
+        </div>
 
       </el-tab-pane>
     </el-tabs>
@@ -108,12 +107,11 @@ export default {
       tabPosition: 'top',
       // 用于各tab里的组件点击tab时渲染
       activeName: '1',
-      gsConfig: null
+      gsConfig: []
     }
   },
   created() {
-    this.gsConfig = window.gs
-    console.log(this.gsConfig)
+    this.gsConfig = window.gs.urlConfig
   }
 }
 </script>
