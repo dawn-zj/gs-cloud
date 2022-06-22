@@ -61,13 +61,12 @@
 
       <el-col :span="12" class="card-box">
         <el-card>
-          <el-card>
-            <div slot="header">
-              <span>CPU信息</span>
-            </div>
-            <div class="el-table el-table--enable-row-hover el-table--medium">
-              <table cellspacing="0" style="width: 100%;">
-                <tbody>
+          <div slot="header">
+            <span>CPU信息</span>
+          </div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <tbody>
                 <tr>
                   <td><div class="cell">CPU核数</div></td>
                   <td><div v-if="server.cpu" class="cell">{{ server.cpu.cpuNum }}</div></td>
@@ -80,10 +79,9 @@
                   <td><div class="cell">用户使用率</div></td>
                   <td><div v-if="server.cpu" class="cell">{{ server.cpu.used }}%</div></td>
                 </tr>
-                </tbody>
-              </table>
-            </div>
-          </el-card>
+              </tbody>
+            </table>
+          </div>
         </el-card>
       </el-col>
 
