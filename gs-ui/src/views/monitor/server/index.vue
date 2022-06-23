@@ -113,7 +113,7 @@
 
       <el-col :span="24" class="card-box">
         <el-card>
-          <!--          <diskChart />-->
+          <diskChart />
         </el-card>
       </el-col>
 

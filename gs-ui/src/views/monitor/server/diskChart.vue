@@ -71,7 +71,7 @@ export default {
             var result = ''
             result += '<div>' + params[0].name + '<div/>'
             params.forEach(function(item) {
-              result += item.marker + item.seriesName + ' : ' + item.data + 'MB' + '</br>'
+              result += item.marker + item.seriesName + ' : ' + item.data + 'GB' + '</br>'
             })
             return result
           }
@@ -101,7 +101,7 @@ export default {
           data: []
         },
         yAxis: {
-          name: '单位(MB)',
+          name: '单位(GB)',
           nameTextStyle: {
             padding: [0, 60, 10, 0],
             align: 'center'
@@ -152,7 +152,7 @@ export default {
     getServer() {
       getServer().then(response => {
         var _this = this
-        response.data.sysFiles.forEach(function(item) {
+        response.data.disks.forEach(function(item) {
           _this.echartsOption.xAxis.data.push(item.dirName)
           _this.echartsOption.series[0].data.push(item.total)
           _this.echartsOption.series[1].data.push(item.free)
