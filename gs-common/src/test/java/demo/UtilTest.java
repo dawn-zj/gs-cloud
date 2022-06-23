@@ -3,6 +3,9 @@ package demo;
 import com.alibaba.fastjson.JSON;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.Cpu;
+import com.gs.common.entity.Disk;
+import com.gs.common.entity.Memory;
+import com.gs.common.entity.ServerInfo;
 import com.gs.common.util.*;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
@@ -17,6 +20,7 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
+import oshi.SystemInfo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -24,6 +28,7 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class UtilTest {
@@ -236,19 +241,30 @@ public class UtilTest {
 	}
 
 	/**
+	 * 浮点数运算
+	 */
+	@Test
+	public void arithTest() {
+		System.out.println(Arith.round(1.6456, 2));
+	}
+
+	/**
 	 * 系统监控信息
 	 * @throws Exception
 	 */
 	@Test
 	public void monitorTest() throws Exception {
-		// ServerInfo systemInfo = NetWorkUtil.systemInfo();
-		// System.out.println(JSON.toJSONString(systemInfo));
-		//
-		// Memory memory = NetWorkUtil.memoryInfo();
-		// System.out.println(JSON.toJSONString(memory));
+		ServerInfo systemInfo = NetWorkUtil.systemInfo();
+		System.out.println(JSON.toJSONString(systemInfo));
+
+		Memory memory = NetWorkUtil.memoryInfo();
+		System.out.println(JSON.toJSONString(memory));
 
 		Cpu cpu = NetWorkUtil.cpuInfo();
 		System.out.println(JSON.toJSONString(cpu));
+
+		List<Disk> disks = NetWorkUtil.diskInfo();
+		System.out.println(JSON.toJSONString(disks));
 	}
 
 	/**

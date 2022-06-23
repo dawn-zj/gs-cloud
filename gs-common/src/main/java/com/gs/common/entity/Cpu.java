@@ -9,7 +9,7 @@ import com.gs.common.util.Arith;
  */
 public class Cpu {
     /**
-     * 核心数
+     * 逻辑处理数
      */
     private int cpuNum;
 

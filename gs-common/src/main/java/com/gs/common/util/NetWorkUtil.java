@@ -1,19 +1,25 @@
 package com.gs.common.util;
 
 import com.gs.common.entity.Cpu;
+import com.gs.common.entity.Disk;
 import com.gs.common.entity.Memory;
 import com.gs.common.entity.ServerInfo;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
 import oshi.hardware.HardwareAbstractionLayer;
+import oshi.software.os.FileSystem;
+import oshi.software.os.OSFileStore;
+import oshi.software.os.OperatingSystem;
 import oshi.util.Util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 public class NetWorkUtil {
@@ -69,6 +75,13 @@ public class NetWorkUtil {
         }
     }
 
+    /**
+     * 获取centos的指定网口Mac信息
+     * @param networkCard
+     * @param reader
+     * @return
+     * @throws Exception
+     */
     private static String getHostMacCentos(String networkCard, BufferedReader reader) throws Exception {
         String hWaddr = null;
         // centos
@@ -85,6 +98,13 @@ public class NetWorkUtil {
         return hWaddr;
     }
 
+    /**
+     * 获取中标麒麟系统的指定网口Mac信息
+     * @param networkCard
+     * @param reader
+     * @return
+     * @throws Exception
+     */
     private static String getHostMacNeoKylin(String networkCard, BufferedReader reader) throws Exception {
         String hWaddr = null;
         // 中标麒麟
@@ -110,6 +130,11 @@ public class NetWorkUtil {
         return hWaddr;
     }
 
+    /**
+     * 使用JDK自带的方法获取系统信息
+     * @return
+     * @throws Exception
+     */
     public static ServerInfo systemInfo() throws Exception {
         ServerInfo systemInfo = new ServerInfo();
         systemInfo.setServerName(InetAddress.getLocalHost().getHostName());
@@ -127,17 +152,25 @@ public class NetWorkUtil {
         return systemInfo;
     }
 
+    /**
+     * 使用oshi获取内存信息
+     * @return
+     */
     public static Memory memoryInfo() {
         HardwareAbstractionLayer hardware = new SystemInfo().getHardware();
         GlobalMemory mem = hardware.getMemory();// 内存单位 b
 
         Memory memory = new Memory();
-        memory.setTotal(mem.getTotal());
-        memory.setFree(mem.getAvailable());
-        memory.setUsed(mem.getTotal() -  mem.getAvailable());
+        memory.setTotal(Arith.round(b2GB(mem.getTotal()), 2));
+        memory.setFree(Arith.round(b2GB(mem.getAvailable()), 2));
+        memory.setUsed(Arith.round(b2GB(mem.getTotal() -  mem.getAvailable()), 2));
         return memory;
     }
 
+    /**
+     * 使用oshi获取cpu信息
+     * @return
+     */
     public static Cpu cpuInfo() {
         HardwareAbstractionLayer hardware = new SystemInfo().getHardware();
         CentralProcessor processor = hardware.getProcessor();
@@ -162,6 +195,38 @@ public class NetWorkUtil {
         cpu.setWait(iowait);
         cpu.setFree(idle);
         return cpu;
+    }
+
+    public static List<Disk> diskInfo() {
+        List<Disk> disks = new ArrayList<>();
+
+        OperatingSystem operatingSystem = new SystemInfo().getOperatingSystem();
+        FileSystem fileSystem = operatingSystem.getFileSystem();
+        List<OSFileStore> fsArray = fileSystem.getFileStores();
+        for (OSFileStore fs : fsArray) {
+            long free = fs.getUsableSpace(); // 单位 b
+            long total = fs.getTotalSpace();
+            long used = total - free;
+            Disk disk = new Disk();
+            disk.setDirName(fs.getMount());
+            disk.setSysTypeName(fs.getType());
+            disk.setTypeName(fs.getName());
+            disk.setTotal(Arith.round(b2GB(total), 2));
+            disk.setFree(Arith.round(b2GB(free), 2));
+            disk.setUsed(Arith.round(b2GB(used), 2));
+            disk.setUsage(Arith.mul(Arith.div(used, total, 2), 100));
+            disks.add(disk);
+        }
+
+        return disks;
+    }
+
+    private static double b2GB(long b) {
+        return Arith.div(b2MB(b), 1024, 2);
+    }
+
+    private static double b2MB(long b) {
+        return Arith.div(b, (1024 * 1024), 2);
     }
 
     public static void main(String[] args) throws Exception {

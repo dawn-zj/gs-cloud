@@ -1,7 +1,5 @@
 package com.gs.common.entity;
 
-import com.gs.common.util.Arith;
-
 public class Memory {
     /**
      * 内存总量(GB)
@@ -9,12 +7,12 @@ public class Memory {
     private double total;
 
     /**
-     * 已用内存
+     * 已用内存(GB)
      */
     private double used;
 
     /**
-     * 剩余内存
+     * 剩余内存(GB)
      */
     private double free;
 
@@ -24,7 +22,7 @@ public class Memory {
 
     public void setTotal(double total) {
 
-        this.total = Arith.div(total, (1024 * 1024 * 1024), 2);
+        this.total = total;
     }
 
     public double getUsed() {
@@ -32,7 +30,7 @@ public class Memory {
     }
 
     public void setUsed(double used) {
-        this.used = Arith.div(used, (1024 * 1024 * 1024), 2);
+        this.used = used;
     }
 
     public double getFree() {
@@ -40,7 +38,7 @@ public class Memory {
     }
 
     public void setFree(double free) {
-        this.free = Arith.div(free, (1024 * 1024 * 1024), 2);
+        this.free = free;
     }
 
 }
