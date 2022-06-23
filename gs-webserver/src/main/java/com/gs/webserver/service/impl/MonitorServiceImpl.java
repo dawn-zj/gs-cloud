@@ -14,6 +14,7 @@ public class MonitorServiceImpl implements IMonitorService {
         serverTo.setServer(NetWorkUtil.systemInfo());
         serverTo.setMemory(NetWorkUtil.memoryInfo());
         serverTo.setCpu(NetWorkUtil.cpuInfo());
+        serverTo.setDisks(NetWorkUtil.diskInfo());
         return serverTo;
     }
 }
