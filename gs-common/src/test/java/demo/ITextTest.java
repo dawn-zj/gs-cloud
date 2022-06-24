@@ -4,6 +4,7 @@ import com.gs.common.define.Constants;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.cert.CertUtil;
 import com.gs.common.util.crypto.KeyUtil;
+import com.gs.common.util.pkcs.KeyStoreUtil;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.ExternalSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
@@ -31,10 +32,7 @@ public class ITextTest {
         String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
 
         // 读取keystore ，获得私钥
-        KeyStore ks = KeyStore.getInstance("PKCS12");
-        ks.load(new FileInputStream(pfxPath), password.toCharArray());
-        String alias = ks.aliases().nextElement();
-        PrivateKey pk = (PrivateKey) ks.getKey(alias, password.toCharArray());
+        PrivateKey pk = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
 
         // 使用itext的ExternalSignature签名
         ExternalSignature signature = new PrivateKeySignature(pk, "sha1", null);
