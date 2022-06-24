@@ -12,6 +12,7 @@ public class Constants {
 
 	// 密钥
 	public static final String PFX_SUFFIX = ".pfx"; // 密钥后缀
+	public static final String JKS_SUFFIX = ".jks"; // 密钥后缀
 	// 文件
 	public static final String PHOTO_SUFFIX = ".png"; // 图片后缀
 	public static final String PDF_SUFFIX = ".pdf"; // pdf后缀
