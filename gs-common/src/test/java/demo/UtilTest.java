@@ -20,7 +20,6 @@ import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
-import oshi.SystemInfo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -28,7 +27,6 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 public class UtilTest {
@@ -434,6 +432,20 @@ public class UtilTest {
 		String file = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer";
 		byte[] data = FileUtil.getFile(file);
 		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1_b64.cer", Base64Util.encode(data).getBytes());
+	}
+
+	@Test
+	public void jks2pfx() throws  Exception {
+		String jksPath = Constants.FILE_PATH + "/key/rsa/zj.jks";
+		String pfxPath = Constants.FILE_PATH + "/key/rsa/zj.pfx";
+		KeyStoreUtil.jks2pfx(jksPath, pfxPath, password);
+	}
+
+	@Test
+	public void getCertFromPfx() throws  Exception {
+		byte[] cert = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "pfx.cer", cert);
+
 	}
 
 }
