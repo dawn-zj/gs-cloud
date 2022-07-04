@@ -4,6 +4,8 @@ import com.gs.common.entity.Photo;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.photo.Circle;
 import com.gs.common.util.photo.Ellipse;
+import com.gs.common.util.photo.RectangleUtil;
+import com.gs.common.util.photo.SquareUtil;
 import com.gs.webserver.entity.to.request.PhotoTo;
 import com.gs.webserver.service.IPhotoService;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +24,10 @@ public class PhotoServiceImpl implements IPhotoService {
                 return new Circle(photo).draw();
             case 2:
                 return new Ellipse(photo).draw();
+            case 3:
+                return new SquareUtil(photo).draw();
+            case 4:
+                return new RectangleUtil(photo).draw();
             default:
                 throw new NetGSRuntimeException("不支持的图章类型：" + stampStyle);
         }

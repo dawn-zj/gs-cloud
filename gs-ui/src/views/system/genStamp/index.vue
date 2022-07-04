@@ -43,25 +43,6 @@
 
       <el-row>
         <el-col :xs="24" :sm="24" :md="12" :lg="12">
-          <el-form-item label="正文名称(预览)" prop="company">
-            <el-input v-model="stampForm.company" :disabled="disabledCompany" />
-          </el-form-item>
-          <el-form-item label="正文名称字体大小" prop="companyFontSize">
-            <el-input-number v-model="stampForm.companyFontSize" :disabled="disabledCompany" style="width: 100%" />
-          </el-form-item>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12">
-          <el-form-item label="图章编码(预览)" prop="number">
-            <el-input v-model="stampForm.number" :disabled="disabledCompany" />
-          </el-form-item>
-          <el-form-item label="图章编码字体大小" prop="numberFontSize">
-            <el-input-number v-model="stampForm.numberFontSize" :disabled="disabledCompany" style="width: 100%" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章名称(预览)" prop="name">
             <el-input v-model="stampForm.name" />
           </el-form-item>
@@ -84,6 +65,29 @@
           </el-form-item>
         </el-col>
       </el-row>
+
+      <el-row>
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
+          <el-form-item label="单位名称(预览)" prop="company">
+            <el-input v-model="stampForm.company" :disabled="disabledCompany" />
+          </el-form-item>
+          <el-form-item label="单位名称字体大小" prop="companyFontSize">
+            <el-input-number v-model="stampForm.companyFontSize" :disabled="disabledCompany" style="width: 100%" />
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
+          <el-form-item label="图章编码(预览)" prop="number">
+            <el-input v-model="stampForm.number" :disabled="disabledNumber" />
+          </el-form-item>
+          <el-form-item label="图章编码字体大小" prop="numberFontSize">
+            <el-input-number v-model="stampForm.numberFontSize" :disabled="disabledNumber" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="图章编码底部距离" prop="numberMarginBottom">
+            <el-input-number v-model="stampForm.numberMarginBottom" :disabled="disabledNumber" style="width: 100%" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-form-item label="实时预览">
         <el-image v-loading="loading" :src="url" fit="fill" />
       </el-form-item>
@@ -106,6 +110,7 @@ export default {
       loading: true,
       disabledHeight: true,
       disabledCompany: false,
+      disabledNumber: false,
       openDialog: false,
       url: '',
       fileBase64: '',
@@ -114,18 +119,19 @@ export default {
       title: '图章下载',
       stampForm: {
         width: '150',
-        height: '100',
+        height: '150',
         fontType: '',
         name: '测试专用章',
         nameFontSize: '12',
         nameMarginBottom: '20',
         label: '(1)',
         labelFontSize: '10',
-        labelMarginBottom: '10',
+        labelMarginBottom: '5',
         company: '电子签章系统测试',
         companyFontSize: '20',
         number: '1234567890123',
         numberFontSize: '13',
+        numberMarginBottom: 0,
         stampStyle: ''
       },
       stampRules: {
@@ -187,7 +193,6 @@ export default {
     init() {
       this.stampForm.stampStyle = this.stampStyleList[0].value
       this.stampForm.fontType = this.fontList[0].value
-      this.textFiletip = '(txt文件格式：图章名称和正文用英文逗号分隔,每一行为一个图章,每次最多制作500个)'
     },
     // 图章预览
     viewStamp() {
@@ -207,68 +212,88 @@ export default {
     },
     // 下拉框的选择事件
     getValue(val) {
-      if (val === 1 || val === 3) {
-        this.disabled = true
-      } else {
-        this.disabled = false
-      }
-      if (val === 3 || val === 4) {
-        this.disabledCompany = true
-        this.textFiletip = '(txt文件格式：每个图章名称为一行,每次最多制作500个)'
-      } else {
-        this.disabledCompany = false
-        this.textFiletip = '(txt文件格式：图章名称和正文用英文逗号分隔,每一行为一个图章,每次最多制作500个)'
-      }
-      if (val === 1) {
+      if (val === 1) { // 圆
+        this.disabledHeight = true
         this.stampForm.width = '150'
-        this.stampForm.companyFontSize = '20'
-        this.stampForm.height = '100'
+        this.stampForm.height = '150'
+
+        this.stampForm.name = '测试专用章'
         this.stampForm.nameFontSize = '12'
         this.stampForm.nameMarginBottom = '20'
-        this.stampForm.companyFontSize = '20'
-        this.stampForm.name = '测试专用章'
+
+        this.stampForm.labelMarginBottom = '5'
+
+        this.disabledCompany = false
         this.stampForm.company = '电子签章系统测试'
-        this.disabledHeight = true
+        this.stampForm.companyFontSize = '20'
       }
-      if (val === 2) {
+      if (val === 2) { // 椭圆
+        this.disabledHeight = false
         this.stampForm.width = '150'
-        this.stampForm.companyFontSize = '16'
         this.stampForm.height = '100'
+
+        this.stampForm.name = '测试专用章'
         this.stampForm.nameFontSize = '12'
-        this.stampForm.nameMarginBottom = '0'
-        this.stampForm.name = '测试专用章'
+        this.stampForm.nameMarginBottom = '10'
+
+        this.stampForm.labelMarginBottom = '0'
+
+        this.disabledCompany = false
         this.stampForm.company = '电子签章系统测试'
-        this.disabledHeight = false
+        this.stampForm.companyFontSize = '16'
       }
-      if (val === 3) {
-        this.stampForm.width = '150'
-        this.stampForm.height = '100'
-        this.stampForm.nameFontSize = '45'
-        this.stampForm.companyFontSize = '20'
-        this.stampForm.name = '测试专用章'
-        this.stampForm.company = '电子签章系统测试'
+      if (val === 3) { // 正方形
         this.disabledHeight = true
-      }
-      if (val === 4) {
         this.stampForm.width = '150'
-        this.stampForm.height = '50'
-        this.stampForm.nameFontSize = '25'
-        this.stampForm.companyFontSize = '20'
-        this.stampForm.name = '测试专用章'
-        this.stampForm.company = '电子签章系统测试'
+        this.stampForm.height = '150'
+
+        this.stampForm.name = '个人专用章'
+        this.stampForm.nameFontSize = '45'
+        this.stampForm.nameMarginBottom = '15'
+
+        this.stampForm.labelFontSize = '15'
+        this.stampForm.labelMarginBottom = '5'
+
+        this.stampForm.numberFontSize = '15'
+        this.stampForm.numberMarginBottom = '0'
+
+        this.disabledCompany = true
+      }
+      if (val === 4) { // 长方形
         this.disabledHeight = false
+        this.stampForm.width = '180'
+        this.stampForm.height = '60'
+
+        this.stampForm.name = '测试专用章'
+        this.stampForm.nameFontSize = '25'
+        this.stampForm.nameMarginBottom = '0'
+
+        this.stampForm.labelFontSize = '13'
+        this.stampForm.labelMarginBottom = '0'
+
+        this.stampForm.numberFontSize = '13'
+        this.stampForm.numberMarginBottom = '0'
+
+        this.disabledCompany = true
       }
     },
     // // 表单重置
     reset() {
       this.stampForm = {
-        name: '测试专用章',
         width: '150',
-        height: '100',
+        height: '150',
         fontType: '',
+        name: '测试专用章',
         nameFontSize: '12',
-        companyFontSize: '20',
+        nameMarginBottom: '20',
+        label: '(1)',
+        labelFontSize: '10',
+        labelMarginBottom: '10',
         company: '电子签章系统测试',
+        companyFontSize: '20',
+        number: '1234567890123',
+        numberFontSize: '13',
+        numberMarginBottom: 0,
         stampStyle: ''
       }
       this.fileBase64 = ''
