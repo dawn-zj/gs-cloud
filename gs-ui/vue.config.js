@@ -37,8 +37,7 @@ module.exports = {
       // 跨域代理只在开发环境有效，通过node的服务器代理；
       // 打包之后就需要自行解决跨域问题
       [process.env.VUE_APP_WEB_API]: {
-        // target: [process.env.VUE_APP_PROXY_URL],
-        target: 'http://10.20.61.61:8081/',
+        target: process.env.VUE_APP_PROXY_URL,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_WEB_API]: ''
