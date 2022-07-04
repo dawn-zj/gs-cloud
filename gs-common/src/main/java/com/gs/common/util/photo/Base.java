@@ -65,7 +65,7 @@ public class Base {
     protected Integer numberMarginBottom = 5;
 
     /**
-     * 以图中心点为圆心，横向画名称
+     * 以图中心点为对称点，横向画名称，起点是文字左下角
      * @param g2d
      * @param name
      * @param size
@@ -79,7 +79,7 @@ public class Base {
         int w = fm.stringWidth(name);// 名称宽度
         int h = fm.getHeight();// 名称高度
         // System.out.println(StringUtil.format("总高度{}，名称{}，高度{}，宽度{}，距离{}", height, name, h, w, marginBottom));
-        g2d.drawString(name, - w / 2, height / 2 - borderWidth - h - marginBottom); // 字体到底部的距离
+        g2d.drawString(name, - w / 2, height / 2 - borderWidth - marginBottom); // 字体到底部的距离
     }
 
     /**

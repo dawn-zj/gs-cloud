@@ -89,12 +89,12 @@ public class Ellipse extends Base {
 
         // -------绘制图章名称-------
         if (StringUtil.isNotBlank(name)) {
-            drawName(g2d, name, nameSize, nameMarginBottom - 10, nameColor);
+            drawName(g2d, name, nameSize, nameMarginBottom, nameColor);
         }
 
         // -------绘制图章副名-------
         if (StringUtil.isNotBlank(label)) {
-            drawName(g2d, label, labelSize, labelMarginBottom - 10, labelColor);
+            drawName(g2d, label, labelSize, labelMarginBottom, labelColor);
         }
 
         // -------绘制图章单位-------

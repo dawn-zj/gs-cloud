@@ -64,20 +64,20 @@ public class SquareUtil extends Base{
 
 		Stroke stroke = g2d.getStroke();// 旧的线性
 
-		// 绘制图章边框
+		// 绘制图章边框，起点矩形左上角
 		g2d.setColor(borderColor);
 		g2d.setStroke(new BasicStroke(borderWidth));
 		g2d.drawRect(-width / 2, -height / 2, width, height);
 		g2d.setStroke(stroke);
 
-		// -------绘制图章副名-------
+		// -------绘制图章副名，起点名称左下角-------
 		if (StringUtil.isNotBlank(label)) {
 			drawName(g2d, label, labelSize, labelMarginBottom, labelColor);
 		}
 
 		// -------绘制图章编码-------
 		if (StringUtil.isNotBlank(number)) {
-			drawName(g2d, number, numberSize, numberMarginBottom - 10, numberColor);
+			drawName(g2d, number, numberSize, numberMarginBottom, numberColor);
 		}
 
 		// -------绘制图章名称-------

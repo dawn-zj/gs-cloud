@@ -83,7 +83,7 @@ public class RectangleUtil extends Base{
 
         // -------绘制图章编码-------
         if (StringUtil.isNotBlank(number)) {
-            drawName(g2d, number, numberSize, numberMarginBottom - 10, numberColor);
+            drawName(g2d, number, numberSize, numberMarginBottom, numberColor);
         }
 
 	}

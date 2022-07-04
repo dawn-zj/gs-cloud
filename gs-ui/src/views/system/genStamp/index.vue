@@ -123,10 +123,10 @@ export default {
         fontType: '',
         name: '测试专用章',
         nameFontSize: '12',
-        nameMarginBottom: '20',
+        nameMarginBottom: '28',
         label: '(1)',
         labelFontSize: '10',
-        labelMarginBottom: '5',
+        labelMarginBottom: '15',
         company: '电子签章系统测试',
         companyFontSize: '20',
         number: '1234567890123',
@@ -219,9 +219,9 @@ export default {
 
         this.stampForm.name = '测试专用章'
         this.stampForm.nameFontSize = '12'
-        this.stampForm.nameMarginBottom = '20'
+        this.stampForm.nameMarginBottom = '28'
 
-        this.stampForm.labelMarginBottom = '5'
+        this.stampForm.labelMarginBottom = '15'
 
         this.disabledCompany = false
         this.stampForm.company = '电子签章系统测试'
@@ -252,9 +252,9 @@ export default {
         this.stampForm.nameMarginBottom = '15'
 
         this.stampForm.labelFontSize = '15'
-        this.stampForm.labelMarginBottom = '5'
+        this.stampForm.labelMarginBottom = '15'
 
-        this.stampForm.numberFontSize = '15'
+        this.stampForm.numberFontSize = '13'
         this.stampForm.numberMarginBottom = '0'
 
         this.disabledCompany = true
@@ -266,10 +266,10 @@ export default {
 
         this.stampForm.name = '测试专用章'
         this.stampForm.nameFontSize = '25'
-        this.stampForm.nameMarginBottom = '0'
+        this.stampForm.nameMarginBottom = '30'
 
-        this.stampForm.labelFontSize = '13'
-        this.stampForm.labelMarginBottom = '0'
+        this.stampForm.labelFontSize = '15'
+        this.stampForm.labelMarginBottom = '15'
 
         this.stampForm.numberFontSize = '13'
         this.stampForm.numberMarginBottom = '0'
