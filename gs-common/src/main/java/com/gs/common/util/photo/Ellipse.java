@@ -27,13 +27,13 @@ public class Ellipse extends Base {
         this(photo.getWidth(), photo.getHeight(), photo.getCompany(), photo.getCompanyFontSize(),
                 photo.getName(), photo.getNameFontSize(), photo.getNameMarginBottom(),
                 photo.getLabel(), photo.getLabelFontSize(), photo.getLabelMarginBottom(),
-                photo.getNumber(), photo.getNumberFontSize());
+                photo.getNumber(), photo.getNumberFontSize(), photo.getNumberMarginBottom());
     }
 
     public Ellipse(int width, int height, String company, Integer companySize,
                   String name, Integer nameSize, Integer nameMarginBottom,
                   String label, Integer labelSize, Integer labelMarginBottom,
-                  String number, Integer numberSize) {
+                  String number, Integer numberSize, Integer numberMarginBottom) {
         this.width = width;
         this.height = height;
 
@@ -42,6 +42,7 @@ public class Ellipse extends Base {
 
         this.number = number;
         this.numberSize = numberSize;
+        this.numberMarginBottom = numberMarginBottom;
 
         this.name = name;
         this.nameSize = nameSize;
@@ -88,7 +89,12 @@ public class Ellipse extends Base {
 
         // -------绘制图章名称-------
         if (StringUtil.isNotBlank(name)) {
-            drawName(g2d, name, nameSize, nameMarginBottom, nameColor);
+            drawName(g2d, name, nameSize, nameMarginBottom - 10, nameColor);
+        }
+
+        // -------绘制图章副名-------
+        if (StringUtil.isNotBlank(label)) {
+            drawName(g2d, label, labelSize, labelMarginBottom - 10, labelColor);
         }
 
         // -------绘制图章单位-------
