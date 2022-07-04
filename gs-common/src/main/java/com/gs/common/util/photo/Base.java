@@ -1,6 +1,7 @@
 package com.gs.common.util.photo;
 
 import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.common.util.StringUtil;
 
 import java.awt.*;
 
@@ -60,14 +61,25 @@ public class Base {
     protected String number = "5301000082888";//5301000082888
     protected Integer numberSize = 12;
     protected Integer numberAngle = 135;
+    protected Color numberColor = Color.RED;
+    protected Integer numberMarginBottom = 5;
 
+    /**
+     * 以图中心点为圆心，横向画名称
+     * @param g2d
+     * @param name
+     * @param size
+     * @param marginBottom
+     * @param color
+     */
     protected void drawName(Graphics2D g2d, String name, Integer size, Integer marginBottom, Color color) {
         g2d.setFont(new Font(fontType, Font.BOLD, size));
         g2d.setColor(color);
         FontMetrics fm = g2d.getFontMetrics();
         int w = fm.stringWidth(name);// 名称宽度
         int h = fm.getHeight();// 名称高度
-        g2d.drawString(name, - w / 2, height / 2 - h - marginBottom); // 字体到底部的距离
+        // System.out.println(StringUtil.format("总高度{}，名称{}，高度{}，宽度{}，距离{}", height, name, h, w, marginBottom));
+        g2d.drawString(name, - w / 2, height / 2 - borderWidth - h - marginBottom); // 字体到底部的距离
     }
 
     /**

@@ -7,7 +7,7 @@ public class Photo {
     private Integer stampStyle;
 
     /**
-     * 宽高
+     * 宽高，单位像素
      */
     private Integer width;
 
@@ -16,8 +16,8 @@ public class Photo {
     private String fontType;
 
     private String name;
-    private Integer nameFontSize;// 印章名称字体大小
-    private Integer nameMarginBottom;// 印章名称距离底部距离
+    private Integer nameFontSize;// 印章名称字体大小，单位磅?
+    private Integer nameMarginBottom;// 印章名称距离底部距离，单位像素
 
     private String label;
     private Integer labelFontSize;// 印章副名字体大小
@@ -28,6 +28,7 @@ public class Photo {
 
     private String number;
     private Integer numberFontSize;// 印章编号字体大小
+    private Integer numberMarginBottom;// 印章编号距离底部距离
 
     public Integer getStampStyle() {
         return stampStyle;
@@ -139,5 +140,13 @@ public class Photo {
 
     public void setNumberFontSize(Integer numberFontSize) {
         this.numberFontSize = numberFontSize;
+    }
+
+    public Integer getNumberMarginBottom() {
+        return numberMarginBottom;
+    }
+
+    public void setNumberMarginBottom(Integer numberMarginBottom) {
+        this.numberMarginBottom = numberMarginBottom;
     }
 }

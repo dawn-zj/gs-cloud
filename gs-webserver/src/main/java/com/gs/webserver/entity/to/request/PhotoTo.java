@@ -31,5 +31,6 @@ public class PhotoTo {
 
     private String number;
     private Integer numberFontSize;// 印章编号字体大小
+    private Integer numberMarginBottom;// 印章编号字体大小
 
 }
