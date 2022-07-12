@@ -38,9 +38,9 @@ public class FileUtil {
 			throw new NetGSRuntimeException("path invaild, path is " + filePath);
 		}
 		File file = new File(filePath);
-		if (file.isFile()) {
-			FilePathChecker.checkFileSuffix(filePath);
-		}
+		// if (file.isFile()) {
+		// 	FilePathChecker.checkFileSuffix(filePath);
+		// }
 		return file.exists();
 	}
 
