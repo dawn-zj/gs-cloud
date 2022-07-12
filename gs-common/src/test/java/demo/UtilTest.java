@@ -23,9 +23,11 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.net.NetworkInterface;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -236,6 +238,12 @@ public class UtilTest {
 	@Test
 	public void getHostMacTest() throws Exception {
 		System.out.println(NetWorkUtil.getHostMac("eth0"));
+	}
+
+	@Test
+	public void getNetWorkListTest() throws Exception {
+		// windows测试时，进入方法改成windows路径再测
+		System.out.println(NetWorkUtil.getNetworkList());
 	}
 
 	/**
