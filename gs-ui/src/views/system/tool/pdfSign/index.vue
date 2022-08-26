@@ -96,7 +96,7 @@ export default {
       pdfDoc: null,
       numPages: 1,
       pageNum: 1,
-      scale: 1.0, // 放大倍数
+      scale: 1.5, // 放大倍数
       pageRendering: false,
       pageNumPending: null,
       sealUrl: '',
@@ -196,7 +196,12 @@ export default {
       if (this.pageRendering) { // 渲染中，终止用户翻页行为
         this.pageNumPending = pageNums
       } else {
-        this.renderPage(pageNums)
+        this.renderPage(this.pageNum).then((res) => {
+          this.renderPdf({
+            width: this.canvas.width,
+            height: this.canvas.height
+          })
+        })
       }
     },
     prevPage() {
@@ -308,8 +313,10 @@ export default {
     // 拖拽触发
     end(e) {
       alert('x,y： ' + e.originalEvent.layerX + ',' + e.originalEvent.layerY)
-      console.log(e)
       this.addSeal(this.mainImagelist[e.newIndex], e.originalEvent.layerX, e.originalEvent.layerY, e.newIndex)
+    },
+    onDragEnd(e) {
+      console.log(e)
     },
     // 拖拽添加公章
     addSeal(sealUrl, left, top, index) {
@@ -372,5 +379,8 @@ export default {
 </script>
 
 <style scoped>
-
+/*#ele-canvas {*/
+/*  !*index.css里默认蓝色，在此处增加高优先级样式*!*/
+/*  border: 1px solid white;*/
+/*}*/
 </style>
