@@ -26,8 +26,8 @@ public class CryptoHandle {
                 c.init(Cipher.ENCRYPT_MODE, pubKey);
                 return c.doFinal(value);
             case Constants.SM2:
-                // TODO return new SM2Impl().encrypt(value, new SM2PublicKey(pubKey.getEncoded()).getEncoded4ex());
-                throw new Exception("encrypt alg don't support, alg is: " + encAlg);
+                return SM2Util.encrypt(value, pubKey);
+                // throw new Exception("encrypt alg don't support, alg is: " + encAlg);
             default:
                 throw new Exception("encrypt alg unknown, alg is: " + encAlg);
         }
@@ -51,8 +51,7 @@ public class CryptoHandle {
                 c.init(Cipher.DECRYPT_MODE, priKey);
                 return c.doFinal(value);
             case Constants.SM2:
-                // TODO return new SM2Impl().decrypt(value, new SM2PrivateKey(priKey.getEncoded()).getD());
-                throw new Exception("encrypt alg don't support, alg is: " + encAlg);
+                return SM2Util.decrypt(value, priKey);
             default:
                 throw new Exception("decrypt alg unknown, alg is: " + encAlg);
         }
@@ -84,15 +83,7 @@ public class CryptoHandle {
                 sig256.update(plain);
                 return sig256.sign();
             case Constants.SM3_SM2:
-                // byte[] X = ((JCESM2PublicKey) pubKey).getX();
-                // byte[] Y = ((JCESM2PublicKey) pubKey).getY();
-                //
-                // SM2PublicKey pub = new SM2PublicKey();
-                // pub.setX(X);
-                // pub.setY(Y);
-                //
-                // return NetSignUtil.sign(plain, pub, (SM2PrivateKey) priKey, id);
-                throw new Exception("sign alg don't support, alg is: " + signAlg);
+                return SM2Util.signByPrivateKey(plain, priKey);
             default:
                 throw new Exception("sign alg unknown, alg is: " + signAlg);
         }
@@ -138,9 +129,7 @@ public class CryptoHandle {
                 rsa256.update(plain);
                 return rsa256.verify(signed);
             case Constants.SM3_SM2:
-                // SM2PublicKey pubSm2 = new SM2PublicKey(pubKey.getEncoded());
-                // return NetSignUtil.verify(plain, signed, pubSm2, id);
-                throw new Exception("sign alg don't support, alg is: " + signAlg);
+                return SM2Util.verifyByPublicKey(plain, pubKey, signed);
             default:
                 throw new Exception("sign alg unknown, alg is: " + signAlg);
         }
