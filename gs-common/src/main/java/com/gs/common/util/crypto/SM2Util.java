@@ -32,12 +32,12 @@ public class SM2Util {
      * @throws Exception
      */
     public static KeyPair genKeyPair() throws Exception {
-        // 1.获取实例:provider是啥
+        // 1.获取实例
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC", new BouncyCastleProvider());
-        // 2.初始化长度
+        // 2.指定曲线参数名称
         ECGenParameterSpec sm2Spec = new ECGenParameterSpec("sm2p256v1");
         kpg.initialize(sm2Spec);
-        // 3.生成密钥对，PKCS8格式，java平台适用
+        // 3.生成密钥对,BC库使用的公钥=64个字节+1个字节（04标志位），BC库使用的私钥=32个字节
         KeyPair keyPair = kpg.generateKeyPair();
         return keyPair;
     }
@@ -78,7 +78,15 @@ public class SM2Util {
         return publicKey;
     }
 
+    /**
+     * SM2加密
+     * @param data 待加密的数据
+     * @param publicKey 公钥
+     * @return 密文，BC库产生的密文带有04标识符
+     */
     public static byte[] encrypt(byte[] data, PublicKey publicKey) {
+        // SM2的密文有两种排列方式0-C1C2C3；1-C1C3C2，标准排列方式是1，但是BC库的实现是0
+        // todo 要想支持其他模式，需要自行扩展，参考https://blog.csdn.net/seeyouagen/article/details/115727307
         ECPublicKeyParameters localECPublicKeyParameters = null;
 
         if (publicKey instanceof BCECPublicKey) {
@@ -102,7 +110,7 @@ public class SM2Util {
     }
 
     /**
-     * 根据privateKey对加密数据encodeData，使用SM2解密
+     * SM2解密
      *
      * @param encodeData
      * @param privateKey
