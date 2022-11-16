@@ -148,6 +148,7 @@ export default {
       loading: true,
       activeNameLeft: '1',
       activeName: '1',
+      fileList: [],
       pdfUrl: '',
       pdfDoc: null, // pdfjs 生成的对象
       pageNum: 1, //
