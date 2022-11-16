@@ -1,6 +1,22 @@
 <template>
 
   <el-row>
+    <div>
+      <el-upload
+        ref="upload"
+        class="pdf-upload"
+        name="fileList"
+        accept=".pdf"
+        action="#"
+        :auto-upload="false"
+        :file-list="fileList"
+        :show-file-list="false"
+        :on-remove="handleFileRemove"
+        :on-change="handleFileChange"
+      >
+        <el-button type="info" size="small" icon="el-icon-folder-opened" />
+      </el-upload>
+    </div>
     <el-col :span="24">
       <div id="pageContent" class="pageContent_2lAGg">
         <div id="left" class="leftContent_2NoKi">
@@ -114,6 +130,8 @@
 
 <script>
 
+import { base642blob, getBase64, getFileType } from '@/utils/file'
+
 const PDFJS = require('pdfjs-dist')
 PDFJS.GlobalWorkerOptions.workerSrc = './pdf.worker.js'
 
@@ -160,6 +178,14 @@ export default {
       sealList: []
     }
   },
+  // 监听一个值的变化,然后执行相对应的函数。
+  watch: {
+    pdfUrl: function(val) {
+      this.$nextTick(() => {
+        this._loadFile(val)
+      })
+    }
+  },
   mounted() {
     this.$nextTick(function() {
       this.getFileInfo()
@@ -168,6 +194,27 @@ export default {
     this.drag()
   },
   methods: {
+    // 上传文件变化
+    handleFileChange(file, fileList) {
+      // 限制为指定类型
+      const fileType = getFileType(file.raw.name)
+      const isTrue = fileType === '.pdf'
+      if (!isTrue) {
+        this.msgError('请选择pdf类型文件')
+        this.$set(this, 'fileList', [])
+        return false
+      }
+      this.fileList = [fileList[fileList.length - 1]]
+      // 获取base64，并转URL
+      getBase64(file.raw).then(res => {
+        this.pageNum = 1
+        this.pdfUrl = window.URL.createObjectURL(base642blob(res))
+      })
+    },
+    // 删除文件
+    handleFileRemove(file, fileList) {
+      // this.$set(this, 'fileBase64', '')
+    },
     // 获取文件信息
     getFileInfo() {
       // this.form.id = this.$route.query.id
@@ -637,6 +684,8 @@ export default {
             }
           }
         }
+
+        this.msgInfo('还未上线，敬请期待！')
 
         pdfStamp(data).then(res => {
           this.msgSuccess(res.msg)
