@@ -14,7 +14,7 @@
         :on-remove="handleFileRemove"
         :on-change="handleFileChange"
       >
-        <el-button type="info" size="small" icon="el-icon-folder-opened" />
+        <el-button type="info" size="small" icon="el-icon-folder-opened"/>
       </el-upload>
     </div>
     <el-col :span="24">
@@ -23,7 +23,7 @@
           <div class="doc-list-context">
             <div>
               <el-tabs v-model="activeNameLeft" :stretch="true">
-                <el-tab-pane label="签章方式" name="1" />
+                <el-tab-pane label="签章方式" name="1"/>
               </el-tabs>
             </div>
             <template v-if="activeNameLeft == 1">
@@ -38,40 +38,49 @@
                 </el-select>
               </div>
 
-              <div v-show="form.sealId !== null" class="seal-list-title">印章缩略图
-                <div id="sealImg" class="add-widget-module-list" />
+              <div class="seal-list-title" v-show="form.sealId !== null">印章缩略图
+                <div class="add-widget-module-list">
+                  <div id="sealImg" fit="fill"></div>
+                  <el-button type="text" style="float: right" v-show="form.stampParam.useQfz == 1"
+                             @click="handleQfzSeal">设为骑缝章
+                  </el-button>
+                </div>
               </div>
 
-              <div v-show="form.stampType === 1 && form.stampParam.location.x == null" class="doc-list-title">指定签署区
+              <div class="doc-list-title" v-show="form.stampType === 1">指定签署区
 
-                <div v-if="form.stampType === 1" class="add-widget-module-list">
+                <div class="add-widget-module-list" v-if="form.stampType === 1">
                   <div id="sealdivid1" draggable="true" class="added-widget" style="width:100%">
                     <div class="added-widget-type-name">点击添加签署区
                     </div>
                   </div>
                 </div>
-                <div v-show="form.stampType === 1 && form.stampParam.locations.length > 0" class="add-widget-module-list">已添加签署区
+                <div class="add-widget-module-list"
+                     v-show="form.stampType === 1 && form.stampParam.locations.length > 0">已添加签署区
                   <div class="list">
                     <div v-for="(item,index) in form.stampParam.locations">
-                      <el-link class="el-icon-s-check" @click="viewToPageNum(item.pageNum)">{{ item.name }} </el-link>
+                      <el-link @click="viewToPageNum(item.pageNum)" class="el-icon-s-check">{{ item.name }}</el-link>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <el-form v-if="page_count >=2 && page_count <=32" :key="1" label-width="90px" style="margin-top: 20px">
+                  <el-form :key="1" label-width="90px" style="margin-top: 20px"
+                           v-if="page_count >=2 && page_count <=32">
                     <el-form-item label="启用骑缝章">
                       <el-switch
                         v-model="form.stampParam.useQfz"
                         :active-value="1"
                         :inactive-value="0"
-                        :disabled="true"
-                      />
+                      ></el-switch>
                     </el-form-item>
-                    <el-form-item v-if="form.stampParam.useQfz == 1" label="骑缝位置">
-                      <el-radio-group v-model="form.qfzType" size="small">
+                    <el-form-item label="骑缝位置" v-if="form.stampParam.useQfz == 1">
+                      <el-radio-group v-model="form.stampParam.qfzType" size="small">
                         <el-radio-button :label="0">左骑缝</el-radio-button>
                         <el-radio-button :label="1">右骑缝</el-radio-button>
                       </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="印章名称" v-if="form.stampParam.useQfz == 1">
+                      <span>{{ form.stampParam.qfzSealName }}</span>
                     </el-form-item>
                   </el-form>
                 </div>
@@ -94,31 +103,35 @@
 
               </div>
               <div class="page-name">
-                <button style="background-color: Transparent; margin-top:10px;cursor:pointer;" type="button" @click="pagePrev"><span style="color: #4D4D4D">&lt;</span></button>
+                <button style="background-color: Transparent; margin-top:10px;cursor:pointer;" type="button"
+                        @click="pagePrev"><span style="color: #4D4D4D">&lt;</span></button>
               </div>
               <div class="page-name">
-                <button style="background-color: Transparent; margin-top:10px;" type="button"><span id="pageNo" style="color: #4D4D4D">{{ pageNum }}</span><span id="pageCount" style="color: #4D4D4D">/{{ page_count }}</span></button>
+                <button style="background-color: Transparent; margin-top:10px;" type="button"><span id="pageNo"
+                                                                                                    style="color: #4D4D4D">{{
+                    pageNum
+                  }}</span><span id="pageCount" style="color: #4D4D4D">/{{ page_count }}</span></button>
               </div>
               <div class="page-name">
-                <button style="background-color: Transparent; margin-top:10px; cursor:pointer;" type="button" @click="pageNext"><span style="color: #4D4D4D;">&gt;</span></button>
+                <button style="background-color: Transparent; margin-top:10px; cursor:pointer;" type="button"
+                        @click="pageNext"><span style="color: #4D4D4D;">&gt;</span></button>
               </div>
               <span style="margin-top:6px; font-size: 13px;line-height: 28px;color: #606266;">
-                <div class="el-input el-pagination__editor is-in-pagination"><input v-model="pageNum" type="number" min="1" max="4" class="el-input__inner"></div>
+              <div class="el-input el-pagination__editor is-in-pagination"><input type="number" min="1" max="4"
+                                                                                  class="el-input__inner"
+                                                                                  v-model="pageNum"></div>
                 <el-button size="small" @click="viewToPageNum(Number(pageNum))">跳转</el-button>
               </span>
             </div>
           </div>
-          <div
-            ref="pdfBox"
-            class="pdf-container"
-            element-loading-text="拼命加载中"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(0, 0, 0, 0.1)"
-          >
+          <div class="pdf-container" ref="pdfBox"
+               element-loading-text="拼命加载中"
+               element-loading-spinner="el-icon-loading"
+               element-loading-background="rgba(0, 0, 0, 0.1)">
             <div class="pdf-box" :style="{width: pdfWidth+'px', left: showEdges? '-60px': ''}">
-              <div v-show="this.form.stampType == 1" id="signArea" />
+              <div id="signArea" v-show="this.form.stampType == 1"></div>
               <div class="pdfPage_1yRne">
-                <canvas :id="'the-canvas'+pageNum" class="pdf-item" />
+                <canvas class="pdf-item" :id="'the-canvas'+pageNum"></canvas>
               </div>
             </div>
           </div>
@@ -130,7 +143,7 @@
 
 <script>
 
-import { base642blob, getBase64, getFileType } from '@/utils/file'
+import {base642blob, getBase64, getFileType} from '@/utils/file'
 
 const PDFJS = require('pdfjs-dist')
 PDFJS.GlobalWorkerOptions.workerSrc = './pdf.worker.js'
@@ -158,6 +171,7 @@ export default {
       scale: 1.0,
       templateInfo: {},
       sealInfo: {
+        name: '',
         dpi: 96,
         width: 160, // 单位像素，拖拽显示时转换成磅
         height: 160,
@@ -165,34 +179,35 @@ export default {
       },
       form: {
         id: '',
-        stampType: 1, // 签章方式
+        stampType: 1, //签章方式
         sealId: null,
         stampParam: {
-          location: {}, // 签章坐标位置，单位磅
-          pageNum: null,
-          locations: [], // 拖拽签章坐标位置x,y,页码,印章
-          keywords: '',
-          useQfz: 0 // 使用骑缝章
+          locations: [],//拖拽签章坐标位置x,y,页码,印章
+          useQfz: 1, //使用骑缝章
+          qfzType: 1, //骑缝章方式
+          qfzSealId: null,
+          qfzSealName: "",
         },
-        qfzType: 1 // 骑缝章方式
+
       },
       sealList: []
     }
   },
   // 监听一个值的变化,然后执行相对应的函数。
   watch: {
-    pdfUrl: function(val) {
+    pdfUrl: function (val) {
       this.$nextTick(() => {
         this._loadFile(val)
       })
     }
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       this.getFileInfo()
-    })
+    });
 
-    this.drag()
+    this.drag();
+
   },
   methods: {
     // 上传文件变化
@@ -247,102 +262,104 @@ export default {
     // 预览渲染模板文件
     _renderPage(num) {
       this.pdfDoc.getPage(num).then((page) => {
-        const canvas = document.getElementById('the-canvas' + num)
-        const ctx = canvas.getContext('2d')
-        const viewport = page.getViewport(this.scale)
+        let canvas = document.getElementById("the-canvas" + num);
+        let ctx = canvas.getContext("2d");
+        let viewport = page.getViewport(this.scale);
         // pdfjs返回的PDF宽高单位是pt，但我们渲染直接用了px，视觉上pdf比实际小一圈，但清晰
         // 需要注意，拖拽图片时，图片宽高单位和渲染单位，与PDF渲染逻辑保持一致
-        this.pdfHeight = canvas.height = viewport.height
-        this.pdfWidth = canvas.width = viewport.width
-        const renderContext = {
+        this.pdfHeight = canvas.height = viewport.height;
+        this.pdfWidth = canvas.width = viewport.width;
+        let renderContext = {
           canvasContext: ctx,
           viewport: viewport
-        }
-        page.render(renderContext)
+        };
+        page.render(renderContext);
 
         // 渲染指定页时，清除所有签署区，重新渲染，处于当前页的签署区展示，否则隐藏
         var signArea = document.getElementById('signArea')
-        signArea.innerHTML = ''
+        signArea.innerHTML = ""
 
-        const locations = this.form.stampParam.locations
+        let locations = this.form.stampParam.locations
         if (locations.length > 0) {
-          this.$nextTick(function() {
+          this.$nextTick(function () {
+
             for (var i = 0; i < locations.length; i++) {
-              const location = locations[i]
+              let location = locations[i]
               if (location.pageNum == this.pageNum) {
-                this.reviewSignArea(location.x, location.y, location.sealInfo, true)
+                this.reviewSignArea(location.x, location.y, location.sealInfo, true);
               } else {
-                this.reviewSignArea(location.x, location.y, location.sealInfo, false)
+                this.reviewSignArea(location.x, location.y, location.sealInfo, false);
               }
             }
+
           })
         }
-      })
+      });
     },
     // 加载模板文件
     _loadFile(url) {
-      const CMAP_URL = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.0.943/cmaps/'
-      PDFJS.getDocument({ url: url, cMapUrl: CMAP_URL, cMapPacked: true }).promise.then((pdf) => {
-        this.pdfDoc = pdf
-        this.page_count = this.pdfDoc.numPages
+      const CMAP_URL = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.0.943/cmaps/';
+      PDFJS.getDocument({url: url, cMapUrl: CMAP_URL, cMapPacked: true}).promise.then((pdf) => {
+        this.pdfDoc = pdf;
+        this.page_count = this.pdfDoc.numPages;
         this.$nextTick(() => {
-          this.isShow = true
-          this._renderPage(1)
-        })
-      })
+          this.isShow = true;
+          this._renderPage(1);
+        });
+      });
     },
     // 接收后台返回的流文件，赋值模板地址
     getTemplateData() {
       const baseURL = process.env.VUE_APP_BASE_API
-      const baseUrl = baseURL + '/common/download?filePath=' + encodeURI(this.templateInfo.path) + '&remotePath=' + encodeURI(this.templateInfo.remotePath) + '&fileName=' + encodeURI(this.templateInfo.name)
+      const baseUrl = baseURL + '/common/download?filePath=' + encodeURI(this.templateInfo.path) + "&remotePath=" + encodeURI(this.templateInfo.remotePath) + "&fileName=" + encodeURI(this.templateInfo.name)
       const xhr = new XMLHttpRequest()
       xhr.open('get', baseUrl, true) // get、post都可
       xhr.responseType = 'blob' // 转换流
-      const that = this
-      xhr.onload = function() {
+      let that = this
+      xhr.onload = function () {
         if (this.status == 200) {
           const blob = this.response
           that.pdfUrl = window.URL.createObjectURL(blob)
           that.loading = false
-          that._loadFile(that.pdfUrl)
+          that._loadFile(that.pdfUrl);
         }
       }
       xhr.send()
     },
     queueRenderPage(num) {
-      this._renderPage(num)
+      this._renderPage(num);
     },
     // 放大缩小
     handleChange(val) {
-      this.scale = val
-      this.queueRenderPage(this.pageNum)
+      this.scale = val;
+      this.queueRenderPage(this.pageNum);
     },
     // 前进翻页
     pagePrev() {
       if (this.pageNum !== 1) {
-        this.pageNum = this.pageNum - 1
+        this.pageNum = this.pageNum - 1;
       }
-      this._renderPage(this.pageNum)
+      this._renderPage(this.pageNum);
     },
     // 后退翻页
     pageNext() {
       if (this.pageNum !== this.page_count) {
-        this.pageNum = this.pageNum + 1
+        this.pageNum = this.pageNum + 1;
       }
-      this._renderPage(this.pageNum)
+      this._renderPage(this.pageNum);
     },
     viewToPageNum(num) {
       this.pageNum = num
-      this.$nextTick(function() {
-        this._renderPage(this.pageNum)
+      this.$nextTick(function () {
+        this._renderPage(this.pageNum);
       })
     },
     stampTypeChange(val) {
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         if (val === 1) {
           this.drag()
         }
-      })
+      });
     },
     sealChange(sealId) {
       // getSeal(sealId).then(res => {
@@ -362,366 +379,370 @@ export default {
       debugger
 
       // 印章缩略图预览
-      const	sealImgDiv = document.getElementById('sealImg')
+      let sealImgDiv = document.getElementById("sealImg");
 
       // 像素转换成磅
-      const cloneTempWidth = this.sealInfo.width / this.sealInfo.dpi * 72
-      const cloneTempHeight = this.sealInfo.height / this.sealInfo.dpi * 72
+      let cloneTempWidth = this.sealInfo.width / this.sealInfo.dpi * 72;
+      let cloneTempHeight = this.sealInfo.height / this.sealInfo.dpi * 72;
 
       // 若转换成磅之后图片还是很大，左侧缩略图缩小至150，只是一个大小界限，防止图片超大
       if (cloneTempWidth > 150) {
-        sealImgDiv.style.width = 150 + 'px'
-        sealImgDiv.style.height = cloneTempHeight / (cloneTempWidth / 150) + 'px'
+        sealImgDiv.style.width = 150 + "px";
+        sealImgDiv.style.height = cloneTempHeight / (cloneTempWidth / 150) + "px";
       } else {
-        sealImgDiv.style.width = cloneTempWidth + 'px'
-        sealImgDiv.style.height = cloneTempHeight + 'px'
+        sealImgDiv.style.width = cloneTempWidth + "px";
+        sealImgDiv.style.height = cloneTempHeight + "px";
       }
-      sealImgDiv.style.backgroundImage = 'url(data:image/png;base64,' + this.sealInfo.base64 + ')'
-      sealImgDiv.style.backgroundSize = '100% 100%'
-      // })
-    },
-    createSealDiv(left, top, sealInfo) {
-      const	cloneTemp = document.createElement('div')
-      // 像素转换成磅
-      const cloneTempWidth = sealInfo.width / sealInfo.dpi * 72
-      const cloneTempHeight = sealInfo.height / sealInfo.dpi * 72
-      // cloneTemp.id = "signArea1";
-      cloneTemp.className = 'sign-area'
-      // cloneTemp.innerHTML = "签署区";
-      // cloneTemp.style.textAlign = "center"
-      // cloneTemp.style.color = "skyblue"
-      // cloneTemp.style.lineHeight = cloneTempHeight + "px";
-      cloneTemp.draggable = true
-      cloneTemp.style.backgroundColor = 'hsla(0,0%,100%,0)'
-      // cloneTemp.style.border = "1px dotted skyblue";
-      cloneTemp.style.backgroundImage = 'url(data:image/png;base64,' + sealInfo.base64 + ')'
-      cloneTemp.style.backgroundSize = '100% 100%'
-      cloneTemp.style.position = 'absolute' // 相对于pdf图片的绝对位置
-      cloneTemp.style.zIndex = '8' // footer是9
-      cloneTemp.style.width = cloneTempWidth + 'px'
-      cloneTemp.style.height = cloneTempHeight + 'px'
-      cloneTemp.style.left = left + 'px'
-      cloneTemp.style.top = top + 'px'
-      cloneTemp.style.cursor = 'grab'
+      sealImgDiv.style.backgroundImage = "url(data:image/png;base64," + this.sealInfo.base64 + ")";
+      sealImgDiv.style.backgroundSize = "100% 100%";
+    }
+)
 
-      return cloneTemp
-    },
-    createDeleteDiv() {
-      const	deleteDiv = document.createElement('div')
-      const deleteDivWidth = 20
-      const deleteDivHeight = 20
-      deleteDiv.innerHTML = '×'
-      deleteDiv.style.textAlign = 'center'
-      deleteDiv.style.color = 'skyblue'
-      deleteDiv.style.lineHeight = deleteDivHeight + 'px'
-      deleteDiv.style.width = deleteDivWidth + 'px'
-      deleteDiv.style.height = deleteDivHeight + 'px'
-      deleteDiv.style.borderRadius = deleteDivHeight / 2 + 'px'
-      deleteDiv.style.position = 'absolute'
-      deleteDiv.style.right = '0px'
-      deleteDiv.style.top = '0px'
-      deleteDiv.style.display = 'none'
-      deleteDiv.style.cursor = 'pointer'
+},
+createSealDiv(left, top, sealInfo)
+{
+  let cloneTemp = document.createElement("div");
+  // 像素转换成磅
+  let cloneTempWidth = sealInfo.width / sealInfo.dpi * 72;
+  let cloneTempHeight = sealInfo.height / sealInfo.dpi * 72;
+  cloneTemp.className = "sign-area";
+  cloneTemp.draggable = true;
+  cloneTemp.style.backgroundColor = "hsla(0,0%,100%,0)";
+  cloneTemp.style.backgroundImage = "url(data:image/png;base64," + sealInfo.base64 + ")";
+  cloneTemp.style.backgroundSize = "100% 100%";
+  cloneTemp.style.position = 'absolute'; // 相对于pdf图片的绝对位置
+  cloneTemp.style.zIndex = "8"; // footer是9
+  cloneTemp.style.width = cloneTempWidth + "px";
+  cloneTemp.style.height = cloneTempHeight + "px";
+  cloneTemp.style.left = left + 'px';
+  cloneTemp.style.top = top + 'px';
+  cloneTemp.style.cursor = 'grab';
 
-      return deleteDiv
-    },
-    drag() {
-      var _this = this
-      divMove(document.getElementById('sealdivid1'), false)
+  return cloneTemp;
+}
+,
+createDeleteDiv()
+{
+  let deleteDiv = document.createElement("div");
+  let deleteDivWidth = 20;
+  let deleteDivHeight = 20;
+  deleteDiv.innerHTML = "×";
+  deleteDiv.style.textAlign = "center"
+  deleteDiv.style.color = "skyblue"
+  deleteDiv.style.lineHeight = deleteDivHeight + "px";
+  deleteDiv.style.width = deleteDivWidth + "px";
+  deleteDiv.style.height = deleteDivHeight + "px";
+  deleteDiv.style.borderRadius = deleteDivHeight / 2 + "px";
+  deleteDiv.style.position = 'absolute';
+  deleteDiv.style.right = '0px';
+  deleteDiv.style.top = '0px';
+  deleteDiv.style.display = "none"
+  deleteDiv.style.cursor = 'pointer';
 
-      function divMove(div, isRemove) {
-        // 签署区鼠标按下，增加一个签署区
-        div.onmousedown = function(event) {
-          // 选择印章
-          if (_this.form.sealId == null) {
-            _this.msgError('请选择印章')
-            return
-          }
+  return deleteDiv;
+}
+,
+drag()
+{
+  var _this = this;
+  divMove(document.getElementById("sealdivid1"), false);
 
-          // 签署区
-          var signArea = document.getElementById('signArea')
-
-          // if (signArea.children.length >= 1) {
-          //   _this.msgError('只能添加1个签署区')
-          //   return
-          // }
-
-          if (isRemove) {
-            div.style.display = 'none'
-          }
-
-          // 签署区创建在当前所在页
-          // _this.form.stampParam.pageNum =  _this.pageNum
-
-          const cloneTemp = _this.createSealDiv(0, 0, _this.sealInfo)
-          const deleteDiv = _this.createDeleteDiv()
-          cloneTemp.appendChild(deleteDiv)
-          signArea.appendChild(cloneTemp)
-
-          var y = _this.pdfHeight - 120
-          _this.form.stampParam.locations.push({ // 添加坐标和页码
-            x: 0,
-            y: y,
-            pageNum: _this.pageNum,
-            name: _this.form.sealId,
-            sealId: _this.form.sealId,
-            sealInfo: JSON.parse(JSON.stringify(_this.sealInfo))
-          })
-
-          // 给签署方框加 点击/抬起/移动事件，起到拖拽效果
-          cloneTemp.onmousedown = function(e) {
-            document.onmousemove = function(event) {
-              _this.move(event, e)
-            }
-
-            document.onmouseup = function(event) {
-              document.onmousemove = null
-              document.onmouseup = null
-              _this.up(event, e)
-            }
-
-            // 阻止默认事件
-            return false
-          }
-
-          // 签署域方框鼠标悬浮，显示删除小红叉
-          cloneTemp.onmouseover = function(event) {
-            deleteDiv.style.display = 'block'
-          }
-
-          // 签署域方框鼠标离开，隐藏删除小红叉
-          cloneTemp.onmouseleave = function(event) {
-            deleteDiv.style.display = 'none'
-          }
-
-          // 点击删除小红叉，删除签署域方框
-          deleteDiv.onclick = function(event) {
-            var signDiv = event.target.parentNode
-            // 删除坐标参数
-            var index = [].indexOf.call(document.getElementById('signArea').children, signDiv)
-            _this.form.stampParam.stampType = 1
-            _this.form.stampParam.locations.splice(index, 1)
-
-            // 重新渲染当前页，或者删除该签署域dom节点
-            _this.viewToPageNum(_this.pageNum)
-          }
-        }
+  function divMove(div, isRemove) {
+    // 签署区鼠标按下，增加一个签署区
+    div.onmousedown = function (event) {
+      // 选择印章
+      if (_this.form.sealId == null) {
+        _this.msgError('请选择印章')
+        return
       }
-    },
-    reviewSignArea(left, bottom, sealInfo, isShow) {
-      var _this = this
 
       // 签署区
       var signArea = document.getElementById('signArea')
-      const cloneTemp = _this.createSealDiv(0, 0, sealInfo)
-      if (isShow) {
-        cloneTemp.style.display = 'block'
-      } else {
-        cloneTemp.style.display = 'none'
+
+      // if (signArea.children.length >= 1) {
+      //   _this.msgError('只能添加1个签署区')
+      //   return
+      // }
+
+      if (isRemove) {
+        div.style.display = "none";
       }
-      const deleteDiv = _this.createDeleteDiv()
-      cloneTemp.appendChild(deleteDiv)
-      signArea.appendChild(cloneTemp)
 
-      var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
-      var top = pdfBox.scrollHeight - bottom - cloneTemp.scrollHeight
+      // 签署区创建在当前所在页
+      let cloneTemp = _this.createSealDiv(0, 0, _this.sealInfo);
+      let deleteDiv = _this.createDeleteDiv();
+      cloneTemp.appendChild(deleteDiv);
+      signArea.appendChild(cloneTemp);
 
-      cloneTemp.style.left = left + 'px'
-      cloneTemp.style.top = top + 'px'
+      var y = _this.pdfHeight - 120
+      _this.form.stampParam.locations.push({ // 添加坐标和页码
+        x: 0,
+        y: y,
+        pageNum: _this.pageNum,
+        name: _this.sealInfo.name,
+        sealId: _this.form.sealId,
+        sealInfo: JSON.parse(JSON.stringify(_this.sealInfo))
+      })
 
       // 给签署方框加 点击/抬起/移动事件，起到拖拽效果
-      cloneTemp.onmousedown = function(e) {
-        document.onmousemove = function(event) {
+      cloneTemp.onmousedown = function (e) {
+        document.onmousemove = function (event) {
           _this.move(event, e)
         }
 
-        document.onmouseup = function(event) {
-          document.onmousemove = null
-          document.onmouseup = null
+        document.onmouseup = function (event) {
+          document.onmousemove = null;
+          document.onmouseup = null;
           _this.up(event, e)
         }
 
-        // 阻止默认事件
-        return false
+        //阻止默认事件
+        return false;
       }
 
       // 签署域方框鼠标悬浮，显示删除小红叉
-      cloneTemp.onmouseover = function(event) {
-        deleteDiv.style.display = 'block'
+      cloneTemp.onmouseover = function (event) {
+        deleteDiv.style.display = "block"
       }
 
       // 签署域方框鼠标离开，隐藏删除小红叉
-      cloneTemp.onmouseleave = function(event) {
-        deleteDiv.style.display = 'none'
+      cloneTemp.onmouseleave = function (event) {
+        deleteDiv.style.display = "none"
       }
 
       // 点击删除小红叉，删除签署域方框
-      deleteDiv.onclick = function(event) {
+      deleteDiv.onclick = function (event) {
         var signDiv = event.target.parentNode
-
         // 删除坐标参数
-        var index = [].indexOf.call(document.getElementById('signArea').children, signDiv)
+        var index = [].indexOf.call(document.getElementById('signArea').children, signDiv);
         _this.form.stampParam.stampType = 1
         _this.form.stampParam.locations.splice(index, 1)
 
         // 重新渲染当前页，或者删除该签署域dom节点
         _this.viewToPageNum(_this.pageNum)
       }
-    },
 
-    move(documentEvent, divEvent) {
-      var _this = this
-      // var event = event || window.event;
-      // var cloneTemp = document.getElementsByClassName('sign-area')[0]
+    }
 
-      var cloneTemp = divEvent.target
+  }
 
-      var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
+}
+,
+reviewSignArea(left, bottom, sealInfo, isShow)
+{
+  var _this = this
 
-      // pdf在浏览器的绝对位置
-      var pdfTop = _this.offsetTop(pdfBox)
-      var pdfBottom = pdfTop + pdfBox.scrollHeight
-      var pdfLeft = _this.offsetLeft(pdfBox)
-      var pdfRight = pdfLeft + pdfBox.scrollWidth
+  // 签署区
+  var signArea = document.getElementById('signArea')
+  let cloneTemp = _this.createSealDiv(0, 0, sealInfo);
+  if (isShow) {
+    cloneTemp.style.display = "block";
+  } else {
+    cloneTemp.style.display = "none";
+  }
+  let deleteDiv = _this.createDeleteDiv();
+  cloneTemp.appendChild(deleteDiv);
+  signArea.appendChild(cloneTemp);
 
-      // 鼠标在浏览器的绝对位置 event.clientX，event.clientY
-      var event = documentEvent || window.event
-      var top = event.clientY > pdfTop ? event.clientY : pdfTop
-      var left = event.clientX > pdfLeft ? event.clientX : pdfLeft
+  var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
+  var top = pdfBox.scrollHeight - bottom - cloneTemp.scrollHeight
 
-      // 越界处理，减去框的宽高
-      if (top > pdfBottom - cloneTemp.clientHeight) { top = pdfBottom - cloneTemp.clientHeight }
+  cloneTemp.style.left = left + 'px';
+  cloneTemp.style.top = top + 'px';
 
-      if (left > pdfRight - cloneTemp.clientWidth) { left = pdfRight - cloneTemp.clientWidth }
 
-      // 计算签署框相对于pdf左上角的相对位置
-      left = left - pdfLeft
-      top = top - pdfTop
+  // 给签署方框加 点击/抬起/移动事件，起到拖拽效果
+  cloneTemp.onmousedown = function (e) {
+    document.onmousemove = function (event) {
+      _this.move(event, e)
+    }
 
-      cloneTemp.style.left = left + 'px'
-      cloneTemp.style.top = top + 'px'
-      return false
-    },
+    document.onmouseup = function (event) {
+      document.onmousemove = null;
+      document.onmouseup = null;
+      _this.up(event, e)
+    }
 
-    up(documentEvent, divEvent) {
-      var _this = this
-      // 移除移动事件
-      document.onmousemove = function(e) {
-      }
+    //阻止默认事件
+    return false;
+  }
 
-      var cloneTemp = divEvent.target
+  // 签署域方框鼠标悬浮，显示删除小红叉
+  cloneTemp.onmouseover = function (event) {
+    deleteDiv.style.display = "block"
+  }
 
-      // var cloneTemp = document.getElementsByClassName('sign-area')[0]
-      var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
+  // 签署域方框鼠标离开，隐藏删除小红叉
+  cloneTemp.onmouseleave = function (event) {
+    deleteDiv.style.display = "none"
+  }
 
-      var pdfTop = _this.offsetTop(pdfBox)
-      var pdfBottom = pdfTop + pdfBox.scrollHeight
+  // 点击删除小红叉，删除签署域方框
+  deleteDiv.onclick = function (event) {
+    var signDiv = event.target.parentNode
 
-      // 计算签署框相对于pdf左下角的相对位置
-      var x = _this.offsetLeft(cloneTemp) + cloneTemp.scrollLeft - _this.offsetLeft(pdfBox)
-      var y = pdfBottom - _this.offsetTop(cloneTemp) - cloneTemp.scrollHeight
+    // 删除坐标参数
+    var index = [].indexOf.call(document.getElementById('signArea').children, signDiv);
+    _this.form.stampParam.stampType = 1
+    _this.form.stampParam.locations.splice(index, 1)
 
-      // 自动修正，以保证不出边界
-      x = x < 0 ? 0 : x
-      x = x > pdfBox.scrollWidth ? pdfBox.scrollWidth : x
-      y = y < 0 ? 0 : y
-      y = y > pdfBox.scrollHeight ? pdfBox.scrollHeight : y
+    // 重新渲染当前页，或者删除该签署域dom节点
+    _this.viewToPageNum(_this.pageNum)
+  }
+}
+,
 
-      _this.form.stampParam.stampType = 1
+move(documentEvent, divEvent)
+{
+  var _this = this
+  // var event = event || window.event;
+  // var cloneTemp = document.getElementsByClassName('sign-area')[0]
 
-      var index = [].indexOf.call(document.getElementById('signArea').children, cloneTemp)
-      if (index < 0) { return }
+  var cloneTemp = divEvent.target
 
-      if (_this.form.stampParam.locations.length > index) { // 已添加过，修改坐标
-        var location = _this.form.stampParam.locations[index] // 点x删除也会触发这里，加一层判断防止出错
-        if (location.x != undefined) { _this.form.stampParam.locations[index].x = x }
+  var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
 
-        if (location.y != undefined) { _this.form.stampParam.locations[index].y = y }
-      }
-    },
+  // pdf在浏览器的绝对位置
+  var pdfTop = _this.offsetTop(pdfBox);
+  var pdfBottom = pdfTop + pdfBox.scrollHeight;
+  var pdfLeft = _this.offsetLeft(pdfBox);
+  var pdfRight = pdfLeft + pdfBox.scrollWidth;
 
-    offsetTop(elements) {
-      var top = elements.offsetTop
-      var parent = elements.offsetParent
-      while (parent != null) {
-        top += parent.offsetTop
-        parent = parent.offsetParent
-      }
-      return top
-    },
-    offsetLeft(elements) {
-      var left = elements.offsetLeft
-      var parent = elements.offsetParent
-      while (parent != null) {
-        left += parent.offsetLeft
-        parent = parent.offsetParent
-      }
+  // 鼠标在浏览器的绝对位置 event.clientX，event.clientY
+  var event = documentEvent || window.event;
+  var top = event.clientY > pdfTop ? event.clientY : pdfTop;
+  var left = event.clientX > pdfLeft ? event.clientX : pdfLeft
 
-      return left
-    },
+  // 越界处理，减去框的宽高
+  if (top > pdfBottom - cloneTemp.clientHeight)
+    top = pdfBottom - cloneTemp.clientHeight
 
-    submitForm() {
-      const formData = JSON.parse(JSON.stringify(this.form))
-      if (this.page_count < 2 || this.page_count > 32) {
-        delete formData.stampParam.useQfz
-      }
-      if (formData.stampType == 1) {
-        if (formData.stampParam.locations.length <= 0) {
-          this.msgError('请进行拖拽配置')
-          return
+  if (left > pdfRight - cloneTemp.clientWidth)
+    left = pdfRight - cloneTemp.clientWidth
+
+  // 计算签署框相对于pdf左上角的相对位置
+  left = left - pdfLeft;
+  top = top - pdfTop;
+
+  cloneTemp.style.left = left + 'px';
+  cloneTemp.style.top = top + 'px';
+  return false;
+}
+,
+
+up(documentEvent, divEvent)
+{
+  var _this = this
+  // 移除移动事件
+  document.onmousemove = function (e) {
+  }
+
+  var cloneTemp = divEvent.target
+
+  // var cloneTemp = document.getElementsByClassName('sign-area')[0]
+  var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
+
+  var pdfTop = _this.offsetTop(pdfBox);
+  var pdfBottom = pdfTop + pdfBox.scrollHeight;
+
+  // 计算签署框相对于pdf左下角的相对位置
+  var x = _this.offsetLeft(cloneTemp) + cloneTemp.scrollLeft - _this.offsetLeft(pdfBox)
+  var y = pdfBottom - _this.offsetTop(cloneTemp) - cloneTemp.scrollHeight
+
+  // 自动修正，以保证不出边界
+  x = x < 0 ? 0 : x;
+  x = x > pdfBox.scrollWidth ? pdfBox.scrollWidth : x
+  y = y < 0 ? 0 : y;
+  y = y > pdfBox.scrollHeight ? pdfBox.scrollHeight : y
+
+  _this.form.stampParam.stampType = 1
+
+  var index = [].indexOf.call(document.getElementById('signArea').children, cloneTemp);
+  if (index < 0)
+    return
+
+  if (_this.form.stampParam.locations.length > index) { // 已添加过，修改坐标
+    var location = _this.form.stampParam.locations[index] // 点x删除也会触发这里，加一层判断防止出错
+    if (location.x != undefined)
+      _this.form.stampParam.locations[index].x = x
+
+    if (location.y != undefined)
+      _this.form.stampParam.locations[index].y = y
+  }
+}
+,
+
+offsetTop(elements)
+{
+  var top = elements.offsetTop;
+  var parent = elements.offsetParent;
+  while (parent != null) {
+    top += parent.offsetTop;
+    parent = parent.offsetParent;
+  }
+  return top;
+}
+,
+offsetLeft(elements)
+{
+  var left = elements.offsetLeft;
+  var parent = elements.offsetParent;
+  while (parent != null) {
+    left += parent.offsetLeft;
+    parent = parent.offsetParent;
+  }
+
+  return left;
+}
+,
+handleQfzSeal()
+{
+  this.form.stampParam.qfzSealId = this.form.sealId
+  this.form.stampParam.qfzSealName = this.sealInfo.name
+  this.msgSuccess('设置成功');
+}
+,
+submitForm()
+{
+  const formData = JSON.parse(JSON.stringify(this.form))
+  if (this.page_count < 2 || this.page_count > 32) {
+    delete formData.stampParam.useQfz
+  }
+  if (formData.stampType == 1) {
+    if (formData.stampParam.locations.length <= 0) {
+      this.msgError('请进行拖拽配置')
+      return
+    }
+    if (formData.stampParam.useQfz == 1 && formData.stampParam.qfzSealId == null) {
+      this.msgError('请设置骑缝所用印章')
+      return
+    }
+
+    const data = {
+      id: formData.id,
+      stampType: formData.stampType,
+      dragParam: {
+        param: formData.stampParam.locations,
+        qfzParam: {
+          useQfz: formData.stampParam.useQfz,
+          qfzType: formData.stampParam.qfzType,
+          sealId: formData.stampParam.qfzSealId
         }
-        delete formData.stampParam.keywords
-        this.form.stampParam.keywords = ''
-
-        const data = {
-          id: formData.id,
-          stampType: formData.stampType,
-          dragParam: {
-            param: formData.stampParam.locations,
-            qfzParam: {
-              useQfz: formData.stampParam.useQfz,
-              qfzType: formData.qfzType,
-              sealId: formData.sealId
-            }
-          }
-        }
-
-        this.msgInfo('还未上线，敬请期待！')
-
-        pdfStamp(data).then(res => {
-          this.msgSuccess(res.msg)
-
-          // 返回列表
-          this.back()
-        })
-      } else {
-        this.$refs['form'].validate(valid => {
-          if (valid) {
-            if (formData.stampType == 2) {
-              delete formData.stampParam.keywords
-              this.form.stampParam.keywords = ''
-            }
-            if (formData.stampType == 3) {
-              delete formData.stampParam.location
-              delete formData.stampParam.pageNum
-              this.form.stampParam.location.x = null
-              this.form.stampParam.location.y = null
-              this.form.stampParam.pageNum = null
-            }
-            if (formData.stampType === 4) {
-              delete formData.stampParam.keywords
-              delete formData.stampParam.location
-              delete formData.stampParam.pageNum
-              delete formData.stampParam.useQfz
-            }
-            pdfStamp(formData).then(res => {
-              this.msgSuccess(res.msg)
-            })
-          }
-        })
       }
     }
+
+    pdfStamp(data).then(res => {
+      this.msgSuccess(res.msg);
+
+      // 返回列表
+      this.back()
+    })
+  } else {
+    this.msgError('不支持的签署方式')
   }
+}
+,
+}
 }
 </script>
 
@@ -750,12 +771,14 @@ export default {
   flex: 0 0 240px;
   width: 280px;
   height: 100%;
+
   .seal-list-title {
     font-size: 14px;
     font-weight: 800;
     color: #333;
     line-height: 40px;
   }
+
   .doc-list-title {
     font-size: 14px;
     font-weight: 800;
@@ -771,36 +794,43 @@ export default {
       font-weight: normal;
     }
   }
+
   .doc-list-context {
     height: 100%;
     width: 280px;
     display: inline-block;
     padding: 0 15px;
   }
+
   .doc-list {
     overflow-y: auto;
     width: 100%;
     height: calc(100% - 100px);
   }
+
   .doc-list::-webkit-scrollbar {
     display: none
   }
+
   .doc-item {
     margin: 0;
     padding: 20px 45px 0 45px;
     cursor: pointer;
   }
+
   .doc-img {
     border: 1px solid #333;
     position: relative;
     width: 121px;
     height: 161px;
     margin-bottom: 5px;
+
     img {
       width: 100%;
       height: 100%;
     }
   }
+
   .doc-page-num {
     z-index: 100;
     position: absolute;
@@ -823,6 +853,7 @@ export default {
   height: 100%;
   overflow: auto;
   background: #f5f5f5;
+
   .pdf-header {
     /*position: fixed;*/
     top: 55px;
@@ -837,35 +868,42 @@ export default {
     .block {
       display: flex;
       margin-left: 350px;
+
       .demonstration, .slider {
         flex: 0 0 150px;
         line-height: 40px;
         width: 150px;
         text-align: right;
       }
+
       .demonstration {
         flex: 1;
         margin-right: 20px;
       }
     }
-    .pageNo{
+
+    .pageNo {
       display: flex;
       flex: 0 0 150px;
       margin-left: 35%;
       z-index: 2;
       text-align: center;
-      .page-name{
+
+      .page-name {
         float: left;
       }
-      .page-name button{
-        border:none;
+
+      .page-name button {
+        border: none;
       }
     }
+
     .input {
       flex: 1;
       text-align: left;
       line-height: 40px;
       margin-left: 20px;
+
       .input-text {
         border: none;
         outline: none;
@@ -876,24 +914,29 @@ export default {
       }
     }
   }
+
   .pdf-container {
     display: inline-block;
     overflow: auto;
     height: 100%;
     width: 100%;
+
     .pdf-box {
       position: relative;
       margin: 0 auto;
     }
   }
+
   .pdfPage_1yRne {
     /*transition: left .3s;*/
     position: relative;
     margin: 10px 0;
   }
+
   .es-pdf-page__edges--visible {
     border: 2px dashed #2981d9;
   }
+
   .dragLayer_3ccsq {
     position: absolute;
     left: 0;
@@ -909,6 +952,7 @@ export default {
   flex: 0 0 270px;
   width: 270px;
   height: 100%;
+
   .tab-bar {
     width: 100%;
     padding: 0 15px;
@@ -921,6 +965,7 @@ export default {
     overflow: hidden;
     justify-content: space-around;
   }
+
   .tab-context {
     /*padding: 0 15px;*/
     height: calc(100% - 51px);
@@ -929,18 +974,21 @@ export default {
     text-align: center;
     font-weight: bold;
   }
+
   .item {
     margin-top: 25px;
   }
+
   .title {
     margin: 10px 0;
   }
 }
 
-.add-widget-module{
+.add-widget-module {
 
 }
-.add-widget-module-title{
+
+.add-widget-module-title {
   color: #333;
   font-size: 14px;
   font-weight: 500;
@@ -948,22 +996,25 @@ export default {
   padding-left: 15px;
   font-size: 14px;
 }
-.add-widget-module-tips{
+
+.add-widget-module-tips {
   padding: 5px 15px;
   color: #666;
   font-size: 12px;
   line-height: 20px;
 }
+
 .added-widget {
   margin-left: 10px;
   margin-top: 20px;
   width: 210px;
   height: 28px;
   box-sizing: border-box;
-  border: 1px dashed rgba(0,0,0,.3);
+  border: 1px dashed rgba(0, 0, 0, .3);
   padding: 5px 0 0 5px;
   cursor: pointer;
 }
+
 .added-widget-type-name {
   font-size: 12px;
   color: #333;
