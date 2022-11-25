@@ -7,14 +7,33 @@ import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.List;
 
 import com.gs.common.define.Constants;
 import com.gs.common.util.FileUtil;
+import com.gs.common.util.HexUtil;
 import com.gs.common.util.base64.Base64Util;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaCertStore;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cms.CMSException;
+import org.bouncycastle.cms.CMSProcessableByteArray;
+import org.bouncycastle.cms.CMSSignedData;
+import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.Store;
+import org.bouncycastle.util.encoders.Hex;
 
 public class CertUtil {
+
+	static {
+		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+			Security.addProvider(new BouncyCastleProvider());
+		}
+	}
 
 	public static X509Certificate getX509Certificate(byte[] certData) throws Exception {
 		ByteArrayInputStream in = null;
@@ -59,9 +78,57 @@ public class CertUtil {
 		}
 	}
 
+	/**
+	 * 解析p7b证书链
+	 * @param certChainData
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<X509Certificate> parseCertChain(byte[] certChainData) throws Exception {
+		List<X509Certificate> list = new ArrayList<>();
+
+		CMSSignedData cmsSignedData = new CMSSignedData(certChainData);
+		Store<X509CertificateHolder> store = cmsSignedData.getCertificates();
+		Collection<X509CertificateHolder> certificates = store.getMatches(null);
+
+		for (X509CertificateHolder certHolder : certificates) {
+			X509Certificate cert = new JcaX509CertificateConverter().setProvider("BC").getCertificate(certHolder);
+			list.add(cert);
+		}
+		return list;
+	}
+
+	/**
+	 * 制作p7b证书链
+	 * @param certChain
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] genCertChain(List<X509Certificate> certChain) throws Exception {
+		JcaCertStore jcaCertStore = new JcaCertStore(certChain);
+
+		CMSSignedDataGenerator gen = new CMSSignedDataGenerator();
+		gen.addCertificates(jcaCertStore);
+
+		CMSProcessableByteArray msg = new CMSProcessableByteArray("".getBytes());
+		CMSSignedData signedData = gen.generate(msg);
+		return signedData.getEncoded();
+
+	}
+
 	public static void main(String[] args) throws Exception {
-		byte[] file = FileUtil.getFile(Constants.FILE_PATH + "ca.cer");
-		X509Certificate x509Certificate = getX509Certificate(file);
-		System.out.println(x509Certificate.getSubjectDN());
+//		byte[] file = FileUtil.getFile(Constants.FILE_PATH + "ca.cer");
+//		X509Certificate x509Certificate = getX509Certificate(file);
+//		System.out.println(x509Certificate.getSubjectDN());
+
+//		byte[] file = FileUtil.getFile("E:\\zj\\file\\cert\\p7b\\1.p7b");
+//		CertUtil.parseCertChain(Base64Util.decode(file));
+
+		ArrayList<X509Certificate> list = new ArrayList<>();
+		list.add(CertUtil.getX509Certificate(FileUtil.getFile("E:\\Idea\\gs\\gs-cloud\\gs-cloud\\file\\out\\3B53A48943.cer")));
+
+		byte[] bytes = genCertChain(list);
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "p7b/1.p7b", bytes);
+
 	}
 }

@@ -56,7 +56,7 @@ public class Base64Util {
 	 * @return 已解码的byte[]
 	 */
 	public static byte[] decode(String str) {
-		Decoder dec = Base64.getDecoder();
+		Decoder dec = Base64.getMimeDecoder();
 		return dec.decode(str.getBytes());
 	}
 

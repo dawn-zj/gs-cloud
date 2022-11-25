@@ -18,15 +18,19 @@ import com.gs.common.util.pdf.RemovePdfStampUtil;
 import com.gs.common.util.pkcs.KeyStoreUtil;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.math.BigInteger;
 import java.net.NetworkInterface;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
@@ -290,6 +294,35 @@ public class UtilTest {
 		byte[] file = FileUtil.getFile(Constants.FILE_PATH + "ca.cer");
 		X509Certificate x509Certificate = CertUtil.getX509Certificate(file);
 		System.out.println(x509Certificate.getSubjectDN());
+	}
+
+	/**
+	 * 解析p7b证书链
+	 * @throws Exception
+	 */
+	@Test
+	public void parseCertChainTest() throws Exception {
+		byte[] file = FileUtil.getFile("E:\\zj\\file\\cert\\p7b\\1.p7b");
+		List<X509Certificate> list = CertUtil.parseCertChain(Base64Util.decode(file));
+		for (X509Certificate cert : list) {
+			BigInteger serialNumber = cert.getSerialNumber();
+			String sn = HexUtil.byte2Hex(serialNumber.toByteArray()).toUpperCase();
+			FileUtil.storeFile(Constants.FILE_OUT_PATH + sn + ".cer", cert.getEncoded());
+		}
+	}
+
+	/**
+	 * 制作p7b证书链
+	 * @throws Exception
+	 */
+	@Test
+	public void genCertChainTest() throws Exception {
+		ArrayList<X509Certificate> list = new ArrayList<>();
+		list.add(CertUtil.getX509Certificate(FileUtil.getFile("E:\\zj\\file\\cert\\ca61gm\\ca61gm.cer")));
+		list.add(CertUtil.getX509Certificate(FileUtil.getFile("E:\\zj\\file\\cert\\ca61gm\\SM2_cert.cer")));
+
+		byte[] bytes = CertUtil.genCertChain(list);
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "p7b/1.p7b", bytes);
 	}
 
 	/**
