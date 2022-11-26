@@ -154,9 +154,9 @@
             element-loading-background="rgba(0, 0, 0, 0.1)"
           >
             <div class="pdf-box" :style="{width: pdfWidth+'px', left: showEdges? '-60px': ''}">
-              <div v-show="this.form.stampType == 1" id="signArea" />
-              <div class="pdfPage_1yRne">
-                <canvas :id="'the-canvas'+pageNum" class="pdf-item" />
+              <div v-show="this.form.stampType == 1" id="signArea" style="border: 1px solid red;" />
+              <div class="pdfPage_1yRne" style="border: 1px solid #00afff;">
+                <canvas id="the-canvas" class="pdf-item" />
               </div>
             </div>
           </div>
@@ -286,7 +286,7 @@ export default {
     // 预览渲染模板文件
     _renderPage(num) {
       this.pdfDoc.getPage(num).then((page) => {
-        const canvas = document.getElementById('the-canvas' + num)
+        const canvas = document.getElementById('the-canvas')
         const ctx = canvas.getContext('2d')
         const viewport = page.getViewport(this.scale)
         // pdfjs返回的PDF宽高单位是pt，但我们渲染直接用了px，视觉上pdf比实际小一圈，但清晰
@@ -609,9 +609,9 @@ export default {
       var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
 
       // pdf在浏览器的绝对位置
-      var pdfTop = _this.offsetTop(pdfBox)
+      var pdfTop = pdfBox.getBoundingClientRect().top
       var pdfBottom = pdfTop + pdfBox.scrollHeight
-      var pdfLeft = _this.offsetLeft(pdfBox)
+      var pdfLeft = pdfBox.getBoundingClientRect().left
       var pdfRight = pdfLeft + pdfBox.scrollWidth
 
       // 鼠标在浏览器的绝对位置 event.clientX，event.clientY
@@ -922,7 +922,7 @@ export default {
   .pdfPage_1yRne {
     /*transition: left .3s;*/
     position: relative;
-    margin: 10px 0;
+    margin: 0px 0;
   }
 
   .es-pdf-page__edges--visible {
