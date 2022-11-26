@@ -154,8 +154,8 @@
             element-loading-background="rgba(0, 0, 0, 0.1)"
           >
             <div class="pdf-box" :style="{width: pdfWidth+'px', left: showEdges? '-60px': ''}">
-              <div v-show="this.form.stampType == 1" id="signArea" style="border: 1px solid red;" />
-              <div class="pdfPage_1yRne" style="border: 1px solid #00afff;">
+              <div v-show="this.form.stampType == 1" id="signArea" />
+              <div class="pdfPage_1yRne">
                 <canvas id="the-canvas" class="pdf-item" />
               </div>
             </div>
