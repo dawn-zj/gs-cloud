@@ -105,19 +105,19 @@
         <div class="pdfContent_1PW2f">
           <div class="pdf-header">
             <div class="pageNo">
-              <div style="width:140px;margin-top:5px;">
-                <span>
-                  <el-button size="small" @click="viewToPageNum(1)">首页</el-button>
-                  <el-button size="small" @click="viewToPageNum(page_count)">尾页</el-button>
-                </span>
-
+              <div class="page-name">
+                <button
+                  style="background-color: Transparent; margin-top:10px;cursor:pointer;"
+                  type="button"
+                  @click="viewToPageNum(1)"
+                ><span style="color: #4D4D4D" class="el-icon-d-arrow-left"></span></button>
               </div>
               <div class="page-name">
                 <button
                   style="background-color: Transparent; margin-top:10px;cursor:pointer;"
                   type="button"
                   @click="pagePrev"
-                ><span style="color: #4D4D4D">&lt;</span></button>
+                ><span style="color: #4D4D4D" class="el-icon-arrow-left"></span></button>
               </div>
               <div class="page-name">
                 <button style="background-color: Transparent; margin-top:10px;" type="button"><span
@@ -132,7 +132,14 @@
                   style="background-color: Transparent; margin-top:10px; cursor:pointer;"
                   type="button"
                   @click="pageNext"
-                ><span style="color: #4D4D4D;">&gt;</span></button>
+                ><span style="color: #4D4D4D;" class="el-icon-arrow-right"></span></button>
+              </div>
+              <div class="page-name">
+                <button
+                  style="background-color: Transparent; margin-top:10px; cursor:pointer;"
+                  type="button"
+                  @click="viewToPageNum(page_count)"
+                ><span style="color: #4D4D4D;" class="el-icon-d-arrow-right"></span></button>
               </div>
               <span style="margin-top:6px; font-size: 13px;line-height: 28px;color: #606266;">
                 <div class="el-input el-pagination__editor is-in-pagination"><input
@@ -173,8 +180,6 @@ import { base642blob, getBase64, getFileType } from '@/utils/file'
 const PDFJS = require('pdfjs-dist')
 PDFJS.GlobalWorkerOptions.workerSrc = './pdf.worker.js'
 
-// import { getPdfFile, pdfStamp } from '@/api/seal/pdfFile'
-// import { getSeal, listSeal } from '@/api/seal/seal'
 export default {
   // name: "signFieldConfig",
   data() {
