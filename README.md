@@ -26,11 +26,12 @@ https://101.43.242.145:8443/tool
 5. 圆形图章；
 
 ### PDF操作
-1. PDF文件图片签名，验签(PDF的RSA签章 = 图片+签名，没有印章和签章结构)；
-2. PDF转Word(不成熟)；
-3. PDF模板获取文本域；
-4. PDF模板填充内容；
-5. PDF添加图片；
+1. PDF转Word(不成熟)；
+2. PDF模板获取文本域；
+3. PDF模板填充内容；
+4. PDF添加图片； 
+5. PDF文件RSA签章、验章、撤章；(PDF的RSA签章 = 图片+签名，没有印章和签章结构)
+   1. 验签支持ETSI.CAdES.detached、adbe.pkcs7.detached、adbe.x509.rsa_sha1等;
 
 
 ### 信息安全

@@ -1,7 +1,8 @@
 package com.gs.webserver.service;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IStampService {
-    boolean verify(MultipartFile file);
+    JSONObject verify(MultipartFile file);
 }

@@ -1,31 +1,22 @@
 package com.gs.common.util.pdf;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
 import com.gs.common.exception.NetGSRuntimeException;
-import com.gs.common.util.FileUtil;
-import com.gs.common.util.HexUtil;
 import com.gs.common.util.StringUtil;
 import com.gs.common.util.cert.CertUtil;
-import com.gs.common.util.crypto.KeyUtil;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.security.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.X509CertParser;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * 参考文章：https://blog.csdn.net/tomatocc/article/details/80762507
@@ -103,11 +94,18 @@ public class PdfStampUtil {
      * @return
      * @throws Exception
      */
-    public boolean verifySign(byte[] pdfData) throws Exception {
+    public JSONObject verifySign(byte[] pdfData) throws Exception {
+        JSONObject object = new JSONObject();
+
         PdfReader reader = new PdfReader(pdfData);
         AcroFields fields = reader.getAcroFields();
         ArrayList<String> names = fields.getSignatureNames();
         boolean result = true;
+        if (names.size() == 0) {
+            result = false;
+        }
+
+        List<Object> signList = new ArrayList<>();
         for (int i = 0, size = names.size(); i < size; i++) {
             String signName = (String) names.get(i);
             PdfDictionary dictionary = fields.getSignatureDictionary(signName);
@@ -124,14 +122,25 @@ public class PdfStampUtil {
                 if (!verify) {
                     result = false;
                 }
-                System.out.println(StringUtil.format("certDn: {}", x509Certificate.getSubjectDN()));
-                System.out.println(StringUtil.format("verify: {}", verify));
 
+                JSONObject signObj = new JSONObject();
+                signObj.put("result", verify);
+                signObj.put("certDn", x509Certificate.getSubjectDN().getName());
+                signObj.put("certNotBefore", x509Certificate.getNotBefore());
+                signObj.put("certNotAfter", x509Certificate.getNotAfter());
+                signObj.put("signTime", pkcs7.getSignDate());
+                signObj.put("signSubFilter", pkcs7.getFilterSubtype().toString());
+                signObj.put("signHashAlg", pkcs7.getDigestAlgorithm());
+                signObj.put("signLocation", fields.getFieldPositions(signName));
+                signList.add(signObj);
             } else {
                 throw new NetGSRuntimeException("暂不支持的SubFilter类型：" + sub);
             }
         }
-        return false;
+
+        object.put("result", result);
+        object.put("signList", signList);
+        return object;
     }
 
     /**

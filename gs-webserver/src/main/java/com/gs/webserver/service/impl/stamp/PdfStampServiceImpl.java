@@ -1,5 +1,6 @@
 package com.gs.webserver.service.impl.stamp;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
 import com.gs.common.exception.BaseException;
 import com.gs.common.exception.NetGSRuntimeException;
@@ -12,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PdfStampServiceImpl extends StampServiceImpl {
 
     @Override
-    public boolean verify(MultipartFile file) {
+    public JSONObject verify(MultipartFile file) {
         try {
             String filename = file.getOriginalFilename();
             String fileType = FileUtil.getFileSuffix(filename);
@@ -21,7 +22,7 @@ public class PdfStampServiceImpl extends StampServiceImpl {
 
             PdfStampUtil pdfUtil = new PdfStampUtil();
             // todo 验签名，验签章待实现
-            boolean verify = pdfUtil.verifySign(file.getBytes());
+            JSONObject verify = pdfUtil.verifySign(file.getBytes());
             return verify;
         } catch (BaseException e) {
             throw e;

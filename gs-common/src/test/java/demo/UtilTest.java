@@ -1,6 +1,7 @@
 package demo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.Cpu;
 import com.gs.common.entity.Disk;
@@ -452,14 +453,22 @@ public class UtilTest {
 		System.out.println("签章成功，文件存储路径为：" + Constants.FILE_OUT_PATH + "stamp.pdf");
 	}
 
+	/**
+	 * pdf验章
+	 * @throws Exception
+	 */
 	@Test
 	public void pdfVerifyTest() throws Exception {
 		byte[] pdfData = FileUtil.getFile(Constants.FILE_OUT_PATH + "stamp.pdf");
 		PdfStampUtil pdfUtil = new PdfStampUtil();
-		boolean verify = pdfUtil.verifySign(pdfData);
+		JSONObject verify = pdfUtil.verifySign(pdfData);
 		System.out.println("验签结果：" + verify);
 	}
 
+	/**
+	 * pdf撤章
+	 * @throws Exception
+	 */
 	@Test
 	public void pdfStampRemoveTest() throws Exception {
 		String pdfStamp = "f:/temp/stamp1.pdf";

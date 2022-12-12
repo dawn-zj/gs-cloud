@@ -1,5 +1,6 @@
 package com.gs.webserver.controller.seal;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.service.IStampService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class StampController {
 
     @PostMapping("/verify")
     public ResponseTo verify(@RequestParam("file") MultipartFile file) {
-        boolean verify = stampService.verify(file);
+        JSONObject verify = stampService.verify(file);
         return ResponseTo.success(verify);
     }
 }
