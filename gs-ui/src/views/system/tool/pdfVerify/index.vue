@@ -237,7 +237,6 @@ export default {
           this.form.stampParam.locations.push(location)
         })
 
-        console.log(this.form.stampParam.locations)
         // 手动跳转至当前页，渲染悬浮手型div至PDF表层
         this._renderPage(this.pageNum)
       })
@@ -332,7 +331,6 @@ export default {
       this._renderPage(this.pageNum)
     },
     viewToPageNum(num) {
-      console.log(num)
       this.pageNum = num
       this.$nextTick(function() {
         this._renderPage(this.pageNum)
