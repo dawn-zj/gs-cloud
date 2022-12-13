@@ -64,10 +64,10 @@ public class PdfStampUtil {
         sap.setSignatureGraphic(image);
         // 1.2设置图章的显示方式，这里是GRAPHIC只显示图章（还有其他的模式，可以图章和签名描述一同显示），不设置默认是展示描述
         sap.setRenderingMode(PdfSignatureAppearance.RenderingMode.GRAPHIC);
-        // 1.3设置图章位置，页码，签名域名称，多次追加签名的时候，签名预名称不能一样 图片大小受表单域大小影响（过小导致压缩）
+        // 1.3设置图章位置，页码，签名域名称，多次追加签名的时候，签名域名称不能一样 图片大小受表单域大小影响（过小导致压缩）
         // 签名的坐标，是图章相对于pdf页面的位置坐标，原点为pdf页面左下角
         // 四个参数单位均是像素，分别是，图章左下角x，图章左下角y，图章右上角x，图章右上角y。
-        // 分辨率调整：像素 / 72 = ? / dpi
+        // 图片单位调整，像素改为磅pt：像素 / 72 = ? / dpi
         float imageWidth = image.getWidth() * 72f / Constants.DPI;
         float imageHeight = image.getHeight() * 72f / Constants.DPI;
         float ux = x + imageWidth;
