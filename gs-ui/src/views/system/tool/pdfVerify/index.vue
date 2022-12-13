@@ -125,6 +125,7 @@
 import { base642blob, getBase64, getFileType } from '@/utils/file'
 import { verify } from '@/api/system/genStamp'
 
+// 2.7.542版本
 const PDFJS = window['pdfjs-dist/build/pdf']
 PDFJS.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/build/pdf.worker'
 // const PDFJS = require('pdfjs-dist')
@@ -583,7 +584,7 @@ export default {
   .pdfPage_1yRne {
     /*transition: left .3s;*/
     position: relative;
-    margin: 0px 0;
+    margin: 10px 0;
   }
 
   .es-pdf-page__edges--visible {
