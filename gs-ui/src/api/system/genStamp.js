@@ -8,3 +8,12 @@ export function viewStamp(data) {
     data: data
   })
 }
+
+// 验签章
+export function verify(data) {
+  return request({
+    url: '/seal/stamp/verify',
+    method: 'post',
+    data: data
+  })
+}

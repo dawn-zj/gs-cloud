@@ -67,12 +67,12 @@
         </el-row>
       </el-tab-pane>
 
-      <el-tab-pane label="PDF签名验签" name="5">
+      <el-tab-pane label="PDF签名" name="5">
         <el-row>
           <el-col :span="24">
             <el-card>
               <div slot="header" class="clearfix">
-                <span>PDF签名验签</span>
+                <span>PDF签名</span>
               </div>
               <pdf-sign v-if="activeName == '5'" />
             </el-card>
@@ -80,7 +80,20 @@
         </el-row>
       </el-tab-pane>
 
-      <el-tab-pane label="外链项目" name="6">
+      <el-tab-pane label="PDF验签" name="6">
+        <el-row>
+          <el-col :span="24">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>PDF验签</span>
+              </div>
+              <pdf-verify v-if="activeName == '6'" />
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
+
+      <el-tab-pane label="外链项目" name="7">
         <div v-for="(item,index) in gsConfig" :key="index" class="mb10">
           {{ index + 1 }}.{{ item.describe }}：<el-link :href="item.url" target="_blank">{{ item.url }}</el-link>
         </div>
@@ -98,10 +111,11 @@ import barcodeIndex from './barcode/index'
 import px2cmIndex from './px2cm/index'
 import watermark from './watermark/index'
 import pdfSign from './pdfSign/index'
+import pdfVerify from './pdfVerify/index'
 
 export default {
   name: 'Index',
-  components: { textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign },
+  components: { textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify },
   data() {
     return {
       tabPosition: 'top',
