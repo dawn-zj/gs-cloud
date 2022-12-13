@@ -125,9 +125,10 @@
 import { base642blob, getBase64, getFileType } from '@/utils/file'
 import { verify } from '@/api/system/genStamp'
 
-const PDFJS = require('pdfjs-dist')
-PDFJS.GlobalWorkerOptions.workerSrc = './pdf.worker.js'
-
+const PDFJS = window['pdfjs-dist/build/pdf']
+PDFJS.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/build/pdf.worker'
+// const PDFJS = require('pdfjs-dist')
+// PDFJS.GlobalWorkerOptions.workerSrc = './pdf.worker.js'
 export default {
   // name: "signFieldConfig",
   data() {
@@ -250,7 +251,8 @@ export default {
       this.pdfDoc.getPage(num).then((page) => {
         const canvas = document.getElementById('the-canvas')
         const ctx = canvas.getContext('2d')
-        const viewport = page.getViewport(this.scale)
+        // 引用js文件，注意getViewport写法，和required引用写法不同
+        const viewport = page.getViewport({ scale: this.scale })
         // pdfjs返回的PDF宽高单位是pt，但我们渲染直接用了px，视觉上pdf比实际小一圈，但清晰
         // 需要注意，拖拽图片时，图片宽高单位和渲染单位，与PDF渲染逻辑保持一致
         this.pdfHeight = canvas.height = viewport.height
