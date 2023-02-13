@@ -28,6 +28,7 @@ TPORT_TOMCAT_WEB=`netstat -ntlp | awk '{print $4}' | grep -i '8443'`
 if [ -z "$TPORT_TOMCAT_WEB" ];then
  cd ${defpath}/tomcat_web/bin
  ./startup.sh
+# ./catalina.sh jpda start
 else
 	echo "The port 8443 has been in use."
 fi
