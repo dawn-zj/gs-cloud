@@ -14,6 +14,13 @@ import java.util.Iterator;
 
 public class PKCS7Envelope {
 
+    /**
+     * cms制作数字信封
+     * @param signed
+     * @param cert
+     * @return
+     * @throws Exception
+     */
     public static byte[] makeP7(byte[] signed, X509Certificate cert) throws Exception {
         CMSTypedData signedData = new CMSProcessableByteArray(signed);
 
@@ -26,6 +33,13 @@ public class PKCS7Envelope {
         return result;
     }
 
+    /**
+     * cms验证p7
+     * @param signed
+     * @param privateKey
+     * @return
+     * @throws Exception
+     */
     public static byte[] verifyP7(byte[] signed, PrivateKey privateKey) throws Exception {
         CMSEnvelopedData ed = new CMSEnvelopedData(signed);
 
