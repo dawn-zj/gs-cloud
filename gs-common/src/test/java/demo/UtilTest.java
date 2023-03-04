@@ -3,16 +3,14 @@ package demo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
-import com.gs.common.entity.Cpu;
-import com.gs.common.entity.Disk;
-import com.gs.common.entity.Memory;
-import com.gs.common.entity.ServerInfo;
+import com.gs.common.entity.*;
 import com.gs.common.util.*;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
 import com.gs.common.util.crypto.KeyUtil;
 import com.gs.common.util.crypto.RSAUtil;
 import com.gs.common.util.date.DateUtil;
+import com.gs.common.util.p10.P10Util;
 import com.gs.common.util.pdf.PdfStampUtil;
 import com.gs.common.util.pdf.PdfUtil;
 import com.gs.common.util.pdf.RemovePdfStampUtil;
@@ -496,6 +494,36 @@ public class UtilTest {
 		byte[] cert = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "pfx.cer", cert);
 
+	}
+
+	@Test
+	public void genP10() throws  Exception {
+		String p10Path = Constants.FILE_OUT_PATH + "p10.p10";
+		String priKeyPath = Constants.FILE_OUT_PATH + "p10.pri";
+
+		KeyStoreIo keyStoreIo = P10Util.genP10(".pri", "RSA", "CN=Test");
+		FileUtil.storeFile(p10Path, keyStoreIo.getP10().getBytes());
+		FileUtil.storeFile(priKeyPath, keyStoreIo.getPriKeyData());
+		System.out.println("p10和私钥存储完成");
+
+
+		byte[] p10Data = Base64Util.decode(FileUtil.getFile(p10Path));
+		boolean verifyP10 = P10Util.verifyP10(p10Data);
+		System.out.println("验证p10: " + verifyP10);
+
+		// 从p10中读取公钥做一次加解密测试
+		String plain = "plain";
+		System.out.println("加密开始，原文数据：" + plain);
+		// 加载RSA公钥
+		byte[] pubKeyData = P10Util.getPubKeyFormP10(p10Data);
+		PublicKey publicKey = RSAUtil.generateP8PublicKey(pubKeyData);
+		byte[] encrypt = KeyUtil.encrypt(publicKey, plain.getBytes(), Constants.RSA);
+
+		// 加载RSA私钥
+		byte[] priKeyData = FileUtil.getFile(priKeyPath);
+		PrivateKey privateKey = RSAUtil.generateP8PrivateKey(priKeyData);
+		byte[] decrypt = KeyUtil.decrypt(privateKey, encrypt, Constants.RSA);
+		System.out.println("解密完成，解密数据：" + new String(decrypt));
 	}
 
 }
