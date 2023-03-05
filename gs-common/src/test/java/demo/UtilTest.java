@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.*;
+import com.gs.common.pkcs.pkcs7.PKCS7Envelope;
 import com.gs.common.util.*;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
@@ -408,8 +409,7 @@ public class UtilTest {
 		X509Certificate cert = CertUtil.getX509Certificate(file);
 		// 签名
 		byte[] signed = KeyUtil.detachedSign(plain.getBytes(), cert);
-		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsa_sha256_detachedSigned.txt", Base64Util.encode(signed).getBytes());
-
+		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/rsa_sha256_detachedSigned.txt", signed);
 
 		// 验签
 		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
@@ -524,6 +524,26 @@ public class UtilTest {
 		PrivateKey privateKey = RSAUtil.generateP8PrivateKey(priKeyData);
 		byte[] decrypt = KeyUtil.decrypt(privateKey, encrypt, Constants.RSA);
 		System.out.println("解密完成，解密数据：" + new String(decrypt));
+	}
+
+	@Test
+	public void makeEnvelop() throws  Exception {
+		String plain = "plain";
+		byte[] certData = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
+		X509Certificate cert = CertUtil.getX509Certificate(certData);
+		// 制作数字信封
+		byte[] bytes = PKCS7Envelope.makeP7(plain.getBytes(), cert);
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "envelop.asn1", bytes);
+		System.out.println("数字信封内容：" + plain + "，制作完成");
+	}
+
+	@Test
+	public void parseEnvelop() throws  Exception {
+		byte[] envData = FileUtil.getFile("E:/Idea/NetSeal/v6/netseal/netseal-app-demo/file/envelop/envelop.asn1");
+		// 解数字信封
+		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
+		byte[] bytes = PKCS7Envelope.verifyP7(envData, privateKey);
+		System.out.println("数字信封内容：" + new String(bytes));
 	}
 
 }
