@@ -176,7 +176,7 @@ public class NetWorkUtil {
 
     public static List<NetworkCard> getNetworkList() throws Exception {
         List<NetworkCard> networkCards = new ArrayList<>();
-        if (true) {
+        if (isLinux()) {
             Runtime runt = Runtime.getRuntime();
             Process p = runt.exec("ifconfig -a");
             // 流只能被读一次
@@ -196,7 +196,17 @@ public class NetWorkUtil {
             else
                 throw new Exception("not support current os(must centos、neokylin)");
         } else {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface ni = (NetworkInterface) networkInterfaces.nextElement();
+                if (ni.getHardwareAddress() != null) {
+                    NetworkCard card = new NetworkCard();
+                    card.setName(ni.getName());
+                    card.setDisplayName(ni.getDisplayName());
+                    card.setMac(HexUtil.byte2Hex(ni.getHardwareAddress()));
+                }
 
+            }
         }
         return networkCards;
     }
