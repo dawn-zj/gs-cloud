@@ -31,3 +31,4 @@ target/
 
 ### NetTool ###
 **/tomcat_web/webapps/**
+/file/out/
