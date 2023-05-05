@@ -250,7 +250,7 @@ public class UtilTest {
 	@Test
 	public void getNetWorkListTest() throws Exception {
 		// windows测试linux时，进入方法改成windows路径再测
-		System.out.println(NetWorkUtil.getNetworkList());
+		System.out.println(JSON.toJSONString(NetWorkUtil.getNetworkList()));
 	}
 
 	/**
