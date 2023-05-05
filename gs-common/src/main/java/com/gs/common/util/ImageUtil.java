@@ -6,6 +6,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.gs.common.define.Constants;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.resource.ErrCode;
@@ -315,11 +316,14 @@ public class ImageUtil {
 
 			Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
 			hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+			// 误差校正等级：L = ~7%、M = ~15%、Q = ~25%、H = ~30%，不设置时，默认为 L 等级，等级不一样，生成的图案不同，但扫描的结果是一样的
+//			hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 			/**
-			 * MultiFormatWriter:多格式写入，这是一个工厂类，里面重载了两个 encode 方法，用于写入条形码或二维码 encode(String
-			 * contents,BarcodeFormat format,int width, int height,Map<EncodeHintType,?>
-			 * hints) contents:条形码/二维码内容 format：编码类型，如 条形码，二维码 等 width：码的宽度 height：码的高度
-			 * hints：码内容的编码类型 BarcodeFormat：枚举该程序包已知的条形码格式，即创建何种码，如 1 维的条形码，2 维的二维码 等
+			 * MultiFormatWriter:多格式写入，这是一个工厂类，里面重载了两个 encode 方法，
+			 * 用于写入条形码或二维码 encode(String contents,BarcodeFormat format,int width, int height,Map<EncodeHintType,?> hints)
+			 * contents:条形码/二维码内容 format：编码类型，如 条形码，二维码 等 width：码的宽度 height：码的高度
+			 * BarcodeFormat：枚举该程序包已知的条形码格式，即创建何种码，如 1 维的条形码，2 维的二维码 等
+			 * hints：码内容的编码类型、时效性
 			 * BitMatrix：位(比特)矩阵或叫2D矩阵，也就是需要的二维码
 			 */
 
@@ -339,6 +343,10 @@ public class ImageUtil {
 
 	public static byte[] genAuthCodeImage(int width, int height) throws Exception{
 		return new GenAuthCode(width, height).draw();
+	}
+
+	public static byte[] genAuthCodeImage(int width, int height, int codeCount, int lineCount) throws Exception{
+		return new GenAuthCode(width, height, codeCount, lineCount).draw();
 	}
 
 	public static void main(String[] args) throws Exception {

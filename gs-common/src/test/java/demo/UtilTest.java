@@ -1,6 +1,7 @@
 package demo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.Cpu;
@@ -85,7 +86,8 @@ public class UtilTest {
 	@Test
 	public void genAuthCodeTest() throws Exception {
 		String path = Constants.FILE_OUT_PATH + "authCodeImage.jpg";
-		byte[] bytes = ImageUtil.genAuthCodeImage(180, 50);
+//		byte[] bytes = ImageUtil.genAuthCodeImage(180, 50);
+		byte[] bytes = ImageUtil.genAuthCodeImage(180, 50, 4, 100);
 		FileUtil.storeFile(path, bytes);
 		System.out.println("制作完成");
 	}
@@ -247,7 +249,7 @@ public class UtilTest {
 
 	@Test
 	public void getNetWorkListTest() throws Exception {
-		// windows测试时，进入方法改成windows路径再测
+		// windows测试linux时，进入方法改成windows路径再测
 		System.out.println(NetWorkUtil.getNetworkList());
 	}
 
@@ -496,6 +498,19 @@ public class UtilTest {
 		byte[] cert = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "pfx.cer", cert);
 
+	}
+
+	@Test
+	public void readJsonTest() {
+		String jsonPath = "F:\\infosec\\za\\v8\\自测\\case.json";
+
+		byte[] file = FileUtil.getFile(jsonPath);
+		Object jsonObject = JSON.parse(file);
+		JSONArray array = (JSONArray)jsonObject;
+		for (int i = 0; i < array.size(); i++) {
+			JSONObject obj = (JSONObject)array.get(i);
+			System.out.println(obj.get("id"));
+		}
 	}
 
 }
