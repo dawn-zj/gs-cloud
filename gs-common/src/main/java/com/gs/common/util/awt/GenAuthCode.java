@@ -23,7 +23,7 @@ public class GenAuthCode {
 	// 图片的高度。
 	private int height = 40;
 	// 验证码字符个数
-	private int codeCount = 5;
+	private int codeCount = 4;
 	// 验证码干扰线数
 	private int lineCount = 150;
 	// 验证码
