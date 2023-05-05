@@ -190,7 +190,7 @@ public class FileUtil {
 	 * @throws Exception
 	 */
 	public static byte[] getFile(String filePath) {
-		checkPath(filePath, true);
+//		checkPath(filePath, true);
 
 		File f = new File(filePath);
 		FileInputStream fis = null;

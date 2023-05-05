@@ -14,8 +14,15 @@ import java.util.Iterator;
 
 public class PKCS7Envelope {
 
-    public static byte[] makeP7(byte[] signed, X509Certificate cert) throws Exception {
-        CMSTypedData signedData = new CMSProcessableByteArray(signed);
+    /**
+     * cms制作数字信封
+     * @param content 要发送的内容
+     * @param cert 接收方公钥证书
+     * @return
+     * @throws Exception
+     */
+    public static byte[] makeP7(byte[] content, X509Certificate cert) throws Exception {
+        CMSTypedData signedData = new CMSProcessableByteArray(content);
 
         CMSEnvelopedDataGenerator edGen = new CMSEnvelopedDataGenerator();
         edGen.addRecipientInfoGenerator(new JceKeyTransRecipientInfoGenerator(cert).setProvider(new BouncyCastleProvider()));
@@ -26,8 +33,15 @@ public class PKCS7Envelope {
         return result;
     }
 
-    public static byte[] verifyP7(byte[] signed, PrivateKey privateKey) throws Exception {
-        CMSEnvelopedData ed = new CMSEnvelopedData(signed);
+    /**
+     * cms解析数字信封
+     * @param envData 数字信封数据
+     * @param privateKey 接收者私钥
+     * @return
+     * @throws Exception
+     */
+    public static byte[] verifyP7(byte[] envData, PrivateKey privateKey) throws Exception {
+        CMSEnvelopedData ed = new CMSEnvelopedData(envData);
 
         RecipientInformationStore recipients = ed.getRecipientInfos();
 
