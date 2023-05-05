@@ -10,6 +10,11 @@ public class NetworkCard {
     private String name;
 
     /**
+     * 网卡可读性名称
+     */
+    private String displayName;
+
+    /**
      * 网卡ip
      */
     private String ip;
@@ -60,6 +65,14 @@ public class NetworkCard {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public boolean isUp() {
