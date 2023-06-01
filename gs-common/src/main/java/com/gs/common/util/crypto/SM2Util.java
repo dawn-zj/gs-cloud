@@ -271,11 +271,21 @@ public class SM2Util {
             DEROctetString cipher_obj = (DEROctetString)obj.getObjectAt(3);
             byte[] cipherData = cipher_obj.getOctets();
 
-            // 转换为指定模式的密文
             byte[] encData_no_der = new byte[kxData.length + kyData.length + hashData.length + cipherData.length];
-            System.arraycopy(kxData, 0, encData_no_der, 0, kxData.length);
-            System.arraycopy(kyData, 0, encData_no_der, kxData.length, kyData.length);
+            // 若xy分量发生了补位，就截掉
+            if (kxData.length == 33) {
+                System.arraycopy(kxData, 1, encData_no_der, 0, kxData.length - 1);
+            } else {
+                System.arraycopy(kxData, 0, encData_no_der, 0, kxData.length);
+            }
 
+            if (kyData.length == 33) {
+                System.arraycopy(kyData, 1, encData_no_der, kxData.length, kyData.length - 1);
+            } else {
+                System.arraycopy(kyData, 0, encData_no_der, kxData.length, kyData.length);
+            }
+
+            // 转换为指定模式的密文
             if (cipherMode == 0) { // 转为C1||C2||C3格式
                 System.arraycopy(cipherData, 0, encData_no_der, kxData.length + kyData.length, cipherData.length);
                 System.arraycopy(hashData, 0, encData_no_der, kxData.length + kyData.length + cipherData.length, hashData.length);
