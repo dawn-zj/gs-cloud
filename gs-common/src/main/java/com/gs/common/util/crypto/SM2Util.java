@@ -1,7 +1,10 @@
 package com.gs.common.util.crypto;
 
 import com.gs.common.define.Constants;
+import com.gs.common.exception.BaseException;
 import com.gs.common.util.FileUtil;
+import com.gs.common.util.HexUtil;
+import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.gm.GMObjectIdentifiers;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.SM2Engine;
@@ -13,7 +16,6 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECParameterSpec;
-
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -45,7 +47,7 @@ public class SM2Util {
     /**
      * 将Base64转码的公钥串，转化为公钥对象
      *
-     * @param publicKey
+     * @param publicKey Base64格式的公钥串
      * @return 公钥对象
      */
     public static PublicKey createPublicKey(String publicKey) {
@@ -63,7 +65,7 @@ public class SM2Util {
     /**
      * 将Base64转码的私钥串，转化为私钥对象
      *
-     * @param privateKey
+     * @param privateKey Base64格式的私钥串
      * @return
      */
     public static PrivateKey createPrivateKey(String privateKey) {
@@ -82,10 +84,10 @@ public class SM2Util {
      * SM2加密
      * @param data 待加密的数据
      * @param publicKey 公钥
-     * @return 密文，BC库产生的密文带有04标识符
+     * @return 密文，格式：C1||C2||C3，以04开始
      */
     public static byte[] encrypt(byte[] data, PublicKey publicKey) {
-        // SM2的密文有两种排列方式0-C1C2C3；1-C1C3C2，标准排列方式是1，但是BC库的实现是0
+        // SM2的密文有两种排列方式0-C1C2C3；1-C1C3C2，《0003规范》标准排列方式是1，但是BC库的实现是0
         // todo 要想支持其他模式，需要自行扩展，参考https://blog.csdn.net/seeyouagen/article/details/115727307
         ECPublicKeyParameters localECPublicKeyParameters = null;
 
@@ -112,8 +114,8 @@ public class SM2Util {
     /**
      * SM2解密
      *
-     * @param encodeData
-     * @param privateKey
+     * @param encodeData C1||C2||C3格式密文，C1以04开始
+     * @param privateKey 私钥
      * @return
      */
     public static byte[] decrypt(byte[] encodeData, PrivateKey privateKey) {
@@ -135,11 +137,179 @@ public class SM2Util {
     }
 
     /**
+     *
+     * @param data 原文
+     * @param publicKey 公钥
+     * @return der编码的加密结果，符合0009规范
+     */
+    public static byte[] encryptWith0009(byte[] data, PublicKey publicKey) throws Exception {
+        byte[] encDataNoDer = encrypt(data, publicKey);
+        byte[] encData = genSM2EncryptedWith0009(encDataNoDer, 0);
+        return encData;
+    }
+
+    /**
+     *
+     * @param encData der编码的密文，符合0009规范
+     * @param publicKey 公钥
+     * @return 解密结果
+     */
+    public static byte[] decryptWith0009(byte[] encData, PrivateKey privateKey) throws Exception {
+        byte[] encDataNoDer = getSM2DecryptedBy0009(encData, 0, true);
+        byte[] data = decrypt(encDataNoDer, privateKey);
+        return data;
+    }
+
+    /**
+     * 将指定加密模式的密文，转为0009规范密文
+     * @param data 密文
+     * @param cipherMode 密文的加密模式，0:C1||C2||C3, 1:C1||C3||C2
+     * @return 0009规范密文，der编码
+     * @throws Exception
+     */
+    private static byte[] genSM2EncryptedWith0009(byte[] data, int cipherMode) throws Exception {
+        // 兼容C1公钥部分带04
+        byte[] encData = new byte[data.length];
+        if (data[0] == 0x04) {
+            encData = new byte[data.length - 1];
+            System.arraycopy(data, 1, encData, 0, data.length - 1);
+        } else {
+            System.arraycopy(data, 0, encData, 0, data.length);
+        }
+
+        // 拆分成0009规范所需的值
+        byte[] kxData = new byte[32];
+        byte[] kyData = new byte[32];
+        byte[] hashData = new byte[32];
+        byte[] cipherData = new byte[encData.length - 96]; // 减去上面3部分，剩下的全是密文
+
+        System.arraycopy(encData, 0, kxData, 0, kxData.length);
+        System.arraycopy(encData, kxData.length, kyData, 0, kyData.length);
+        if (cipherMode == 0) {// C1||C2||C3格式密文
+            System.arraycopy(encData, kxData.length + kyData.length, cipherData, 0, cipherData.length);
+            System.arraycopy(encData, kxData.length + kyData.length + cipherData.length, hashData, 0, hashData.length);
+        } else if (cipherMode == 0) {// C1||C3||C2格式密文
+            System.arraycopy(encData, kxData.length + kyData.length, hashData, 0, hashData.length);
+            System.arraycopy(encData, kxData.length + kyData.length + hashData.length, cipherData, 0, cipherData.length);
+        } else {
+            throw new BaseException("unknown cipherMode");
+        }
+
+        // 组装0009规范的asn1格式
+        return genSM2EncryptedWith0009(kxData, kyData, hashData, cipherData);
+    }
+
+    /**
+     * 将各部分数剧组装成der编码的0009规范密文
+     * @param kxData x分量
+     * @param kyData y分量
+     * @param hashData hash值
+     * @param cipherData 密文
+     * @return 0009规范密文
+     * @throws Exception
+     */
+    private static byte[] genSM2EncryptedWith0009(byte[] kxData, byte[] kyData, byte[] hashData, byte[] cipherData) throws Exception {
+        // 组装0009规范的asn1格式
+        DERInteger kx,ky;
+        DEROctetString derHash = new DEROctetString(hashData);
+        DEROctetString derCipher = new DEROctetString(cipherData);
+
+        // 针对Integer类型的xy分量，如果数字的第1bit为1，通常会在编码前补上一个0字节(byte)，也就是0x00
+        if ((kxData[0] & 0x80) == 0x80) {
+            byte[] kxDataTmp = new byte[kxData.length + 1];
+            kxDataTmp[0] = 0;
+            System.arraycopy(kxData, 0, kxDataTmp, 1, kxData.length);
+            kx = new DERInteger(kxDataTmp);
+        } else {
+            kx = new DERInteger(kxData);
+        }
+
+        if ((kyData[0] & 0x80) == 0x80) {
+            byte[] kyDataTmp = new byte[kyData.length + 1];
+            kyDataTmp[0] = 0;
+            System.arraycopy(kyData, 0, kyDataTmp, 1, kyData.length);
+            ky = new DERInteger(kyDataTmp);
+        } else {
+            ky = new DERInteger(kyData);
+        }
+
+        ASN1EncodableVector derVec = new ASN1EncodableVector();
+        derVec.add(kx);
+        derVec.add(ky);
+        derVec.add(derHash);
+        derVec.add(derCipher);
+        DERSequence seq = new DERSequence(derVec);
+        byte[] enc = seq.getEncoded();
+
+        return enc;
+    }
+
+    /**
+     * 将0009规范的密文，按指定的加密模式拼接输出
+     * @param encData 0009格式的密文
+     * @param cipherMode 0:C1||C2||C3, 1:C1||C3||C2
+     * @param c1with04 C1部分是否以04开始
+     * @return 指定模式的密文
+     * @throws Exception
+     */
+    private static byte[] getSM2DecryptedBy0009(byte[] encData, int cipherMode, boolean c1with04) throws Exception {
+        try {
+            ASN1InputStream asn1InputStream = new ASN1InputStream(encData);
+            ASN1Primitive asn1Primitive = asn1InputStream.readObject();
+            ASN1Sequence obj = (ASN1Sequence) asn1Primitive;
+
+            // 获取4部分的值
+            ASN1Integer x_obj = (ASN1Integer)obj.getObjectAt(0);
+            byte[] kxData = x_obj.getValue().toByteArray();
+
+            ASN1Integer y_obj = (ASN1Integer)obj.getObjectAt(1);
+            byte[] kyData = y_obj.getValue().toByteArray();
+
+            DEROctetString hash_obj = (DEROctetString)obj.getObjectAt(2);
+            byte[] hashData = hash_obj.getOctets();
+
+            DEROctetString cipher_obj = (DEROctetString)obj.getObjectAt(3);
+            byte[] cipherData = cipher_obj.getOctets();
+
+            // 转换为指定模式的密文
+            byte[] encData_no_der = new byte[kxData.length + kyData.length + hashData.length + cipherData.length];
+            System.arraycopy(kxData, 0, encData_no_der, 0, kxData.length);
+            System.arraycopy(kyData, 0, encData_no_der, kxData.length, kyData.length);
+
+            if (cipherMode == 0) { // 转为C1||C2||C3格式
+                System.arraycopy(cipherData, 0, encData_no_der, kxData.length + kyData.length, cipherData.length);
+                System.arraycopy(hashData, 0, encData_no_der, kxData.length + kyData.length + cipherData.length, hashData.length);
+            } else if (cipherMode == 1) {// 转为C1||C3||C2格式
+                System.arraycopy(hashData, 0, encData_no_der, kxData.length + kyData.length, hashData.length);
+                System.arraycopy(cipherData, 0, encData_no_der, kxData.length + kyData.length + hashData.length, cipherData.length);
+            } else {
+                throw new BaseException("unknown cipherMode");
+            }
+
+            // 按情况给C1部分增加04标识
+            byte[] all = new byte[encData_no_der.length];
+            if (c1with04) {
+                all = new byte[encData_no_der.length + 1];
+                all[0] = 04;
+                System.arraycopy(encData_no_der, 0, all, 1, encData_no_der.length);
+            } else {
+                System.arraycopy(encData_no_der, 0, all, 0, encData_no_der.length);
+            }
+            return all;
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+        }
+    }
+
+
+    /**
      * 私钥签名
      *
-     * @param data
-     * @param privateKey
-     * @return
+     * @param data 原文
+     * @param privateKey 私钥
+     * @return 签名值
      * @throws Exception
      */
     public static byte[] signByPrivateKey(byte[] data, PrivateKey privateKey) throws Exception {
@@ -154,10 +324,10 @@ public class SM2Util {
     /**
      * 公钥验签
      *
-     * @param data
-     * @param publicKey
-     * @param signature
-     * @return
+     * @param data 原文
+     * @param publicKey 公钥
+     * @param signature 签名值
+     * @return 验签结果
      * @throws Exception
      */
     public static boolean verifyByPublicKey(byte[] data, PublicKey publicKey, byte[] signature) throws Exception {
@@ -188,10 +358,11 @@ public class SM2Util {
         PrivateKey privateKey = SM2Util.createPrivateKey(priKey);
 
         byte[] encrypt = SM2Util.encrypt(str.getBytes(), publicKey);
-        String encryptBase64Str = Base64.getEncoder().encodeToString(encrypt);
-        System.out.println("加密数据：" + encryptBase64Str);
+        String encryptHex = HexUtil.byte2Hex(encrypt);
+        // 示例：040938b0c9c04a0c399dad46ba9d30780eca9921e438265206c6081af6c05499ff2d89ad022516198548175e892d57fe9de7e95483c4377f18bf8f276a7004834ec13f0fcb7c94291ad75b7b97d7e24cb04cdb1538e18d7324e3b542e291affb0e3840f3412891
+        System.out.println("加密数据：" + encryptHex);
 
-        byte[] decode = Base64.getDecoder().decode(encryptBase64Str);
+        byte[] decode = HexUtil.hex2Byte(encryptHex);
         byte[] decrypt = SM2Util.decrypt(decode, privateKey);
         System.out.println("解密数据：" + new String(decrypt));
 

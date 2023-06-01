@@ -36,8 +36,8 @@ https://101.43.242.145:8443/tool
 
 ### 信息安全
 1. 签名验签支持SHA1_RSA、SHA256_RSA、SM3_SM2； 
-2. 加密解密支持RSA、SM2；
-3. SM2加解密密文只支持C1C2C3模式；
+2. 加密解密支持RSA、SM2(Bouncycastle、GMT0009)；
+3. SM2加解密密文支持C1C2C3、C1C3C2模式；
 4. 解析密钥文件（PFX、JKS），获取私钥；
 5. 解析PFX文件，获取证书；
 6. JKS转PFX；
