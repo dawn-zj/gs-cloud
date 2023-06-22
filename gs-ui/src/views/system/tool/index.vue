@@ -99,6 +99,19 @@
         </div>
 
       </el-tab-pane>
+
+      <el-tab-pane label="获取PDF签章数据" name="8">
+        <el-row>
+          <el-col :span="24">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span>获取PDF签章数据</span>
+              </div>
+              <pdf-get-stamp v-if="activeName == '8'" />
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
     </el-tabs>
   </div>
 
@@ -112,10 +125,11 @@ import px2cmIndex from './px2cm/index'
 import watermark from './watermark/index'
 import pdfSign from './pdfSign/index'
 import pdfVerify from './pdfVerify/index'
+import pdfGetStamp from './pdfVerify/getStamp'
 
 export default {
   name: 'Index',
-  components: { textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify },
+  components: { textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify, pdfGetStamp },
   data() {
     return {
       tabPosition: 'top',

@@ -5,9 +5,23 @@ import com.gs.common.define.Constants;
 import com.gs.common.exception.BaseException;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.FileUtil;
+import com.gs.common.util.HexUtil;
+import com.gs.common.util.StringUtil;
+import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.pdf.PdfStampUtil;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.PdfDictionary;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfReader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PdfStampServiceImpl extends StampServiceImpl {
@@ -29,5 +43,56 @@ public class PdfStampServiceImpl extends StampServiceImpl {
         } catch (Exception e) {
             throw new NetGSRuntimeException("PDF验签章发生错误", e);
         }
+    }
+
+    @Override
+    public Map<String, String> getStampFromPdf(MultipartFile file) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        PdfReader reader = null;
+        try {
+            byte[] pdfData = file.getBytes();
+            reader = new PdfReader(pdfData);
+            AcroFields af = reader.getAcroFields();
+
+            ArrayList<String> names = af.getSignatureNames();
+            // 获取每一个签名域的 Contents
+            for (String name : names) {
+                PdfDictionary dictionary = af.getSignatureDictionary(name);
+                byte[] bytes = dictionary.getAsString(PdfName.CONTENTS).getBytes();
+                String hexContents = HexUtil.byte2Hex(bytes);
+
+                // 判断签名值长度
+                String lenHex = hexContents.substring(2, 4);
+                if (lenHex.equals("81")) { //308110xx
+                    lenHex = hexContents.substring(4, 6);
+                    int i = Integer.parseInt(lenHex, 16);
+                    hexContents = hexContents.substring(0, (i + 3) * 2);
+                } else if (lenHex.equals("82")) { //30821020xx
+                    lenHex = hexContents.substring(4, 8);
+                    int i = Integer.parseInt(lenHex, 16);
+                    hexContents = hexContents.substring(0, (i + 4) * 2);
+                } else {
+                    int i = Integer.parseInt(lenHex, 16);
+                    hexContents = hexContents.substring(0, (i + 2) * 2);
+                }
+
+                map.put(name, Base64Util.encode(HexUtil.hex2Byte(hexContents)));
+            }
+            return map;
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        byte[] file = FileUtil.getFile("E:/1.txt");
+        FileUtil.storeFile("E:/1.asn1", HexUtil.hex2Byte(new String(file)));
     }
 }

@@ -26,29 +26,22 @@ export function getFileType(fileName) {
   return fileType;
 }
 
-
-// 下载文件，base64图片下载
-export function downloadBase64Photo(base64Photo, fileName) {
-  var blob = base642blob(base64Photo)
+// 下载文件
+export function download(str, fileName) {
+  let binaryData = [];
+  binaryData.push(str);
   var a = document.createElement('a')
-  var url = window.URL.createObjectURL(blob)
+  var url = window.URL.createObjectURL(new Blob(binaryData))
   a.href = url
   a.download = fileName // 文件名
   a.click()
 
-  // var xhr = new XMLHttpRequest()
-  // xhr.open('get', baseUrl, true) // get、post都可
-  // xhr.responseType = 'blob' // 转换流
-  // xhr.onload = function() {
-  //   if (this.status == 200) {
-  //     var blob = this.response
-  //
-  //   }
-  //   a.click()
-  //   window.URL.revokeObjectURL(url)
-  // }
-  // xhr.send()
+}
 
+// 下载文件，base64图片下载
+export function downloadBase64(base64, fileName) {
+  var blob = base642blob(base64)
+  download(blob, fileName)
 }
 
 export function base642blob(base64) {
