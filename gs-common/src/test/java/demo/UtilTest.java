@@ -1,6 +1,7 @@
 package demo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.*;
@@ -10,6 +11,7 @@ import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
 import com.gs.common.util.crypto.KeyUtil;
 import com.gs.common.util.crypto.RSAUtil;
+import com.gs.common.util.crypto.SM2Util;
 import com.gs.common.util.date.DateUtil;
 import com.gs.common.util.p10.P10Util;
 import com.gs.common.util.pdf.PdfStampUtil;
@@ -18,20 +20,16 @@ import com.gs.common.util.pdf.RemovePdfStampUtil;
 import com.gs.common.util.pkcs.KeyStoreUtil;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.math.BigInteger;
-import java.net.NetworkInterface;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -76,6 +74,18 @@ public class UtilTest {
 
 	}
 
+	@Test
+	public void parseDerASN1() throws Exception {
+		byte[] file = FileUtil.getFile(Constants.FILE_OUT_PATH + "sequence.asn1");
+		ASN1InputStream asn1InputStream = new ASN1InputStream(file);
+		ASN1Primitive asn1Primitive = asn1InputStream.readObject();
+		ASN1Sequence obj = (ASN1Sequence) asn1Primitive;
+
+		ASN1Integer a_obj = (ASN1Integer)obj.getObjectAt(0);
+		byte[] a = a_obj.getValue().toByteArray();
+		System.out.println(HexUtil.byte2Hex(a));
+
+	}
 	/**
 	 * 制作图片验证码
 	 *
@@ -84,7 +94,8 @@ public class UtilTest {
 	@Test
 	public void genAuthCodeTest() throws Exception {
 		String path = Constants.FILE_OUT_PATH + "authCodeImage.jpg";
-		byte[] bytes = ImageUtil.genAuthCodeImage(180, 50);
+//		byte[] bytes = ImageUtil.genAuthCodeImage(180, 50);
+		byte[] bytes = ImageUtil.genAuthCodeImage(180, 50, 4, 100);
 		FileUtil.storeFile(path, bytes);
 		System.out.println("制作完成");
 	}
@@ -246,8 +257,8 @@ public class UtilTest {
 
 	@Test
 	public void getNetWorkListTest() throws Exception {
-		// windows测试时，进入方法改成windows路径再测
-		System.out.println(NetWorkUtil.getNetworkList());
+		// windows测试linux时，进入方法改成windows路径再测
+		System.out.println(JSON.toJSONString(NetWorkUtil.getNetworkList()));
 	}
 
 	/**
@@ -497,6 +508,19 @@ public class UtilTest {
 	}
 
 	@Test
+	public void readJsonTest() {
+		String jsonPath = "F:\\infosec\\za\\v8\\自测\\case.json";
+
+		byte[] file = FileUtil.getFile(jsonPath);
+		Object jsonObject = JSON.parse(file);
+		JSONArray array = (JSONArray)jsonObject;
+		for (int i = 0; i < array.size(); i++) {
+			JSONObject obj = (JSONObject)array.get(i);
+			System.out.println(obj.get("id"));
+		}
+	}
+
+	@Test
 	public void genP10() throws  Exception {
 		String p10Path = Constants.FILE_OUT_PATH + "p10.p10";
 		String priKeyPath = Constants.FILE_OUT_PATH + "p10.pri";
@@ -546,4 +570,38 @@ public class UtilTest {
 		System.out.println("数字信封内容：" + new String(bytes));
 	}
 
+	@Test
+	public void encryptWithBC() throws  Exception {
+		String str = "123456";
+
+		// bc库sm2加密
+		String pubKey = new String(FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/pubKey.txt"));
+		PublicKey publicKey = SM2Util.createPublicKey(pubKey);
+		byte[] bytes = SM2Util.encrypt(str.getBytes(), publicKey);
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "sm2/enc_bc.txt", bytes);
+
+		// bc库sm2解密
+		String priKey = new String(FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/priKey.txt"));
+		PrivateKey privateKey = SM2Util.createPrivateKey(priKey);
+		byte[] decrypt = SM2Util.decrypt(bytes, privateKey);
+		System.out.println("解密出原文：" + new String(decrypt));
+
+	}
+
+	@Test
+	public void encryptWith0009() throws  Exception {
+		String str = "123456";
+
+		// 0009规范加密
+		String pubKey = new String(FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/pubKey.txt"));
+		PublicKey publicKey = SM2Util.createPublicKey(pubKey);
+		byte[] bytes = SM2Util.encryptWith0009(str.getBytes(), publicKey);
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "sm2/enc."+DateUtil.getCurrentTime()+".asn1", bytes);
+
+		// 0009规范解密
+		String priKey = new String(FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/priKey.txt"));
+		PrivateKey privateKey = SM2Util.createPrivateKey(priKey);
+		byte[] decrypt = SM2Util.decryptWith0009(bytes, privateKey);
+		System.out.println("解密出原文：" + new String(decrypt));
+	}
 }
