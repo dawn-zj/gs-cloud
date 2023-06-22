@@ -2,9 +2,14 @@ package demo;
 
 import com.gs.common.define.Constants;
 import com.gs.common.util.FileUtil;
+import com.gs.common.util.HexUtil;
 import com.gs.common.util.cert.CertUtil;
 import com.gs.common.util.crypto.KeyUtil;
 import com.gs.common.util.pkcs.KeyStoreUtil;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.PdfDictionary;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import com.itextpdf.text.pdf.security.ExternalSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
@@ -14,6 +19,7 @@ import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 
 public class ITextTest {
 
@@ -45,6 +51,42 @@ public class ITextTest {
         X509Certificate x509Certificate = CertUtil.getX509Certificate(file);
         boolean result = KeyUtil.rawSignVerify(x509Certificate.getPublicKey(), "123".getBytes(), signed, Constants.SHA1_RSA, "1".getBytes());
         System.out.println("itext签名验签完成，验签结果：" + result);
+    }
+
+    @Test
+    public void getStampFromPDF() throws Exception {
+        String pdfStampPath = "F:/kms-rsa签章.pdf";
+        String stampPath = "f:/temp/kms-rsa签章.stamp";
+
+        byte[] pdfData = FileUtil.getFile(pdfStampPath);
+
+        PdfReader reader = null;
+        try {
+            reader = new PdfReader(pdfData);
+            AcroFields af = reader.getAcroFields();
+
+            ArrayList<String> names = af.getSignatureNames();
+            // 获取每一个签名域的 Contents
+            for (String name : names) {
+                PdfDictionary dictionary = af.getSignatureDictionary(name);
+                byte[] bytes = dictionary.getAsString(PdfName.CONTENTS).getBytes();
+                String hexContents = HexUtil.byte2Hex(bytes);
+                while (hexContents.endsWith("00"))
+                    hexContents = hexContents.substring(0, hexContents.length() - 2);
+
+                FileUtil.storeFile(stampPath, HexUtil.hex2Byte(hexContents));
+            }
+
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (Exception e) {
+            }
+        }
     }
 
 }
