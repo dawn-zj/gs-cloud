@@ -3,7 +3,7 @@ package com.gs.webserver.controller.tool;
 import com.gs.common.util.ImageUtil;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.webserver.entity.to.request.BaseTo;
-import com.gs.webserver.entity.to.response.CommonTo;
+import com.gs.webserver.entity.to.response.CommonResTo;
 import com.gs.webserver.entity.to.request.PhotoTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.service.IPhotoService;
@@ -22,7 +22,7 @@ public class PhotoController {
     @PostMapping("/viewStamp")
     public ResponseTo viewStamp(@RequestBody PhotoTo photoTo) throws Exception {
         byte[] photoData = photoService.viewStamp(photoTo);
-        CommonTo commonTo = new CommonTo();
+        CommonResTo commonTo = new CommonResTo();
         commonTo.setResult(Base64Util.encode(photoData));
         return ResponseTo.success(commonTo);
     }
@@ -30,7 +30,7 @@ public class PhotoController {
     @PostMapping("/genBarcode")
     public ResponseTo genBarcode(@RequestBody BaseTo baseTo) throws Exception {
         byte[] photoData = ImageUtil.genBarcodeImage(baseTo.getContent());
-        CommonTo commonTo = new CommonTo();
+        CommonResTo commonTo = new CommonResTo();
         commonTo.setResult(Base64Util.encode(photoData));
         return ResponseTo.success(commonTo);
     }

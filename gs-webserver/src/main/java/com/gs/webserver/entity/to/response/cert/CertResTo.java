@@ -3,7 +3,7 @@ package com.gs.webserver.entity.to.response.cert;
 import lombok.Data;
 
 @Data
-public class CertTo {
+public class CertResTo {
     private String sn;
     private String dn;
     private String cn;
