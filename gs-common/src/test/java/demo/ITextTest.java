@@ -56,7 +56,6 @@ public class ITextTest {
     @Test
     public void getStampFromPDF() throws Exception {
         String pdfStampPath = "F:/kms-rsa签章.pdf";
-        String stampPath = "f:/temp/kms-rsa签章.stamp";
 
         byte[] pdfData = FileUtil.getFile(pdfStampPath);
 
@@ -71,10 +70,23 @@ public class ITextTest {
                 PdfDictionary dictionary = af.getSignatureDictionary(name);
                 byte[] bytes = dictionary.getAsString(PdfName.CONTENTS).getBytes();
                 String hexContents = HexUtil.byte2Hex(bytes);
-                while (hexContents.endsWith("00"))
-                    hexContents = hexContents.substring(0, hexContents.length() - 2);
 
-                FileUtil.storeFile(stampPath, HexUtil.hex2Byte(hexContents));
+                // 判断签名值长度
+                String lenHex = hexContents.substring(2, 4);
+                if (lenHex.equals("81")) { //308110xx
+                    lenHex = hexContents.substring(4, 6);
+                    int i = Integer.parseInt(lenHex, 16);
+                    hexContents = hexContents.substring(0, (i + 3) * 2);
+                } else if (lenHex.equals("82")) { //30821020xx
+                    lenHex = hexContents.substring(4, 8);
+                    int i = Integer.parseInt(lenHex, 16);
+                    hexContents = hexContents.substring(0, (i + 4) * 2);
+                } else {
+                    int i = Integer.parseInt(lenHex, 16);
+                    hexContents = hexContents.substring(0, (i + 2) * 2);
+                }
+
+                FileUtil.storeFile("f:/temp/kms-rsa签章-" + name + ".stamp", HexUtil.hex2Byte(hexContents));
             }
 
 
