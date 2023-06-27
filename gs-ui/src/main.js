@@ -22,7 +22,8 @@ import './assets/icons' // icon
 import './permission' // permission control
 import { getDictValue } from "@/common/dicts";
 import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/ruoyi";
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
+import { download, downloadBase64 } from "@/utils/file";
 import Pagination from "@/components/Pagination";
 //自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
@@ -36,6 +37,7 @@ Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
+Vue.prototype.downloadBase64 = downloadBase64
 Vue.prototype.handleTree = handleTree
 Vue.prototype.publicPath = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : ''
 

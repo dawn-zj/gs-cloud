@@ -102,7 +102,6 @@
 <script>
 import { viewStamp } from '@/api/system/genStamp'
 import { validateByteSize, validateNumber } from '@/utils/validate'
-import { downloadBase64Photo } from '@/utils/file'
 export default {
   name: 'Index',
   data() {
@@ -306,7 +305,7 @@ export default {
         if (valid) {
           viewStamp(this.stampForm).then(res => {
             this.loading = false
-            downloadBase64Photo(res.data.result, 'seal.png')
+            this.downloadBase64(res.data.result, 'seal.png')
           }).catch(() => {
             this.loading = false
           })
