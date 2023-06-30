@@ -1,3 +1,5 @@
+import {base642blob} from "@/utils/base64/base64";
+
 // 把图片转成base64编码
 export function getBase64(file) {
   return new Promise(function (resolve, reject) {
@@ -44,15 +46,3 @@ export function downloadBase64(base64, fileName) {
   download(blob, fileName)
 }
 
-export function base642blob(base64) {
-  var byteCharacters = atob(base64);
-  var byteNumbers = new Array(byteCharacters.length);
-  for (var i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-  var byteArray = new Uint8Array(byteNumbers);
-  var blob = new Blob([byteArray], {
-    type: undefined,
-  });
-  return blob;
-}
