@@ -22,7 +22,7 @@
           v-model="fileBase64"
           readonly
           type="textarea"
-          :autosize="{ minRows: 5}"
+          :autosize="{ minRows: 5, maxRows: 10}"
         />
       </el-form-item>
     </el-form>
