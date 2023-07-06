@@ -10,9 +10,24 @@ import java.util.List;
 
 @Data
 public class ServerTo {
+    /**
+     * 服务信息
+     */
     private ServerInfo server;
+
+    /**
+     * 内存信息
+     */
     private Memory memory;
+
+    /**
+     * CPU信息
+     */
     private Cpu cpu;
+
+    /**
+     * 磁盘信息
+     */
     private List<Disk> disks;
 
 }

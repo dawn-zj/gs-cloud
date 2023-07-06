@@ -4,5 +4,8 @@ import lombok.Data;
 
 @Data
 public class CommonResTo {
+    /**
+     * 结果
+     */
     private String result;
 }

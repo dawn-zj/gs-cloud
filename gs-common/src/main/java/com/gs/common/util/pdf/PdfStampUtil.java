@@ -2,6 +2,8 @@ package com.gs.common.util.pdf;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
+import com.gs.common.entity.pdf.StampInfo;
+import com.gs.common.entity.pdf.StampVerify;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.StringUtil;
 import com.gs.common.util.cert.CertUtil;
@@ -94,8 +96,8 @@ public class PdfStampUtil {
      * @return
      * @throws Exception
      */
-    public JSONObject verifySign(byte[] pdfData) throws Exception {
-        JSONObject object = new JSONObject();
+    public StampVerify verifySign(byte[] pdfData) throws Exception {
+        StampVerify object = new StampVerify();
 
         PdfReader reader = new PdfReader(pdfData);
         AcroFields fields = reader.getAcroFields();
@@ -105,7 +107,7 @@ public class PdfStampUtil {
             result = false;
         }
 
-        List<Object> signList = new ArrayList<>();
+        List<StampInfo> signList = new ArrayList<>();
         for (int i = 0, size = names.size(); i < size; i++) {
             String signName = (String) names.get(i);
             PdfDictionary dictionary = fields.getSignatureDictionary(signName);
@@ -123,23 +125,23 @@ public class PdfStampUtil {
                     result = false;
                 }
 
-                JSONObject signObj = new JSONObject();
-                signObj.put("result", verify);
-                signObj.put("certDn", x509Certificate.getSubjectDN().getName());
-                signObj.put("certNotBefore", x509Certificate.getNotBefore());
-                signObj.put("certNotAfter", x509Certificate.getNotAfter());
-                signObj.put("signTime", pkcs7.getSignDate());
-                signObj.put("signSubFilter", pkcs7.getFilterSubtype().toString());
-                signObj.put("signHashAlg", pkcs7.getDigestAlgorithm());
-                signObj.put("signLocation", fields.getFieldPositions(signName));
+                StampInfo signObj = new StampInfo();
+                signObj.setResult(verify);
+                signObj.setCertDn(x509Certificate.getSubjectDN().getName());
+                signObj.setCertNotBefore(x509Certificate.getNotBefore().getTime());
+                signObj.setCertNotAfter(x509Certificate.getNotAfter().getTime());
+                signObj.setSignTime(pkcs7.getSignDate().getTimeInMillis());
+                signObj.setSignSubFilter(pkcs7.getFilterSubtype().toString());
+                signObj.setSignHashAlg(pkcs7.getDigestAlgorithm());
+                signObj.setSignLocation(fields.getFieldPositions(signName));
                 signList.add(signObj);
             } else {
                 throw new NetGSRuntimeException("暂不支持的SubFilter类型：" + sub);
             }
         }
 
-        object.put("result", result);
-        object.put("signList", signList);
+        object.setResult(result);
+        object.setSignList(signList);
         return object;
     }
 

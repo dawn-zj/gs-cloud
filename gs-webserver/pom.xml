@@ -39,6 +39,13 @@
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 		</dependency>
+
+		<!-- api 接口文档 -->
+		<dependency>
+			<groupId>io.github.yedaxia</groupId>
+			<artifactId>japidocs</artifactId>
+			<version>1.4.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>

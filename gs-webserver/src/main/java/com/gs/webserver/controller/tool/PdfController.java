@@ -13,6 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
+/**
+ * PDF
+ */
 @RestController
 @RequestMapping("/tool/pdf")
 public class PdfController {
@@ -20,8 +23,14 @@ public class PdfController {
     @Qualifier("pdfStampServiceImpl")
     private IStampService stampService;
 
+    /**
+     * 获取签章文件中的签章结构
+     * @param file 签章文件
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/getStamp")
-    public ResponseTo getStampFromPdf(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseTo<PdfStampResTo> getStampFromPdf(@RequestParam("file") MultipartFile file) throws Exception {
         Map<String, String> stampMap = stampService.getStampFromPdf(file);
         PdfStampResTo pdfStampResTo = new PdfStampResTo();
         pdfStampResTo.setStampMap(stampMap);

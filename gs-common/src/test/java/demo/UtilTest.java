@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.*;
+import com.gs.common.entity.pdf.StampVerify;
 import com.gs.common.pkcs.pkcs7.PKCS7Envelope;
 import com.gs.common.util.*;
 import com.gs.common.util.base64.Base64Util;
@@ -470,8 +471,8 @@ public class UtilTest {
 	public void pdfVerifyTest() throws Exception {
 		byte[] pdfData = FileUtil.getFile(Constants.FILE_OUT_PATH + "stamp.pdf");
 		PdfStampUtil pdfUtil = new PdfStampUtil();
-		JSONObject verify = pdfUtil.verifySign(pdfData);
-		System.out.println("验签结果：" + verify);
+		StampVerify verify = pdfUtil.verifySign(pdfData);
+		System.out.println("验签结果：" + JSON.toJSONString(verify));
 	}
 
 	/**

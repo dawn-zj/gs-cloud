@@ -2,6 +2,7 @@ package com.gs.webserver.service.impl.stamp;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gs.common.define.Constants;
+import com.gs.common.entity.pdf.StampVerify;
 import com.gs.common.exception.BaseException;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.FileUtil;
@@ -9,10 +10,12 @@ import com.gs.common.util.HexUtil;
 import com.gs.common.util.StringUtil;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.pdf.PdfStampUtil;
+import com.gs.webserver.entity.to.response.pdf.PdfStampVerifyResTo;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfReader;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +30,7 @@ import java.util.Map;
 public class PdfStampServiceImpl extends StampServiceImpl {
 
     @Override
-    public JSONObject verify(MultipartFile file) {
+    public PdfStampVerifyResTo verify(MultipartFile file) {
         try {
             String filename = file.getOriginalFilename();
             String fileType = FileUtil.getFileSuffix(filename);
@@ -36,8 +39,12 @@ public class PdfStampServiceImpl extends StampServiceImpl {
 
             PdfStampUtil pdfUtil = new PdfStampUtil();
             // todo 验签名，验签章待实现
-            JSONObject verify = pdfUtil.verifySign(file.getBytes());
-            return verify;
+            StampVerify verify = pdfUtil.verifySign(file.getBytes());
+
+            PdfStampVerifyResTo to = new PdfStampVerifyResTo();
+            BeanUtils.copyProperties(verify, to);
+
+            return to;
         } catch (BaseException e) {
             throw e;
         } catch (Exception e) {
