@@ -49,3 +49,10 @@ https://101.43.242.145:8443/tool
 
 ### 报文生成
 1. 采用japidocs工具类，通过规范的注释来生成报文结构。
+
+### 打包问题
+1. 为了Jenkins打包，前后端全都属于父项目中的模块：
+    - 前端pom中定义编译后存入NetTool里的tomcat中，
+    - 后端pom中定义编译后的war存入NetTool里的tomcat中。
+    - 在Jenkins里，执行根pom，然后将NetTool中所需信息传到腾讯云服务里，重启服务。
+2. 研究assembly自动打包，争取打出基线包和补丁包。

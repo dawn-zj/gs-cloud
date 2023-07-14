@@ -16,11 +16,12 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>gs-ui</module>
+		<module>gs-ui</module><!--todo 本地打包时有异常，请注释掉-->
 		<module>gs-webserver</module>
 		<module>gs-gateway</module>
 		<module>gs-common</module>
-	</modules>
+        <module>assembly</module><!--打包模块放在最后-->
+    </modules>
 
 	<properties>
 		<!-- 打包跳过单元测试 -->

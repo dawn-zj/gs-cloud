@@ -1,0 +1,24 @@
+<assembly
+        xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <!-- 打包文件名的标识符,在打包后的文件名称的后缀显示 -->
+    <id>release</id>
+    <formats>
+        <!-- 这里设置打包的类型，例如 tar、zip 等 -->
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <fileSets>
+        <!-- 将 jar 包从项目所在的目录中的 target 目录取出来，放到 zip 包 ${project.parent.basedir}/aiplatform-api/target-->
+        <fileSet>
+            <directory>../NetTool</directory><!-- 指定归档文件（要打的包）所在目录 -->
+            <includes>
+                <include>**/**</include><!-- 要包含的文件 -->
+            </includes>
+            <outputDirectory>/</outputDirectory><!-- 存储目录,不指定则存储在zip包根目录下，zip包的存储路径在外层定义的 -->
+        </fileSet>
+
+    </fileSets>
+</assembly>

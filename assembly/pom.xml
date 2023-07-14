@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>gs-cloud</artifactId>
+        <groupId>com.gs</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>assembly</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <!-- todo 测试预留项：打一个jar包，名称webserver.jar，放在target目录下-->
+                    <execution>
+                        <id>make-jar</id><!--名字任意，唯一即可 -->
+                        <phase>package</phase><!-- 绑定到package生命周期阶段上，即执行mvn clean package打包即可 -->
+                        <goals>
+                            <goal>single</goal><!-- 该打包任务只运行一次 -->
+                        </goals>
+                        <configuration>
+                            <finalName>webserver</finalName><!--jar包名称webserver，可在配置里用id属性增加后缀-->
+                            <descriptors>
+                                <!-- 指定配置文件的路径，路径可变，例如：在resources 目录下则为：src/main/resources/assembly.xml -->
+                                <descriptor>src/main/resources/assembly-jar.xml</descriptor>
+                            </descriptors>
+                            <outputDirectory>target</outputDirectory>
+                            <archiverConfig>
+                                <encoding>utf-8</encoding>
+                            </archiverConfig>
+                        </configuration>
+                    </execution>
+
+                    <!--打一个产品基线包，名称NetTool.zip，放在server目录下-->
+                    <execution><!--打一个产品基线包-->
+                        <id>make-assembly</id><!--名字任意 -->
+                        <phase>package</phase><!-- 绑定到package生命周期阶段上，即执行mvn clean package打包即可 -->
+                        <goals>
+                            <goal>single</goal><!-- 该打包任务只运行一次 -->
+                        </goals>
+                        <configuration>
+                            <finalName>NetTool</finalName>
+                            <descriptors>
+                                <!-- 指定配置文件的路径，路径可变，例如：在resources 目录下则为：src/main/resources/assembly.xml -->
+                                <descriptor>src/main/resources/assembly.xml</descriptor>
+                            </descriptors>
+                            <outputDirectory>server</outputDirectory>
+                            <archiverConfig>
+                                <encoding>utf-8</encoding>
+                            </archiverConfig>
+                        </configuration>
+                    </execution>
+
+<!--                    <execution>&lt;!&ndash;打一个产品补丁包&ndash;&gt;-->
+<!--                    </execution>-->
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
