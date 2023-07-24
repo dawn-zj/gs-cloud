@@ -1,5 +1,6 @@
 package com.gs.common.util.crypto;
 
+import java.io.ByteArrayOutputStream;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -7,6 +8,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import com.gs.common.define.Constants;
+import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.base64.Base64Util;
 
@@ -74,4 +76,58 @@ public class RSAUtil {
 	}
 
 	//TODO RSA 加密、解密
+
+
+	private static byte[] getHashMagic(String hash) {
+		// see https://www.ietf.org/rfc/rfc3110.txt
+		// RSA/SHA1 SIG Resource Records
+		byte result[];
+		switch (hash) {
+			case Constants.SHA1:
+				result = new byte[] { 0x30, 0x1f, 0x30, 0x07, 0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a, 0x04, 0x14 };
+				break;
+			case Constants.SHA224:
+				result = new byte[] { 0x30, 0x2b, 0x30, 0x0b, 0x06, 0x09, 0x60, (byte) 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04, 0x04, 0x1c };
+				break;
+			case Constants.SHA256:
+				result = new byte[] { 0x30, 0x2f, 0x30, 0x0b, 0x06, 0x09, 0x60, (byte) 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x04, 0x20 };
+				break;
+			case Constants.SHA384:
+				result = new byte[] { 0x30, 0x3f, 0x30, 0x0b, 0x06, 0x09, 0x60, (byte) 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, 0x04, 0x30 };
+				break;
+			case Constants.SHA512:
+				result = new byte[] { 0x30, 0x4f, 0x30, 0x0b, 0x06, 0x09, 0x60, (byte) 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x04, 0x40 };
+				break;
+//			case ripemd128:
+//				result = new byte[] { 0x30, 0x1b, 0x30, 0x07, 0x06, 0x05, 0x2b, 0x24, 0x03, 0x02, 0x02, 0x04, 0x10 };
+//				break;
+//			case ripemd160:
+//				result = new byte[] { 0x30, 0x1f, 0x30, 0x07, 0x06, 0x05, 0x2b, 0x24, 0x03, 0x02, 0x01, 0x04, 0x14 };
+//				break;
+			// case ripemd256: result = new byte[]
+			// { 0x30, 0x2b, 0x30, 0x07, 0x06, 0x05, 0x2b, 0x24
+			// , 0x03, 0x02, 0x03, 0x04, 0x20 };
+			// break;
+			default:
+				throw new NetGSRuntimeException("Hash algorithm " + hash + " not supported for signing.");
+		}
+
+		return result;
+	}
+
+	/**
+	 * 将hash值转为PKCS1规范的结构
+	 * @param hash hash算法
+	 * @param hashData hash值
+	 * @return der编码后的hash值
+	 * @throws Exception
+	 */
+	public static byte[] genDerHash(String hash, byte[] hashData) throws Exception {
+		ByteArrayOutputStream digestInfoValueBuf = new ByteArrayOutputStream();
+		digestInfoValueBuf.write(getHashMagic(hash));
+		digestInfoValueBuf.write(hashData);
+		byte[] derHashData = digestInfoValueBuf.toByteArray();
+		return derHashData;
+	}
+
 }

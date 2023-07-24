@@ -61,7 +61,9 @@ public class Constants {
 	public static final String SM3_SM2 = "SM3WITHSM2";
 	public static final String RSA = "RSA";
 	public static final String SHA1 = "SHA1";
+	public static final String SHA224 = "SHA224";
 	public static final String SHA256 = "SHA256";
+	public static final String SHA384 = "SHA384";
 	public static final String SHA512 = "SHA512";
 	public static final String SHA1_RSA = "SHA1WITHRSA";
 	public static final String SHA256_RSA = "SHA256WITHRSA";
