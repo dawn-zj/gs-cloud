@@ -144,3 +144,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-card__header {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border-left: 5px solid #50bfff;
+  border-bottom: 0px;
+  margin: 20px 0px 0px 10px;
+}
+</style>
