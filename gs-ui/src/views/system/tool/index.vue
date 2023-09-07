@@ -11,59 +11,44 @@
       <el-tab-pane label="Base64" name="1">
         <el-row>
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>文字数据</span>
-              </div>
+            <card-component title="文字数据">
               <text-base64 v-if="activeName == '1'" />
-            </el-card>
-
+            </card-component>
           </el-col>
         </el-row>
+
         <el-row class="mt20">
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>文件数据</span>
-              </div>
+            <card-component title="文件数据">
               <file-base64 v-if="activeName == '1'" />
-            </el-card>
+            </card-component>
           </el-col>
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="制作二维码" name="2">
         <el-row>
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>制作二维码</span>
-              </div>
+            <card-component title="制作二维码">
               <barcode-index v-if="activeName == '2'" />
-            </el-card>
+            </card-component>
           </el-col>
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="像素尺寸转换" name="3">
         <el-row>
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>像素/分辨率/英寸/厘米 转换</span>
-              </div>
+            <card-component title="像素/分辨率/英寸/厘米 转换">
               <px2cm-index v-if="activeName == '3'" />
-            </el-card>
+            </card-component>
           </el-col>
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="水印" name="4">
         <el-row>
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>水印</span>
-              </div>
+            <card-component title="水印">
               <watermark v-if="activeName == '4'" />
-            </el-card>
+            </card-component>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -71,12 +56,9 @@
       <el-tab-pane label="PDF签名" name="5">
         <el-row>
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>PDF签名</span>
-              </div>
+            <card-component title="PDF签名">
               <pdf-sign v-if="activeName == '5'" />
-            </el-card>
+            </card-component>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -84,32 +66,27 @@
       <el-tab-pane label="PDF验签" name="6">
         <el-row>
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>PDF验签</span>
-              </div>
+            <card-component title="PDF验签">
               <pdf-verify v-if="activeName == '6'" />
-            </el-card>
+            </card-component>
           </el-col>
         </el-row>
       </el-tab-pane>
 
       <el-tab-pane label="外链项目" name="7">
-        <div v-for="(item,index) in gsConfig" :key="index" class="mb10">
-          {{ index + 1 }}.{{ item.describe }}：<el-link :href="item.url" target="_blank">{{ item.url }}</el-link>
-        </div>
-
+        <card-component title="外链项目">
+          <div v-for="(item,index) in gsConfig" :key="index" class="mb10">
+            {{ index + 1 }}.{{ item.describe }}：<el-link :href="item.url" target="_blank">{{ item.url }}</el-link>
+          </div>
+        </card-component>
       </el-tab-pane>
 
       <el-tab-pane label="获取PDF签章数据" name="8">
         <el-row>
           <el-col :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">
-                <span>获取PDF签章数据</span>
-              </div>
+            <card-component title="获取PDF签章数据">
               <pdf-get-stamp v-if="activeName == '8'" />
-            </el-card>
+            </card-component>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -119,6 +96,7 @@
 </template>
 
 <script>
+import CardComponent from '@/views/components/CardComponent'
 import textBase64 from './base64/textBase64'
 import fileBase64 from './base64/fileBase64'
 import barcodeIndex from './barcode/index'
@@ -130,7 +108,7 @@ import pdfGetStamp from './pdfVerify/getStamp'
 
 export default {
   name: 'Index',
-  components: { textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify, pdfGetStamp },
+  components: { CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify, pdfGetStamp },
   data() {
     return {
       tabPosition: 'top',
@@ -146,11 +124,4 @@ export default {
 </script>
 
 <style>
-.el-card__header {
-  padding: 8px 16px;
-  border-radius: 4px;
-  border-left: 5px solid #50bfff;
-  border-bottom: 0px;
-  margin: 20px 0px 0px 10px;
-}
 </style>
