@@ -8,84 +8,11 @@
     </el-radio-group>
 
     <el-tabs v-model="activeName" :tab-position="tabPosition" class="mt20">
-      <el-tab-pane label="Base64" name="1">
-        <el-row>
-          <el-col :span="24">
-            <card-component title="文字数据">
-              <text-base64 v-if="activeName == '1'" />
-            </card-component>
-          </el-col>
-        </el-row>
-
-        <el-row class="mt20">
-          <el-col :span="24">
-            <card-component title="文件数据">
-              <file-base64 v-if="activeName == '1'" />
-            </card-component>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-      <el-tab-pane label="制作二维码" name="2">
-        <el-row>
-          <el-col :span="24">
-            <card-component title="制作二维码">
-              <barcode-index v-if="activeName == '2'" />
-            </card-component>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-      <el-tab-pane label="像素尺寸转换" name="3">
-        <el-row>
-          <el-col :span="24">
-            <card-component title="像素/分辨率/英寸/厘米 转换">
-              <px2cm-index v-if="activeName == '3'" />
-            </card-component>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-      <el-tab-pane label="水印" name="4">
-        <el-row>
-          <el-col :span="24">
-            <card-component title="水印">
-              <watermark v-if="activeName == '4'" />
-            </card-component>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-
-      <el-tab-pane label="PDF签名" name="5">
-        <el-row>
-          <el-col :span="24">
-            <card-component title="PDF签名">
-              <pdf-sign v-if="activeName == '5'" />
-            </card-component>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-
-      <el-tab-pane label="PDF验签" name="6">
-        <el-row>
-          <el-col :span="24">
-            <card-component title="PDF验签">
-              <pdf-verify v-if="activeName == '6'" />
-            </card-component>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-
-      <el-tab-pane label="外链项目" name="7">
-        <card-component title="外链项目">
-          <div v-for="(item,index) in gsConfig" :key="index" class="mb10">
-            {{ index + 1 }}.{{ item.describe }}：<el-link :href="item.url" target="_blank">{{ item.url }}</el-link>
-          </div>
-        </card-component>
-      </el-tab-pane>
-
-      <el-tab-pane label="获取PDF签章数据" name="8">
-        <el-row>
-          <el-col :span="24">
-            <card-component title="获取PDF签章数据">
-              <pdf-get-stamp v-if="activeName == '8'" />
+      <el-tab-pane v-for="(tab, index) in tabPaneArr" :key="index" :label="tab.tabLabel" :name="index.toString()">
+        <el-row v-for="(row, index) in tab.row" :key="index" class="mb20" :gutter="20">
+          <el-col v-for="(col, index) in row.col" :key="index" :span="col.span" :offset="col.offset">
+            <card-component :title="col.cardTitle">
+              <component :is="col.componentName" />
             </card-component>
           </el-col>
         </el-row>
@@ -105,20 +32,98 @@ import watermark from './watermark/index'
 import pdfSign from './pdfSign/index'
 import pdfVerify from './pdfVerify/index'
 import pdfGetStamp from './pdfVerify/getStamp'
+import linkProject from './linkProject/index'
 
 export default {
   name: 'Index',
-  components: { CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify, pdfGetStamp },
+  components: { CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify, pdfGetStamp, linkProject },
   data() {
     return {
       tabPosition: 'top',
       // 用于各tab里的组件点击tab时渲染
-      activeName: '1',
-      gsConfig: []
+      activeName: '0',
+      currentView: '',
+      tabPaneArr: [
+        {
+          tabLabel: 'Base64',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: '文字编码', componentName: 'textBase64' }
+              ]
+            },
+            {
+              col: [
+                { span: 24, cardTitle: '文件编码', componentName: 'fileBase64' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: '制作二维码',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: '制作二维码', componentName: 'barcodeIndex' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: '像素尺寸转换',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: '像素尺寸转换', componentName: 'px2cmIndex' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: '水印(外链项目)',
+          row: [
+            {
+              col: [
+                { span: 12, cardTitle: '外链项目', componentName: 'linkProject' },
+                { span: 12, cardTitle: '水印', componentName: 'watermark' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: 'PDF签名',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: 'PDF签名', componentName: 'pdfSign' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: 'PDF验签',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: 'PDF验签', componentName: 'pdfVerify' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: '获取PDF签章数据',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: '获取PDF签章数据', componentName: 'pdfGetStamp' }
+              ]
+            }
+          ]
+        }
+      ]
     }
   },
   created() {
-    this.gsConfig = window.gs.urlConfig
   }
 }
 </script>
