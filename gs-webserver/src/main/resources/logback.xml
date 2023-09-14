@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!--1.修改property标签，定义log.path日志输出路径，定义log.package指定要打印日志的包全路径-->
-<!--    <property name="log.path" value="/opt/gs/NetTool/log/web"/>-->
-    <property name="log.path" value="/opt/gs/NetTool/tomcat_web/webapps/tool/json/log"/>
+    <property name="log.path" value="/opt/gs/NetTool/log/web"/>
     <property name="log.package" value="com.gs.webserver"/>
     <property name="log.level" value="debug" />
 
