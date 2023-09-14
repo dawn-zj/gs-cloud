@@ -39,15 +39,22 @@ public class LogAspect {
 	@Around(value = "logPointCut()")
 	public Object around(ProceedingJoinPoint proceedingJoinPoint) {
 		Object result = null;
+
 		try {
-			Object[] args = proceedingJoinPoint.getArgs();
 			String className = proceedingJoinPoint.getTarget().getClass().getName();
 			String methodName = proceedingJoinPoint.getSignature().getName();
 			String ip = IpUtil.getIpAddr(ServletUtil.getRequest());
 			String url = ServletUtil.getRequest().getRequestURI();
-			// 结果
+			Object[] args = proceedingJoinPoint.getArgs();
+
 			String msg = "操作成功";
-			logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, JSON.toJSONString(args));
+			try {
+				String jsonString = JSON.toJSONString(args);
+				// 结果
+				logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, jsonString);
+			} catch (Throwable ex) {
+				logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, "");
+			}
 
 			result = proceedingJoinPoint.proceed();
 		} catch (Throwable ex) {
