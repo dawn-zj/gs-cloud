@@ -122,7 +122,8 @@
 
 <script>
 
-import { base642blob, getBase64, getFileType } from '@/utils/file'
+import { getBase64, getFileType } from '@/utils/file'
+import { base642blob } from '@/utils/base64/base64'
 import { verify } from '@/api/system/genStamp'
 
 // 2.7.542版本
