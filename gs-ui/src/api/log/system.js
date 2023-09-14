@@ -4,7 +4,7 @@ import requestVue from '@/utils/requestLocal'
 
 export function list(query) {
   return requestVue({
-    url: '/json/log/info.json',
+    url: '/json/log/debug.log',
     method: 'get',
     params: query
   })

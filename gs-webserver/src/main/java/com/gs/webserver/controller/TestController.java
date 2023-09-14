@@ -1,15 +1,16 @@
 package com.gs.webserver.controller;
 
+import com.gs.webserver.entity.to.response.ResponseTo;
 import io.github.yedaxia.apidocs.Ignore;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * @author Administator
  * @Description 测试
  */
 @Ignore
-@Controller
+@RestController
 public class TestController {
 
     /**
@@ -17,7 +18,7 @@ public class TestController {
      * @return
      */
     @GetMapping("/test")
-    public String test() {
-        return "Welcome to spring boot!";
+    public ResponseTo<String> test() {
+        return ResponseTo.success("Welcome to spring boot!");
     }
 }

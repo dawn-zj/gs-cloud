@@ -99,6 +99,12 @@
             <version>1.2.75</version>
         </dependency>
 
+        <!-- 自定义验证注解 -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

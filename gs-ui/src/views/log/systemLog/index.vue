@@ -38,8 +38,7 @@ export default {
   methods: {
     getSystemLog() {
       list().then((response) => {
-        // let reg = /^[\d+][\d+][\d+][\d+]-[\d+][\d+]-[\d+][\d+] [\d+][\d+]:[\d+][\d+]:[\d+][\d+]$/  日期正则
-        this.logText += response
+        this.logText = response.replace(/\n/g, '<br>')
       })
     },
     add() {
@@ -53,7 +52,7 @@ export default {
 
 <style scoped>
 .log{
-  width: 80%;
+  width: 100%;
   height: 500px;
   background-color: #cccccc;
   overflow: scroll;

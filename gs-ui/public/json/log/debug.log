@@ -1,0 +1,4 @@
+2023-09-14 10:07:26 [main] DEBUG c.g.webserver.GsWebserverApplication - Running with Spring Boot v2.3.0.RELEASE, Spring v5.2.6.RELEASE
+2023-09-14 10:07:42 [http-nio-8081-exec-1] DEBUG com.gs.webserver.aspect.LogAspect - [操作] [127.0.0.1] [/test] [com.gs.webserver.controller.TestController.test()] [操作成功] [[]]
+2023-09-14 11:16:16 [main] DEBUG c.g.webserver.GsWebserverApplication - Running with Spring Boot v2.3.0.RELEASE, Spring v5.2.6.RELEASE
+2023-09-14 11:38:38 [http-nio-8081-exec-1] DEBUG com.gs.webserver.aspect.LogAspect - [操作] [127.0.0.1] [/test] [com.gs.webserver.controller.TestController.test()] [操作成功] [[]]

@@ -56,6 +56,12 @@
 				<artifactId>spring-boot-starter-web</artifactId>
 				<version>${springboot.version}</version>
 			</dependency>
+			<!-- SpringBoot 拦截器 -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-aop</artifactId>
+				<version>${springboot.version}</version>
+			</dependency>
 			<!-- spring cloud gateway 依赖 -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
