@@ -25,7 +25,7 @@
                             <goal>single</goal><!-- 该打包任务只运行一次 -->
                         </goals>
                         <configuration>
-                            <finalName>webserver</finalName><!--jar包名称webserver，可在配置里用id属性增加后缀-->
+                            <finalName>web</finalName><!--jar包名称webserver，可在配置里用id属性增加后缀-->
                             <descriptors>
                                 <!-- 指定配置文件的路径，路径可变，例如：在resources 目录下则为：src/main/resources/assembly.xml -->
                                 <descriptor>src/main/resources/assembly-jar.xml</descriptor>
