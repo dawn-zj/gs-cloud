@@ -75,6 +75,13 @@ Vue.use(Element, {
 
 Vue.config.productionTip = false
 
+// 正式环境清除所有console.log()
+if (process.env.NODE_ENV === 'production') {
+  if (window) {
+    window.console.log = function () {};
+  }
+}
+
 new Vue({
   el: '#app',
   router,
