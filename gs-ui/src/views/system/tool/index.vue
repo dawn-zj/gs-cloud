@@ -9,13 +9,15 @@
 
     <el-tabs v-model="activeName" :tab-position="tabPosition" class="mt20">
       <el-tab-pane v-for="(tab, index) in tabPaneArr" :key="index" :label="tab.tabLabel" :name="index.toString()">
-        <el-row v-for="(row, index) in tab.row" :key="index" class="mb20" :gutter="20">
-          <el-col v-for="(col, index) in row.col" :key="index" :span="col.span" :offset="col.offset">
-            <card-component :title="col.cardTitle" :show-button="col.showButton" :button-text="col.buttonText">
-              <component :is="col.componentName" />
-            </card-component>
-          </el-col>
-        </el-row>
+        <div v-if="activeName == index">
+          <el-row v-for="(row, index) in tab.row" :key="index" class="mb20" :gutter="20">
+            <el-col v-for="(col, index) in row.col" :key="index" :span="col.span" :offset="col.offset">
+              <card-component :title="col.cardTitle" :show-button="col.showButton" :button-text="col.buttonText">
+                <component :is="col.componentName" />
+              </card-component>
+            </el-col>
+          </el-row>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>

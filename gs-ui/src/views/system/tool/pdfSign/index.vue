@@ -110,14 +110,14 @@
                   style="background-color: Transparent; margin-top:10px;cursor:pointer;"
                   type="button"
                   @click="viewToPageNum(1)"
-                ><span style="color: #4D4D4D" class="el-icon-d-arrow-left"></span></button>
+                ><span style="color: #4D4D4D" class="el-icon-d-arrow-left" /></button>
               </div>
               <div class="page-name">
                 <button
                   style="background-color: Transparent; margin-top:10px;cursor:pointer;"
                   type="button"
                   @click="pagePrev"
-                ><span style="color: #4D4D4D" class="el-icon-arrow-left"></span></button>
+                ><span style="color: #4D4D4D" class="el-icon-arrow-left" /></button>
               </div>
               <div class="page-name">
                 <button style="background-color: Transparent; margin-top:10px;" type="button"><span
@@ -132,14 +132,14 @@
                   style="background-color: Transparent; margin-top:10px; cursor:pointer;"
                   type="button"
                   @click="pageNext"
-                ><span style="color: #4D4D4D;" class="el-icon-arrow-right"></span></button>
+                ><span style="color: #4D4D4D;" class="el-icon-arrow-right" /></button>
               </div>
               <div class="page-name">
                 <button
                   style="background-color: Transparent; margin-top:10px; cursor:pointer;"
                   type="button"
                   @click="viewToPageNum(page_count)"
-                ><span style="color: #4D4D4D;" class="el-icon-d-arrow-right"></span></button>
+                ><span style="color: #4D4D4D;" class="el-icon-d-arrow-right" /></button>
               </div>
               <span style="margin-top:6px; font-size: 13px;line-height: 28px;color: #606266;">
                 <div class="el-input el-pagination__editor is-in-pagination"><input
@@ -175,7 +175,8 @@
 
 <script>
 
-import { base642blob, getBase64, getFileType } from '@/utils/file'
+import { getBase64, getFileType } from '@/utils/file'
+import { base642blob } from '@/utils/base64/base64'
 // 2.7.542版本
 const PDFJS = window['pdfjs-dist/build/pdf']
 PDFJS.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/build/pdf.worker'
