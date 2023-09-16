@@ -20,19 +20,23 @@
         <el-button type="primary" plain class="mt10 mb10" @click="save2File">保存</el-button>
       </el-form-item>
       <el-form-item label="签章数据">
-        <el-input
-          v-model="stampMapStr"
-          readonly
-          type="textarea"
-          :autosize="{ minRows: 5}"
-        />
+        <json-viewer
+          theme="jv-light"
+          :value="stampMap"
+          :show-array-index="false"
+          boxed
+          sort
+          copyable
+        >
+          <template slot="copy">
+            <i class="el-icon-document-copy" title="复制"></i>
+          </template>
+        </json-viewer>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-
-import { getBase64 } from '@/utils/file'
 import { getPdfStamp } from '@/api/system/tool/pdfStamp'
 
 export default {
@@ -42,13 +46,13 @@ export default {
       limitNum: 1,
       // 上传文件列表
       fileList: [],
-      stampMapStr: ''
+      stampMap: {}
     }
   },
   methods: {
     // 上传文件变化
     handleFileChange(file, fileList) {
-      this.stampMapStr = ''
+      this.stampMap = ''
 
       if (this.limitNum === 1) {
         this.fileList = [fileList[fileList.length - 1]]
@@ -56,7 +60,7 @@ export default {
     },
     // 删除文件
     handleFileRemove(file, fileList) {
-      this.$set(this, 'stampMapStr', '')
+      this.$set(this, 'stampMap', {})
     },
     parseFile() {
       if (this.fileList.length === 0) {
@@ -68,13 +72,12 @@ export default {
       formData.append('file', file.raw)
       getPdfStamp(formData).then(res => {
         this.msgSuccess('解析成功')
-        this.stampMapStr = JSON.stringify(res.data.stampMap)
+        this.stampMap = res.data.stampMap
       })
     },
     save2File() {
-      const stampMap = JSON.parse(this.stampMapStr)
-      for (var key in stampMap) {
-        this.downloadBase64(stampMap[key], key + '-stamp.asn1')
+      for (var key in this.stampMap) {
+        this.downloadBase64(this.stampMap[key], key + '-stamp.asn1')
       }
     }
   }

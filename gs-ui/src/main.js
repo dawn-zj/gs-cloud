@@ -53,13 +53,16 @@ Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
 }
 
-// 全局组件挂载
+// 全局组件挂载，自定义组件名，用Vue.component()引入
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
 Vue.component('draggable', draggable)
 
 Vue.use(permission)
 
+// 使用原始组件名，可用Vue.use()引入
+import JsonViewer from 'vue-json-viewer'
+Vue.use(JsonViewer)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
