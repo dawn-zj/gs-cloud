@@ -1,13 +1,12 @@
 在postman全局/局部变量中，增加对应关系：
-myFunction-index.js(多合一)
+myFunction-all.js(多合一)
 然后通过eval写法引入
 eval(postman.getGlobalVariable("myFunction"))
 
 
 各js的方法：
-index.js
-	genPwd(pwd) 密码加密传输
-	及以下all
+all.js
+	以下all
 
 sm2.js
 	sm2Encrypt(data, publickey, cipherMode)
