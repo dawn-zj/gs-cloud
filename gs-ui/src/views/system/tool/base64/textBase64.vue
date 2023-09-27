@@ -17,6 +17,7 @@
           <el-row>
             <el-col :offset="10">
               <el-button type="primary" plain class="mb20" @click="handleEncode">编码</el-button>
+              <el-button type="primary" plain class="mb20" @click="handleHex">转十六进制</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -81,7 +82,7 @@
 <script>
 
 import { downloadBase64 } from '@/utils/file'
-import { base64Decode, base64Encode } from '@/utils/base64/base64'
+import { base64Decode, base64Encode, strToHex } from '@/utils/base64/base64'
 import { parseTime } from '@/utils/ruoyi'
 
 export default {
@@ -106,6 +107,10 @@ export default {
     // 编码
     handleEncode() {
       this.formDataEncode.contentB64 = base64Encode(this.formDataEncode.content)
+    },
+    // 十六进制
+    handleHex() {
+      this.formDataEncode.contentB64 = strToHex(this.formDataEncode.content)
     },
     // 解码
     handleDecode() {
