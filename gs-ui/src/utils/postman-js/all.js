@@ -4315,10 +4315,22 @@ SM3.prototype.toArray = function(s, f){
  * @returns
  */
 function sm3Digest(msg){
-	var _sm3 = new SM3();
-    var digest = _sm3.sum(msg);
-	var hashHex = _sm3.toArray(digest, function(byte) {return ('0' + (byte & 0xFF).toString(16)).slice(-2);}).join('');
-    return hashHex;
+  var _sm3 = new SM3();
+  var digest = _sm3.sum(msg);
+  return digest;
+}
+
+/**
+ * SM3加密主函数
+ *
+ * @param msg
+ * @returns 十六进制
+ */
+function sm3DigestHex(msg){
+  var _sm3 = new SM3();
+  var digest = _sm3.sum(msg);
+  var hashHex = _sm3.toArray(digest, function(byte) {return ('0' + (byte & 0xFF).toString(16)).slice(-2);}).join('');
+  return hashHex;
 }
 
 // 密钥对生成 http://web.chacuo.net/netrsakeypair
