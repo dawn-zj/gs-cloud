@@ -4,12 +4,13 @@ myFunction-all.js(多合一)
 eval(postman.getGlobalVariable("myFunction"))
 
 
-各js的方法：
+各js的方法：(vue项目下建议用sm-crypto)
 all.js
 	以下all
 
 sm2.js
 	sm2Encrypt(data, publickey, cipherMode)
+	暂未找到解密方法
 
 sm3.js
 	sm3Digest(msg) sm3摘要，返回十六进制
