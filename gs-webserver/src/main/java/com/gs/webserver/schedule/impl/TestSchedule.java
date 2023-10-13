@@ -1,6 +1,5 @@
 package com.gs.webserver.schedule.impl;
 
-import com.gs.common.util.ConfigUtil;
 import com.gs.common.util.date.DateUtil;
 import com.gs.webserver.schedule.ISchedule;
 import org.springframework.scheduling.Trigger;
@@ -36,7 +35,8 @@ public class TestSchedule implements ISchedule, SchedulingConfigurer {
             @Override
             public Date nextExecutionTime(TriggerContext triggerContext) {
                 try {
-                    String cron = "";
+                    // 10秒一执行
+                    String cron = "0/10 * * * * ?";
                     CronTrigger cronTrigger = new CronTrigger(cron);
                     Date date = cronTrigger.nextExecutionTime(triggerContext);
                     return date;
