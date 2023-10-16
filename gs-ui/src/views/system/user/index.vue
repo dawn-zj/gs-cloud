@@ -75,6 +75,9 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
+            <template slot="header" slot-scope="{}">
+              <slot-label-component label="操作" />
+            </template>
             <template slot-scope="scope">
               <el-button v-hasPermi="['system:user:edit']" size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
               <el-button v-if="scope.row.userId !== 1" v-hasPermi="['system:user:remove']" size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
@@ -216,10 +219,11 @@ import { treeselect } from '@/api/system/dept'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import DialogComponent from '@/views/components/DialogComponent'
+import SlotLabelComponent from '@/views/components/SlotLabelComponent'
 
 export default {
   name: 'User',
-  components: { DialogComponent, Treeselect },
+  components: { SlotLabelComponent, DialogComponent, Treeselect },
   data() {
     return {
       // 遮罩层

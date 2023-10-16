@@ -89,6 +89,9 @@
       </el-row>
 
       <el-form-item label="实时预览">
+        <template slot="label" slot-scope="{}">
+          <slot-label-component label="实时预览" tip="透明背景" />
+        </template>
         <el-image v-loading="loading" :src="url" fit="fill" />
       </el-form-item>
       <div class="form-footer">
@@ -102,8 +105,10 @@
 <script>
 import { viewStamp } from '@/api/system/genStamp'
 import { validateByteSize, validateNumber } from '@/utils/validate'
+import SlotLabelComponent from '@/views/components/SlotLabelComponent'
 export default {
   name: 'Index',
+  components: { SlotLabelComponent },
   data() {
     return {
       loading: true,
