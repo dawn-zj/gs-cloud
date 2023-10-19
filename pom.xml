@@ -20,6 +20,7 @@
 		<module>gs-webserver</module>
 		<module>gs-gateway</module>
 		<module>gs-common</module>
+		<module>gs-schedule</module>
         <module>assembly</module><!--打包模块放在最后-->
     </modules>
 
@@ -31,6 +32,7 @@
 		<springboot.version>2.3.0.RELEASE</springboot.version>
 		<gateway.version>2.2.1.RELEASE</gateway.version>
 		<common.version>1.0.0-SNAPSHOT</common.version>
+		<schedule.version>1.0.0-SNAPSHOT</schedule.version>
 		<lombok.version>1.18.4</lombok.version>
 		<oshi.version>5.3.6</oshi.version>
 		<commons.fileupload.version>1.3.3</commons.fileupload.version>
@@ -74,6 +76,13 @@
 				<groupId>com.gs</groupId>
 				<artifactId>gs-common</artifactId>
 				<version>${common.version}</version>
+			</dependency>
+
+			<!--模块依赖-->
+			<dependency>
+				<groupId>com.gs</groupId>
+				<artifactId>gs-schedule</artifactId>
+				<version>${schedule.version}</version>
 			</dependency>
 
 			<!--版本统一管理-->

@@ -33,6 +33,10 @@
 			<groupId>com.gs</groupId>
 			<artifactId>gs-common</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.gs</groupId>
+			<artifactId>gs-schedule</artifactId>
+		</dependency>
 		<!-- lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
