@@ -28,7 +28,7 @@ public class Constants {
 	public static final String FILE_PATH = CONTEXT_PATH + "/file/";// 项目内测文件相对路径
 	public static final String FILE_OUT_PATH = CONTEXT_PATH + "/file/out/";// 项目内测输出文件相对路径
 
-	public static final String ROOT_PATH = "/opt/gs/NetTool";
+	public static final String ROOT_PATH = "/opt/gs/NetTool/";
 	public static final String PHOTO_PATH = ROOT_PATH + "photo/";
 	public static final String CONF_PATH = ROOT_PATH + "conf/";
 	public static final String LOG_PATH = ROOT_PATH + "log/";

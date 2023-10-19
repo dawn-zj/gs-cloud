@@ -23,6 +23,7 @@ public class ConfigUtil {
 	private static ConfigUtil instance;
 	private Configuration properties;
 	private FileBasedConfigurationBuilder<FileBasedConfiguration> builder;
+	private String confPath = Constants.CONF_PATH + "config.properties";
 
 	/**
 	 * 获取ConfigUtil实例
@@ -51,7 +52,8 @@ public class ConfigUtil {
 			// 读取属性文件 .properties
 			Parameters params = new Parameters();
 			builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class);
-			builder.configure(params.properties().setFileName(Constants.CONF_PATH + "config.properties").setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+//			builder.configure(params.properties().setFileName(confPath).setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+			builder.configure(params.properties().setFileName(confPath));
 			properties = builder.getConfiguration();
 		} catch (Exception e) {
 			throw new NetGSRuntimeException(ErrCode.LOAD_CONF_ERROR, e.getMessage());
@@ -118,8 +120,15 @@ public class ConfigUtil {
 		return properties.getString("log.file_num", Constants.DEFAULT_STRING);
 	}
 
+	public String getScheduleTask() {
+		return properties.getString("schedule.task", Constants.DEFAULT_STRING);
+	}
+
 	public static void main(String[] args) {
 		Long time = ConfigUtil.getInstance().getTimeoutTime();
 		System.out.println(time);
+
+		String task = ConfigUtil.getInstance().getScheduleTask();
+		System.out.println(task);
 	}
 }
