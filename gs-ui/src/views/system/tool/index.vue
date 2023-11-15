@@ -35,10 +35,16 @@ import pdfSign from './pdfSign/index'
 import pdfVerify from './pdfVerify/index'
 import pdfGetStamp from './pdfVerify/getStamp'
 import linkProject from './linkProject/index'
+import drag from './drag/index2'
+import dynamicTable from './dynamic/index'
 
 export default {
   name: 'Index',
-  components: { CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark, pdfSign, pdfVerify, pdfGetStamp, linkProject },
+  components: {
+    CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark,
+    pdfSign, pdfVerify, pdfGetStamp, linkProject, drag,
+    dynamicTable
+  },
   data() {
     return {
       tabPosition: 'top',
@@ -118,6 +124,26 @@ export default {
             {
               col: [
                 { span: 24, cardTitle: '获取PDF签章数据', componentName: 'pdfGetStamp' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: '拖拽组件',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: '拖拽组件', componentName: 'drag' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: '动态表格',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: '动态表格', componentName: 'dynamicTable' }
               ]
             }
           ]
