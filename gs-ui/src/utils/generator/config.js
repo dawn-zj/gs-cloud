@@ -409,6 +409,33 @@ export const layoutComponents = [
   }
 ]
 
+export const fieldComponents = [
+  {
+    label: '单行文本',
+    tag: 'el-input',
+    tagIcon: 'input',
+    placeholder: '请输入',
+    defaultValue: undefined,
+    span: 24,
+    labelWidth: null,
+    style: { width: '100%' },
+    clearable: true,
+    prepend: '',
+    append: '',
+    'prefix-icon': '',
+    'suffix-icon': '',
+    maxlength: null,
+    'show-word-limit': false,
+    readonly: false,
+    disabled: false,
+    required: true,
+    regList: [],
+    changeTag: true,
+    document: 'https://element.eleme.cn/#/zh-CN/component/input'
+  }
+]
+
+
 // 组件rule的触发方式，无触发方式的组件不生成rule
 export const trigger = {
   'el-input': 'blur',
