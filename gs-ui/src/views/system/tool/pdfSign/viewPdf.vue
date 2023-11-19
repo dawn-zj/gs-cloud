@@ -11,39 +11,39 @@
             <div class="pageNo">
               <div class="page-name">
                 <button
-                  style="background-color: Transparent; margin-top:10px;cursor:pointer;"
+                  class="page-num-btn"
                   type="button"
                   @click="viewToPageNum(1)"
-                ><span style="color: #4D4D4D" class="el-icon-d-arrow-left" /></button>
+                ><span class="el-icon-d-arrow-left" /></button>
               </div>
               <div class="page-name">
                 <button
-                  style="background-color: Transparent; margin-top:10px;cursor:pointer;"
+                  class="page-num-btn"
                   type="button"
                   @click="pagePrev"
-                ><span style="color: #4D4D4D" class="el-icon-arrow-left" /></button>
+                ><span class="el-icon-arrow-left" /></button>
               </div>
               <div class="page-name">
-                <button style="background-color: Transparent; margin-top:10px;" type="button"><span
-                  id="pageNo"
-                  style="color: #4D4D4D"
-                >{{
-                  pageNum
-                }}</span><span id="pageCount" style="color: #4D4D4D">/{{ page_count }}</span></button>
+                <button style="background-color: Transparent; margin-top:10px;" type="button">
+                  <span
+                    id="pageNo"
+                  >{{
+                    pageNum
+                  }}</span><span id="pageCount">/{{ page_count }}</span></button>
               </div>
               <div class="page-name">
                 <button
-                  style="background-color: Transparent; margin-top:10px; cursor:pointer;"
+                  class="page-num-btn"
                   type="button"
                   @click="pageNext"
-                ><span style="color: #4D4D4D;" class="el-icon-arrow-right" /></button>
+                ><span class="el-icon-arrow-right" /></button>
               </div>
               <div class="page-name">
                 <button
-                  style="background-color: Transparent; margin-top:10px; cursor:pointer;"
+                  class="page-num-btn"
                   type="button"
                   @click="viewToPageNum(page_count)"
-                ><span style="color: #4D4D4D;" class="el-icon-d-arrow-right" /></button>
+                ><span class="el-icon-d-arrow-right" /></button>
               </div>
               <span style="margin-top:6px; font-size: 13px;line-height: 28px;color: #606266;">
                 <div class="el-input el-pagination__editor is-in-pagination"><input
@@ -832,6 +832,13 @@ export default {
     top: 0;
     right: 0;
     bottom: 0;
+  }
+
+  .page-num-btn {
+    background-color: Transparent;
+    margin-top:10px;
+    cursor:pointer;
+    color: #4D4D4D;
   }
 }
 
