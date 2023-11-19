@@ -334,7 +334,6 @@ export default {
 
           // 删除坐标参数
           var index = [].indexOf.call(document.getElementById('signArea').children, signDiv)
-          _this.form.stampParam.stampType = 1
           _this.locations.splice(index, 1)
 
           // 重新渲染当前页，或者删除该签署域dom节点
@@ -498,6 +497,7 @@ export default {
       const deleteDiv = document.createElement('div')
       const deleteDivWidth = 20
       const deleteDivHeight = 20
+      deleteDiv.className = 'delete-area'
       deleteDiv.innerHTML = '×'
       deleteDiv.style.textAlign = 'center'
       deleteDiv.style.color = 'skyblue'
@@ -515,6 +515,10 @@ export default {
     },
     move(documentEvent, divEvent) {
       var cloneTemp = divEvent.target
+      // 刪除的小红叉禁止拖拽移动
+      if (cloneTemp.className === 'delete-area') {
+        return false
+      }
 
       var pdfBox = document.getElementsByClassName('pdfPage_1yRne')[0]
 
