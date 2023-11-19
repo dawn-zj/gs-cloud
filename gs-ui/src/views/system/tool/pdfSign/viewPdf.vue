@@ -93,12 +93,15 @@ PDFJS.GlobalWorkerOptions.workerSrc = 'pdfjs-dist/build/pdf.worker'
 
 export default {
   // name: "signFieldConfig",
+  props: {
+    showLeft: { type: Boolean, required: false, default: false },
+    showRight: { type: Boolean, required: false, default: false },
+    isDrag: { type: Boolean, required: false, default: true }
+  },
   data() {
     return {
       isShow: false,
       showEdges: false,
-      showLeft: true,
-      showRight: true,
       // 遮罩层
       loading: true,
       pdfUrl: '',
@@ -115,8 +118,6 @@ export default {
         height: 160,
         base64: ''
       },
-      // 默认可拖拽
-      isDrag: true,
       // 拖拽文本域坐标位置x,y,页码，坐标起点左下角
       fieldParam: [
         {
@@ -152,11 +153,6 @@ export default {
   },
   // 监听一个值的变化,然后执行相对应的函数。
   watch: {
-    pdfUrl: function(val) {
-      this.$nextTick(() => {
-        this._loadFile(val)
-      })
-    },
     // 监听pageNum
     pageNum: {
       handler(val, oldVal) {
@@ -169,6 +165,10 @@ export default {
   mounted() {
     this.$nextTick(function() {
       this.getFileInfo()
+      if (this.pageNum === 1) {
+        this.renderField(this.fieldParam, this.isDrag)
+        this.renderStampField(this.locations, this.isDrag)
+      }
     })
   },
   methods: {
@@ -188,10 +188,11 @@ export default {
       return px / dpi * 72
     },
     // 获取文件信息
-    getFileInfo(blob, fileBase64) {
-      if (blob) {
+    getFileInfo(url, blob, fileBase64) {
+      if (url) {
+        this.pdfUrl = url
+      } else if (blob) {
         this.pdfUrl = window.URL.createObjectURL(blob)
-        this.loading = false
         this.loadFile(this.pdfUrl)
       } else if (fileBase64) {
         this.pdfUrl = window.URL.createObjectURL(base642blob(fileBase64))
@@ -216,12 +217,6 @@ export default {
           viewport: viewport
         }
         page.render(renderContext)
-
-        // 渲染指定页时，清除所有文本域，重新渲染，处于当前页的文本域展示，否则隐藏
-        this.renderField(this.fieldParam, this.isDrag)
-
-        // 渲染指定页时，清除所有签署域，重新渲染，处于当前页的签署域展示，否则隐藏
-        this.renderStampField(this.locations, this.isDrag)
       })
     },
     // 加载模板文件
@@ -337,7 +332,7 @@ export default {
           _this.locations.splice(index, 1)
 
           // 重新渲染当前页，或者删除该签署域dom节点
-          _this.viewToPageNum(_this.pageNum)
+          _this.renderStampField(_this.locations, _this.isDrag)
         }
       }
     },
@@ -407,7 +402,7 @@ export default {
           _this.fieldParam.splice(index, 1)
 
           // 重新渲染当前页，或者删除该签署域dom节点
-          _this.viewToPageNum(_this.pageNum)
+          _this.renderField(_this.fieldParam, _this.isDrag)
         }
       }
     },
@@ -478,11 +473,18 @@ export default {
       const cloneTempWidth = width
       const cloneTempHeight = height
       cloneTemp.className = 'sign-area'
-      cloneTemp.innerHTML = innerHTML
       cloneTemp.draggable = true
-      cloneTemp.style.backgroundColor = 'hsla(0,0%,100%,0)'
-      cloneTemp.style.backgroundImage = 'url(data:image/png;base64,' + sealBase64 + ')'
-      cloneTemp.style.backgroundSize = '100% 100%'
+      // 优先展示图片
+      if (sealBase64) {
+        cloneTemp.style.backgroundColor = 'hsla(0,0%,100%,0)'
+        cloneTemp.style.backgroundImage = 'url(data:image/png;base64,' + sealBase64 + ')'
+        cloneTemp.style.backgroundSize = '100% 100%'
+      } else {
+        cloneTemp.innerHTML = innerHTML
+        cloneTemp.style.textAlign = 'center'
+        cloneTemp.style.color = 'skyblue'
+        cloneTemp.style.lineHeight = cloneTempHeight / Math.ceil(innerHTML.length / 7) + 'px'
+      }
       cloneTemp.style.position = 'absolute' // 相对于pdf图片的绝对位置
       cloneTemp.style.zIndex = '8' // footer是9
       cloneTemp.style.width = cloneTempWidth + 'px'
@@ -664,79 +666,6 @@ export default {
   flex: 0 0 240px;
   width: 280px;
   height: 100%;
-
-  .seal-list-title {
-    font-size: 14px;
-    font-weight: 800;
-    color: #333;
-    line-height: 40px;
-  }
-
-  .doc-list-title {
-    font-size: 14px;
-    font-weight: 800;
-    color: #333;
-    line-height: 40px;
-    height: 40px;
-    width: 100%;
-    /*border-bottom: 1px solid #eaeaea;*/
-    span {
-      color: #777;
-      font-size: 12px;
-      line-height: 40px;
-      font-weight: normal;
-    }
-  }
-
-  .doc-list-context {
-    height: 100%;
-    width: 280px;
-    display: inline-block;
-    padding: 0 15px;
-  }
-
-  .doc-list {
-    overflow-y: auto;
-    width: 100%;
-    height: calc(100% - 100px);
-  }
-
-  .doc-list::-webkit-scrollbar {
-    display: none
-  }
-
-  .doc-item {
-    margin: 0;
-    padding: 20px 45px 0 45px;
-    cursor: pointer;
-  }
-
-  .doc-img {
-    border: 1px solid #333;
-    position: relative;
-    width: 121px;
-    height: 161px;
-    margin-bottom: 5px;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .doc-page-num {
-    z-index: 100;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    text-align: center;
-    background-color: #333333;
-    color: #fff;
-  }
 }
 
 .pdfContent {
