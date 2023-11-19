@@ -121,8 +121,8 @@ export default {
       // 拖拽文本域坐标位置x,y,页码，坐标起点左下角
       fieldParam: [
         {
-          fx: 0, // 单位磅
-          fy: 0, // 单位磅
+          fx: 166, // 单位磅
+          fy: 524, // 单位磅
           width: 100, // 单位磅
           height: 20, // 单位磅
           pageNum: 1,
@@ -133,8 +133,8 @@ export default {
       locations: [
         {
           pageNum: 1,
-          x: 0, // 单位磅
-          y: 0, // 单位磅
+          x: 380, // 单位磅
+          y: 443, // 单位磅
           width: 120, // 单位磅
           height: 120, // 单位磅
           name: '测试签署域',
@@ -233,6 +233,7 @@ export default {
       })
     },
     renderField(fieldParam, isDrag) {
+      this.$emit('render-change')
       // 渲染指定页时，清除所有文本域，重新渲染，处于当前页的文本域展示，否则隐藏
       var fieldArea = document.getElementById('fieldArea')
       fieldArea.innerHTML = ''
@@ -248,6 +249,7 @@ export default {
       }
     },
     renderStampField(locations, isDrag) {
+      this.$emit('render-change')
       // 渲染指定页时，清除所有签署域，重新渲染，处于当前页的签署域展示，否则隐藏
       var signArea = document.getElementById('signArea')
       signArea.innerHTML = ''
