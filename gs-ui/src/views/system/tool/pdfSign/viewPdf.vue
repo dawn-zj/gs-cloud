@@ -121,22 +121,22 @@ export default {
       // 拖拽文本域坐标位置x,y,页码，坐标起点左下角
       fieldParam: [
         {
-          fx: 0,
-          fy: 0,
-          width: 100, // 单位像素，拖拽显示时转换成磅，公式：像素 / 分辨率 * 72
-          height: 20,
+          fx: 0, // 单位磅
+          fy: 0, // 单位磅
+          width: 100, // 单位磅
+          height: 20, // 单位磅
           pageNum: 1,
           fname: '测试文本域'
         }
       ],
-      // 拖拽签署域坐标位置x,y,页码
+      // 拖拽签署域坐标位置x,y,页码，坐标原点左下角
       locations: [
         {
           pageNum: 1,
-          x: 0,
-          y: 0,
-          width: 160, // 单位像素，拖拽显示时转换成磅，公式：像素 / 分辨率 * 72
-          height: 160,
+          x: 0, // 单位磅
+          y: 0, // 单位磅
+          width: 120, // 单位磅
+          height: 120, // 单位磅
           name: '测试签署域',
           // 印章信息，有数据时替掉宽高默认值
           sealInfo: {
@@ -165,10 +165,6 @@ export default {
   mounted() {
     this.$nextTick(function() {
       this.getFileInfo()
-      if (this.pageNum === 1) {
-        this.renderField(this.fieldParam, this.isDrag)
-        this.renderStampField(this.locations, this.isDrag)
-      }
     })
   },
   methods: {
@@ -217,6 +213,11 @@ export default {
           viewport: viewport
         }
         page.render(renderContext)
+
+        if (this.pageNum === 1) {
+          this.renderField(this.fieldParam, this.isDrag)
+          this.renderStampField(this.locations, this.isDrag)
+        }
       })
     },
     // 加载模板文件
@@ -255,7 +256,6 @@ export default {
         this.$nextTick(function() {
           for (var i = 0; i < locations.length; i++) {
             const location = locations[i]
-            console.log(location)
             // 像素转磅
             const width = this.getLocationWidth(location)
             const height = this.getLocationHeight(location)
@@ -267,8 +267,8 @@ export default {
     },
     /**
      *
-     * @param left 距离页面左边界距离
-     * @param bottom 距离页面下边界距离
+     * @param left 距离页面左边界距离，单位磅
+     * @param bottom 距离页面下边界距离，单位磅
      * @param width 域宽，单位磅
      * @param height 域高，单位磅
      * @param name 域名称
@@ -338,12 +338,13 @@ export default {
     },
     /**
      *
-     * @param width 域宽，单位像素
-     * @param height 域高，单位像素
-     * @param left 距离页面左边界距离
-     * @param bottom 距离页面下边界距离
+     * @param left 距离页面左边界距离，单位磅
+     * @param bottom 距离页面下边界距离，单位磅
+     * @param width 域宽，单位磅
+     * @param height 域高，单位磅
      * @param name 域名称
      * @param isShow 是否展示
+     * @param isDrag 是否允许拖拽
      */
     reviewFieldArea(left, bottom, width, height, name, isShow, isDrag) {
       var _this = this
