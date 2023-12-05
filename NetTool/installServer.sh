@@ -27,14 +27,11 @@ mkdir -p $NETTOOLHOME
 
 cd $current_path
 
-echo " copy jdk1.8.0_121 ..."
-cp -r jdk1.8.0_121 "$NETTOOLHOME"/
+echo " copy jre ..."
+cp -r jre "$NETTOOLHOME"/
 
 echo " copy tomcat_web ..."
 cp -r tomcat_web "$NETTOOLHOME"/
-
-#echo " copy tomcat_app ..."
-#cp -r tomcat_app "$NETTOOLHOME"/
 
 echo " copy conf ... "
 cp -r conf "$NETTOOLHOME"/
