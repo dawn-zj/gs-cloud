@@ -1,7 +1,7 @@
 package com.gs.webserver.controller;
 
 import com.gs.webserver.entity.to.response.ResponseTo;
-import io.github.yedaxia.apidocs.Ignore;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

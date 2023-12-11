@@ -5,13 +5,11 @@ import com.gs.common.util.base64.Base64Util;
 import com.gs.webserver.entity.to.request.Base64To;
 import com.gs.webserver.entity.to.response.CommonResTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
-import io.github.yedaxia.apidocs.Ignore;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 编解码
  */
-@Ignore
 @RestController
 @RequestMapping("/tool/base64")
 public class Base64Controller {

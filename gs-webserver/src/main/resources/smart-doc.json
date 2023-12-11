@@ -1,0 +1,17 @@
+{
+  "serverUrl": "http://localhost:8080/",  // 服务器地址，非必须，导出为postman时可以定义为环境变量，如{{web_url}}
+  "pathPrefix": "",                       // 上下文路径
+  "allInOne": true,                       // 是否将文档合并到一个文件中，一般推荐为true
+  "outPath": "F:/smart-doc/gs/",          // 指定文档的输出路径
+  "style": "xt256",                       // 基于highlight.js的代码高亮设置
+  "createDebugPage": true,                // 创建一个可调试接口的文档页面
+  "revisionLogs": [                       // 文档变更记录，非必须
+    {
+      "version": "1.0",                   // 文档版本号
+      "revisionTime": "2023-01-31 10:30", // 文档修订时间
+      "status": "创建",                    // 变更操作状态，一般为：创建、更新等
+      "author": "zhangjuan",              // 文档变更作者
+      "remarks": "自助服务"                // 变更描述
+    }
+  ]
+}
