@@ -1,5 +1,5 @@
 {
-  "serverUrl": "http://localhost:8080/",  // 服务器地址，非必须，导出为postman时可以定义为环境变量，如{{web_url}}
+  "serverUrl": "http://localhost:8081/",  // 服务器地址，非必须，导出为postman时可以定义为环境变量，如{{web_url}}
   "pathPrefix": "",                       // 上下文路径
   "allInOne": true,                       // 是否将文档合并到一个文件中，一般推荐为true
   "outPath": "F:/smart-doc/gs/",          // 指定文档的输出路径
