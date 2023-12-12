@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @Description 签章
+ * 签章
  */
 @RestController
 @RequestMapping("/seal/stamp")

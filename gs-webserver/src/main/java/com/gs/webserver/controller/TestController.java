@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author Administator
- * @Description 测试
+ * 测试
  */
 @Ignore
 @RestController

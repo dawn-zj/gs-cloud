@@ -1,14 +1,12 @@
 package com.gs.webserver.controller.schedule;
 
-import com.gs.webserver.entity.to.request.ServerTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author Administator
- * @Description 定时任务
+ * 定时任务
  */
 @RestController
 @RequestMapping("/schedule/")
@@ -25,6 +23,11 @@ public class ScheduleController {
         return ResponseTo.success("");
     }
 
+    /**
+     * 内置任务列表
+     * @return
+     * @throws Exception
+     */
     @GetMapping("listTask")
     public ResponseTo<?> listTask() throws Exception {
         // 内置的任务类型、类路径
