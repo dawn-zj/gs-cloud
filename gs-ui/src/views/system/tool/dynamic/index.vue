@@ -57,11 +57,11 @@ export default {
       tableData: [
         {
           id: 1,
-          date: '2016-05-02',
-          name: '王小虎',
-          sex: 1,
           // 兼容扩展字段
           extField: {
+            date: '2016-05-02',
+            name: '王小虎',
+            sex: 1,
             address: '上海市普陀区金沙江路 1518 弄'
           }
         },
