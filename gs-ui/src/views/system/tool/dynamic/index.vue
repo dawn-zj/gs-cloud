@@ -49,7 +49,7 @@ export default {
           chineseName: '性别'
         },
         {
-          visible: false,
+          visible: true,
           englishName: 'address',
           chineseName: '地址'
         }
@@ -60,7 +60,10 @@ export default {
           date: '2016-05-02',
           name: '王小虎',
           sex: 1,
-          address: '上海市普陀区金沙江路 1518 弄'
+          // 兼容扩展字段
+          extField: {
+            address: '上海市普陀区金沙江路 1518 弄'
+          }
         },
         {
           id: 2,

@@ -41,7 +41,8 @@
               scope.row.sex ? "男" : "女"
             }}
           </span>
-          <span v-else>{{ scope.row[item.englishName] }}</span>
+          <span v-else-if="scope.row[item.englishName]">{{ scope.row[item.englishName] }}</span>
+          <span v-else>{{ scope.row.extField[item.englishName] }}</span>
         </template>
       </el-table-column>
     </template>
