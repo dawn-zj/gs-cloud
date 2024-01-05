@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 测试
+ * @author Administator
  */
 @Ignore
 @RestController
@@ -14,7 +15,7 @@ public class TestController {
 
     /**
      * 测试
-     * @return
+     * @return 测试结果
      */
     @GetMapping("/test")
     public ResponseTo<String> test() {

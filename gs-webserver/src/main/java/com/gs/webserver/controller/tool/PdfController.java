@@ -15,6 +15,7 @@ import java.util.Map;
 
 /**
  * PDF
+ * @author Administator
  */
 @RestController
 @RequestMapping("/tool/pdf")
@@ -26,8 +27,7 @@ public class PdfController {
     /**
      * 获取签章文件中的签章结构
      * @param file 签章文件
-     * @return
-     * @throws Exception
+     * @return 签章结构列表
      */
     @PostMapping("/getStamp")
     public ResponseTo<PdfStampResTo> getStampFromPdf(@RequestParam("file") MultipartFile file) throws Exception {

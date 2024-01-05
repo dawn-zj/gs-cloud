@@ -8,6 +8,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * @author Administator
+ */
 @Data
 public class ServerTo {
     /**

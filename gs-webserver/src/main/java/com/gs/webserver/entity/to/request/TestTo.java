@@ -10,10 +10,16 @@ public class TestTo {
     @Data
     public static class GetInfoParams {
         /**
-         * 根证base64
+         * id
          */
         private Long id;
+        /**
+         * 名称
+         */
         private String name;
+        /**
+         * 状态
+         */
         private Integer status;
     }
 

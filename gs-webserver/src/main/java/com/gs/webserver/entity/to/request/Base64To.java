@@ -2,16 +2,23 @@ package com.gs.webserver.entity.to.request;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
+/**
+ * @author Administator
+ */
 @Data
 public class Base64To {
 
-    /**
-     * 原文
-     */
-    private String content;
+    @Data
+    public static class Base64ReqTo {
 
-    /**
-     * 编码结果
-     */
-    private String contentB64;
+        /**
+         * 原文
+         */
+        @NotNull
+        private String content;
+
+    }
+
 }

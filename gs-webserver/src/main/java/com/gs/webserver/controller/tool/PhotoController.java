@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 图片处理
+ * @author Administator
  */
 @RestController
 @RequestMapping("/tool/photo")
@@ -24,9 +25,9 @@ public class PhotoController {
 
     /**
      * 制作图章
-     * @param photoTo
-     * @return
-     * @throws Exception
+     * @param photoTo 图章信息
+     * @return 图章数据
+     * @throws Exception 异常
      */
     @PostMapping("/viewStamp")
     public ResponseTo<CommonResTo> viewStamp(@RequestBody PhotoTo photoTo) throws Exception {
@@ -38,12 +39,11 @@ public class PhotoController {
 
     /**
      * 制作二维码
-     * @param baseTo
-     * @return
-     * @throws Exception
+     * @param baseTo 二维码内容信息
+     * @return 二维码图片数据
      */
     @PostMapping("/genBarcode")
-    public ResponseTo<CommonResTo> genBarcode(@RequestBody BaseTo baseTo) throws Exception {
+    public ResponseTo<CommonResTo> genBarcode(@RequestBody BaseTo baseTo) {
         byte[] photoData = ImageUtil.genBarcodeImage(baseTo.getContent());
         CommonResTo commonTo = new CommonResTo();
         commonTo.setResult(Base64Util.encode(photoData));

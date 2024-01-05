@@ -2,14 +2,41 @@ package com.gs.common.entity.pdf;
 
 import java.util.List;
 
+/**
+ * @author Administator
+ */
 public class StampInfo {
+    /**
+     * 验证结果
+     */
     private boolean result;
+    /**
+     * 签章人证书主题
+     */
     private String certDn;
+    /**
+     * 签章人证书起始日期
+     */
     private long certNotBefore;
+    /**
+     * 签章人证书结束日期
+     */
     private long certNotAfter;
+    /**
+     * 签章时间
+     */
     private long signTime;
+    /**
+     * 签章格式
+     */
     private String signSubFilter;
+    /**
+     * 签章摘要算法
+     */
     private String signHashAlg;
+    /**
+     * 签章位置
+     */
     private List signLocation;
 
     public boolean isResult() {

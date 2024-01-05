@@ -3,6 +3,10 @@ package com.gs.webserver.entity.to.response;
 import com.gs.common.util.StringUtil;
 import lombok.Data;
 
+/**
+ * 响应类
+ * @author Administator
+ */
 @Data
 public class ResponseTo<T> {
     /**
@@ -35,8 +39,9 @@ public class ResponseTo<T> {
     public ResponseTo(String code, String msg, T body) {
         this.code = code;
         this.msg = msg;
-        if (StringUtil.isNotNull(body))
+        if (StringUtil.isNotNull(body)) {
             this.data = body;
+        }
     }
 
     private static <T> ResponseTo<T> getResult(String code, String msg, T body) {
