@@ -88,11 +88,35 @@ public class HexUtil {
 		return bs;
 	}
 
+	public static String format(String hex) {
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < hex.length(); i++) {
+			result.append(hex.charAt(i));
+
+			// 每隔2个字符添加一个空格
+			if ((i + 1) % 2 == 0) {
+				result.append(" ");
+			}
+
+			// 每隔32个字符添加一个回车
+			if ((i + 1) % 32 == 0) {
+				result.append("\n");
+			}
+
+		}
+
+		return result.toString();
+	}
+
 	public static void main(String[] args) {
 		long time = System.currentTimeMillis();
 		System.out.println(time);
 		System.out.println(HexUtil.byte2Hex(HexUtil.long2Byte(time)));
 		System.out.println(HexUtil.byte2Long(HexUtil.long2Byte(time)));
+
+		String str = "1234567812345678123456781234567812345678";
+		System.out.println(HexUtil.byte2Hex(str.getBytes()));
+		System.out.println(HexUtil.format(HexUtil.byte2Hex(str.getBytes())));
 	}
 
 }
