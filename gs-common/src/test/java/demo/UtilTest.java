@@ -58,7 +58,7 @@ public class UtilTest {
 		// 从字节流中获取最终数据
 		byte[] result = outputStream.toByteArray();
 		FileUtil.storeFile(Constants.FILE_OUT_PATH  + "sequence.asn1", result);
-		System.out.println("DER编码生成完毕：" + HexUtil.byte2Hex(result)); // 300b02010a0c06737472696e67
+		System.out.println("DER编码生成完毕：" + HexUtil.format(HexUtil.byte2Hex(result))); // 300b02010a0c06737472696e67
 
 		/*
 		 * 30 0b 02 01 0a 0c 06 73 74 72 69 6e 67
