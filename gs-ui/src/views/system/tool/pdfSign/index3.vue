@@ -78,7 +78,6 @@
                     v-show="form.stampParam.useQfz == 1"
                     type="text"
                     style="float: right"
-                    @click=""
                   >设为骑缝章
                   </el-button>
                 </div>
@@ -97,7 +96,7 @@
                   class="add-widget-module-list"
                 >已添加签署区
                   <div class="list">
-                    <div v-for="(item,index) in form.stampParam.locations">
+                    <div v-for="(item,index) in form.stampParam.locations" :key="index">
                       <el-link class="el-icon-s-check" @click="viewToPageNum(item.pageNum)">{{ item.name }}</el-link>
                     </div>
                   </div>
@@ -145,7 +144,7 @@
 import { getBase64, getFileType } from '@/utils/file'
 import { base642blob } from '@/utils/base64/base64'
 
-import viewPdf from './viewPdf'
+import viewPdf from '@/views/components/ViewPdfComponent'
 
 // 2.7.542版本
 const PDFJS = window['pdfjs-dist/build/pdf']
