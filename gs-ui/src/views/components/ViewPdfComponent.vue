@@ -96,7 +96,8 @@ export default {
   props: {
     showLeft: { type: Boolean, required: false, default: false },
     showRight: { type: Boolean, required: false, default: false },
-    isDrag: { type: Boolean, required: false, default: true }
+    isDrag: { type: Boolean, required: false, default: true },
+    url: { type: String, required: false, default: '' }
   },
   data() {
     return {
@@ -160,6 +161,12 @@ export default {
         this.renderStampField(this.locations, this.isDrag)
       },
       deep: true
+    },
+    url: {
+      handler(val, oldVal) {
+        this.getFileInfo(val)
+      },
+      deep: true
     }
   },
   mounted() {
@@ -185,18 +192,18 @@ export default {
     },
     // 获取文件信息
     getFileInfo(url, blob, fileBase64) {
+      console.log(url)
       if (url) {
         this.pdfUrl = url
       } else if (blob) {
         this.pdfUrl = window.URL.createObjectURL(blob)
-        this.loadFile(this.pdfUrl)
       } else if (fileBase64) {
         this.pdfUrl = window.URL.createObjectURL(base642blob(fileBase64))
-        this.loadFile(this.pdfUrl)
       } else {
         this.pdfUrl = this.publicPath + '/show.pdf'
-        this._loadFile(this.pdfUrl)
       }
+      console.log(this.pdfUrl)
+      this._loadFile(this.pdfUrl)
     },
     // 预览渲染模板文件
     _renderPage(num) {
@@ -233,7 +240,9 @@ export default {
       })
     },
     renderField(fieldParam, isDrag) {
-      this.$emit('render-change')
+      // 将参数存储下来，删除时会用
+      this.fieldParam = fieldParam
+      this.$emit('render-change', fieldParam, this.locations)
       // 渲染指定页时，清除所有文本域，重新渲染，处于当前页的文本域展示，否则隐藏
       var fieldArea = document.getElementById('fieldArea')
       fieldArea.innerHTML = ''
@@ -249,7 +258,9 @@ export default {
       }
     },
     renderStampField(locations, isDrag) {
-      this.$emit('render-change')
+      // 将参数存储下来，删除时会用
+      this.locations = locations
+      this.$emit('render-change', this.fieldParam, locations)
       // 渲染指定页时，清除所有签署域，重新渲染，处于当前页的签署域展示，否则隐藏
       var signArea = document.getElementById('signArea')
       signArea.innerHTML = ''

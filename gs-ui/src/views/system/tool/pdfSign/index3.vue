@@ -23,6 +23,7 @@
         :show-left="showLeft"
         :show-right="showRight"
         :is-drag="isDrag"
+        :url="pdfUrl"
         @render-change="renderChange"
       >
         <template slot="left">
@@ -203,15 +204,10 @@ export default {
   },
   // 监听一个值的变化,然后执行相对应的函数。
   watch: {
-    pdfUrl: function(val) {
-      this.$nextTick(() => {
-        this.getFileInfo(val)
-      })
-    }
   },
   mounted() {
     this.$nextTick(function() {
-      this.getFileInfo()
+      // this.getFileInfo()
       this.getSealList()
     })
   },
@@ -236,15 +232,6 @@ export default {
     // 删除文件
     handleFileRemove(file, fileList) {
       // this.$set(this, 'fileBase64', '')
-    },
-    // 获取文件信息
-    getFileInfo(url) {
-      if (url) {
-        this.$refs.viewComponent.getFileInfo(url)
-      } else {
-        this.pdfUrl = this.publicPath + '/show.pdf'
-        this.$refs.viewComponent.getFileInfo(this.pdfUrl)
-      }
     },
     /** 查询印章管理列表 */
     getSealList() {
@@ -324,18 +311,16 @@ export default {
         sealInfo: JSON.parse(JSON.stringify(this.sealInfo))
       }
       // 预览组件渲染
-      this.$refs.viewComponent.locations.push(obj)
-      this.$refs.viewComponent.renderStampField(this.$refs.viewComponent.locations, this.isDrag)
+      this.locations.push(obj)
+      this.$refs.viewComponent.renderStampField(this.locations, this.isDrag)
       this.msgSuccess('添加成功')
     },
     viewToPageNum(pageNum) {
       this.$refs.viewComponent.viewToPageNum(pageNum)
     },
-    renderChange() {
-      this.fieldParam = []
-      this.fieldParam = this.$refs.viewComponent.fieldParam
-      this.locations = []
-      this.locations = this.$refs.viewComponent.locations
+    renderChange(fieldParam, locations) {
+      this.fieldParam = fieldParam
+      this.locations = locations
     },
     submitForm() {
       const formData = JSON.parse(JSON.stringify(this.form))
