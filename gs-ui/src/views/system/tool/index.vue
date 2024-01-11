@@ -37,13 +37,14 @@ import pdfGetStamp from './pdfVerify/getStamp'
 import linkProject from './linkProject/index'
 import drag from './drag/index2'
 import dynamicTable from './dynamic/index'
+import sm3 from './crypto/sm3'
 
 export default {
   name: 'Index',
   components: {
     CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark,
     pdfSign, pdfVerify, pdfGetStamp, linkProject, drag,
-    dynamicTable
+    dynamicTable, sm3
   },
   data() {
     return {
@@ -94,6 +95,16 @@ export default {
               col: [
                 { span: 12, cardTitle: '外链项目', componentName: 'linkProject', showButton: true, buttonText: '添加' },
                 { span: 12, cardTitle: '水印', componentName: 'watermark' }
+              ]
+            }
+          ]
+        },
+        {
+          tabLabel: '加解密',
+          row: [
+            {
+              col: [
+                { span: 24, cardTitle: '摘要', componentName: 'sm3' }
               ]
             }
           ]
