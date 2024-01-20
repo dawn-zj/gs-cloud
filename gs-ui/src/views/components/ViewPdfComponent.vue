@@ -192,7 +192,6 @@ export default {
     },
     // 获取文件信息
     getFileInfo(url, blob, fileBase64) {
-      console.log(url)
       if (url) {
         this.pdfUrl = url
       } else if (blob) {
@@ -202,7 +201,6 @@ export default {
       } else {
         this.pdfUrl = this.publicPath + '/show.pdf'
       }
-      console.log(this.pdfUrl)
       this._loadFile(this.pdfUrl)
     },
     // 预览渲染模板文件
@@ -242,7 +240,7 @@ export default {
     renderField(fieldParam, isDrag) {
       // 将参数存储下来，删除时会用
       this.fieldParam = fieldParam
-      this.$emit('render-change', fieldParam, this.locations)
+      this.$emit('render-change-field', fieldParam)
       // 渲染指定页时，清除所有文本域，重新渲染，处于当前页的文本域展示，否则隐藏
       var fieldArea = document.getElementById('fieldArea')
       fieldArea.innerHTML = ''
@@ -260,7 +258,7 @@ export default {
     renderStampField(locations, isDrag) {
       // 将参数存储下来，删除时会用
       this.locations = locations
-      this.$emit('render-change', this.fieldParam, locations)
+      this.$emit('render-change-stamp', locations)
       // 渲染指定页时，清除所有签署域，重新渲染，处于当前页的签署域展示，否则隐藏
       var signArea = document.getElementById('signArea')
       signArea.innerHTML = ''
