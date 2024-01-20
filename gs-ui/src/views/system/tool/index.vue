@@ -31,7 +31,9 @@ import fileBase64 from './base64/fileBase64'
 import barcodeIndex from './barcode/index'
 import px2cmIndex from './px2cm/index'
 import watermark from './watermark/index'
-import pdfSign from './pdfSign/index3'
+import pdfView from './pdfSign/pdfView'
+import pdfViewField from './pdfSign/pdfViewField'
+import pdfSign from './pdfSign/pdfSign'
 import pdfVerify from './pdfVerify/index'
 import pdfGetStamp from './pdfVerify/getStamp'
 import linkProject from './linkProject/index'
@@ -44,7 +46,7 @@ export default {
   name: 'Index',
   components: {
     CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark,
-    pdfSign, pdfVerify, pdfGetStamp, linkProject, drag,
+    pdfView, pdfViewField, pdfSign, pdfVerify, pdfGetStamp, linkProject, drag,
     dynamicTable, CryptoSm3, CryptoCaesar
   },
   data() {
@@ -111,6 +113,18 @@ export default {
               ]
             }
           ]
+        },
+        {
+          tabLabel: 'PDF预览',
+          row: [{
+            col: [{ span: 24, cardTitle: 'PDF预览', componentName: 'pdfView' }]
+          }]
+        },
+        {
+          tabLabel: 'PDF域预览',
+          row: [{
+            col: [{ span: 24, cardTitle: 'PDF域预览', componentName: 'pdfViewField' }]
+          }]
         },
         {
           tabLabel: 'PDF签名',
