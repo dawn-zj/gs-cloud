@@ -334,7 +334,6 @@ export default {
     firstRender() {
       // 预览组件渲染
       this.$refs.viewComponent.renderField(this.fieldParam, this.isDrag)
-      console.log(this.locations)
       this.$refs.viewComponent.renderStampField(this.locations, this.isDrag)
     },
     viewToPageNum(pageNum) {
