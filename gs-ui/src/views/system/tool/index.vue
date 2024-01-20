@@ -37,14 +37,15 @@ import pdfGetStamp from './pdfVerify/getStamp'
 import linkProject from './linkProject/index'
 import drag from './drag/index2'
 import dynamicTable from './dynamic/index'
-import sm3 from './crypto/sm3'
+import CryptoSm3 from './crypto/sm3'
+import CryptoCaesar from './crypto/caesar'
 
 export default {
   name: 'Index',
   components: {
     CardComponent, textBase64, fileBase64, barcodeIndex, px2cmIndex, watermark,
     pdfSign, pdfVerify, pdfGetStamp, linkProject, drag,
-    dynamicTable, sm3
+    dynamicTable, CryptoSm3, CryptoCaesar
   },
   data() {
     return {
@@ -104,7 +105,9 @@ export default {
           row: [
             {
               col: [
-                { span: 24, cardTitle: '摘要', componentName: 'sm3' }
+                { span: 12, cardTitle: '摘要', componentName: 'CryptoSm3' },
+                { span: 12, cardTitle: '凯撒密码', componentName: 'CryptoCaesar' }
+
               ]
             }
           ]

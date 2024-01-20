@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" :model="formData" label-width="80px">
+    <el-form ref="form" :model="formData">
       <el-row>
         <el-col>
           <el-form-item label="字符串" required>
@@ -21,7 +21,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :offset="10">
+        <el-col>
           <el-button type="success" plain class="mb20" @click="handleSM3">SM3</el-button>
         </el-col>
       </el-row>
@@ -45,7 +45,7 @@ import { smEncrypt } from '@/utils/crypto/smEncrypt.min'
 import * as HexUtil from '@/utils/hex/hex'
 
 export default {
-  name: 'Index',
+  name: 'CryptoSm3',
   data() {
     return {
       type: '2',
