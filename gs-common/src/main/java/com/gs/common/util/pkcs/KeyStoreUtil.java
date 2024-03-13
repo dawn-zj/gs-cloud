@@ -4,6 +4,7 @@ import com.gs.common.define.Constants;
 import com.gs.common.exception.BaseException;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.FileUtil;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -89,7 +90,7 @@ public class KeyStoreUtil {
 
         // 查找相关信息，写入pfx
         char[] pfxPwd = pfxKeyPwd.toCharArray();
-        KeyStore outputKeyStore = KeyStore.getInstance("PKCS12");
+        KeyStore outputKeyStore = KeyStore.getInstance("PKCS12", new BouncyCastleProvider());
         outputKeyStore.load(null, pfxPwd);
 
         Enumeration enums = inputKeyStore.aliases();
