@@ -499,7 +499,9 @@ public class UtilTest {
 		String jksPath = Constants.FILE_PATH + "/key/rsa/zj.jks";
 		String pfxPath = Constants.FILE_PATH + "/key/rsa/zj.pfx";
 		KeyStoreUtil.jks2pfx(jksPath, pfxPath, password);
+//		KeyStoreUtil.jks2pfx(jksPath, pfxPath, "68683556", "11111111");
 	}
+
 
 	@Test
 	public void getCertFromPfx() throws  Exception {
