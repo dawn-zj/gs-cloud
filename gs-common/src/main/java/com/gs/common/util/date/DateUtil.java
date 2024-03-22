@@ -7,6 +7,7 @@ import java.util.Date;
 public class DateUtil {
 	private static SimpleDateFormat sdf_all = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private static SimpleDateFormat sdf_1 = new SimpleDateFormat("yyyyMMdd");
 	private static SimpleDateFormat sdf_2 = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	public static void main(String[] args) {
@@ -85,6 +86,9 @@ public class DateUtil {
 		return sdf_2.format(new Date());
 	}
 
+	public static String getDateDir() {
+		return sdf_1.format(new Date()) + "/";
+	}
 	/**
 	 * 毫秒转天
 	 * @param mss

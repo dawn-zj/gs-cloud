@@ -167,7 +167,7 @@ public class SM2Util {
      * @return 0009规范密文，der编码
      * @throws Exception
      */
-    private static byte[] genSM2EncryptedWith0009(byte[] data, int cipherMode) throws Exception {
+    public static byte[] genSM2EncryptedWith0009(byte[] data, int cipherMode) throws Exception {
         // 兼容C1公钥部分带04
         byte[] encData = new byte[data.length];
         if (data[0] == 0x04) {
@@ -252,7 +252,7 @@ public class SM2Util {
      * @return 指定模式的密文
      * @throws Exception
      */
-    private static byte[] getSM2DecryptedBy0009(byte[] encData, int cipherMode, boolean c1with04) throws Exception {
+    public static byte[] getSM2DecryptedBy0009(byte[] encData, int cipherMode, boolean c1with04) throws Exception {
         try {
             ASN1InputStream asn1InputStream = new ASN1InputStream(encData);
             ASN1Primitive asn1Primitive = asn1InputStream.readObject();

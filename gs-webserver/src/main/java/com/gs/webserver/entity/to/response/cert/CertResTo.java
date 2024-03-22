@@ -30,7 +30,7 @@ public class CertResTo {
     /**
      * 密钥用法
      */
-    private Integer keyUsage;
+    private boolean[] keyUsage;
     /**
      * 证书起始日期
      */
@@ -43,4 +43,8 @@ public class CertResTo {
      * 证书授权密钥标识符
      */
     private String keyId;
+    /**
+     * 证书颁发者密钥标识
+     */
+    private String keyIdIssue;
 }
