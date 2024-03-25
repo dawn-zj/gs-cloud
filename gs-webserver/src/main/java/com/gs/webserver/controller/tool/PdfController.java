@@ -67,12 +67,12 @@ public class PdfController {
      * pdf插入图片
      * @param pdfFile pdf文件
      * @param imgFile 图片文件
-     * @param pageNumber 页码
-     * @param x          x坐标
-     * @param y          y坐标
-     * @param w          图片宽度
-     * @param h          图片高度
-     * @param type 单位类型，1厘米，2像素
+     * @param pageNumber 页码 | 1
+     * @param x          x坐标,单位像素 | 100
+     * @param y          y坐标,单位像素 | 100
+     * @param w          图片宽度 | 4.2
+     * @param h          图片高度 | 4.2
+     * @param type 图片单位类型，1厘米，2像素 | 1
      * @throws Exception
      */
     @PostMapping("/pdfAddImage")
@@ -91,9 +91,9 @@ public class PdfController {
      * @param photoFile 印模图片
      * @param pfxFile pfx文件
      * @param password pfx文件密码
-     * @param pageNumber 页码
-     * @param x x坐标，单位像素
-     * @param y y坐标，单位像素
+     * @param pageNumber 页码 | 1
+     * @param x x坐标，单位像素 | 100
+     * @param y y坐标，单位像素 | 100
      * @return
      * @throws Exception
      */

@@ -53,10 +53,10 @@ public class PhotoController {
 
     /**
      * 制作图片验证码
-     * @param width 宽度，单位像素
-     * @param height 高度，单位像素
-     * @param codeCount 验证码个数
-     * @param lineCount 干扰线个数
+     * @param width 宽度，单位像素 | 180
+     * @param height 高度，单位像素 | 50
+     * @param codeCount 验证码个数 | 4
+     * @param lineCount 干扰线个数 | 100
      * @return
      * @throws Exception
      */
