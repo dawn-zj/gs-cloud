@@ -10,8 +10,8 @@ window.gs = {
       url: 'https://101.43.242.145:8443/demo/index.html'
     },
     {
-      describe: 'Jenkins自动化构建',
-      url: 'http://101.43.242.145:10240/'
+      describe: '接口文档',
+      url: 'https://101.43.242.145:8443/doc/debug-all.html'
     }
   ]
 }
