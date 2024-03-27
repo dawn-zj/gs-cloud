@@ -2,6 +2,8 @@ package com.gs.webserver.controller.tool;
 
 import com.gs.common.define.Constants;
 import com.gs.common.pkcs.pkcs7.PKCS7Envelope;
+import com.gs.common.util.FileUtil;
+import com.gs.common.util.StringUtil;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
 import com.gs.common.util.crypto.KeyUtil;
@@ -11,6 +13,7 @@ import com.gs.common.util.pkcs.KeyStoreUtil;
 import com.gs.webserver.entity.to.response.CommonResTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.entity.to.response.key.KeyResTo;
+import org.junit.Test;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,7 +79,7 @@ public class KeyController {
         byte[] decrypt = KeyUtil.decrypt(privateKey, encrypt, Constants.RSA);
 
         CommonResTo commonTo = new CommonResTo();
-        commonTo.setResult(new String(decrypt));
+        commonTo.setResult(StringUtil.getString(decrypt));
         return ResponseTo.success(commonTo);
     }
 
@@ -120,6 +123,30 @@ public class KeyController {
         return ResponseTo.success(result);
     }
 
+    @PostMapping("/rsaDetachedSign")
+    public ResponseTo<CommonResTo> detachedSignTest(@RequestParam("certFile") MultipartFile certFile, @NotNull String plain) throws Exception {
+        X509Certificate cert = CertUtil.getX509Certificate(certFile.getBytes());
+        // 签名
+        byte[] signed = KeyUtil.detachedSign(plain.getBytes(), cert);
+
+        CommonResTo commonTo = new CommonResTo();
+        commonTo.setResult(Base64Util.encode(signed));
+        return ResponseTo.success(commonTo);
+    }
+
+    @PostMapping("/rsaDetachedVerify")
+    public ResponseTo<CommonResTo> detachedVerifyTest(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
+                                 @NotNull String signB64) throws Exception {
+        byte[] signed = Base64Util.decode(signB64);
+        // 验签
+        PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, pfxFile.getBytes());
+        byte[] data = KeyUtil.detachedVerify(signed, privateKey);
+
+        CommonResTo commonTo = new CommonResTo();
+        commonTo.setResult(StringUtil.getString(data));
+        return ResponseTo.success(commonTo);
+    }
+
     /**
      * 生成SM2密钥对
      * @return
@@ -133,7 +160,7 @@ public class KeyController {
     }
 
     /**
-     * SM2加密(GB/T 0003)
+     * SM2加密(GM/T 0003)
      * @param plain 原文
      * @param publicKeyB64 公钥
      * @return 加密值
@@ -152,7 +179,7 @@ public class KeyController {
     }
 
     /**
-     * SM2解密(GB/T 0003)
+     * SM2解密(GM/T 0003)
      * @param encryptB64 加密值
      * @param privateKeyB64 私钥
      * @return 原文
@@ -166,12 +193,12 @@ public class KeyController {
         byte[] decrypt = SM2Util.decrypt(encrypt, privateKey);
 
         CommonResTo commonTo = new CommonResTo();
-        commonTo.setResult(new String(decrypt));
+        commonTo.setResult(StringUtil.getString(decrypt));
         return ResponseTo.success(commonTo);
     }
 
     /**
-     * SM2加密(GB/T 0009)
+     * SM2加密(GM/T 0009)
      * @param plain 原文
      * @param publicKeyB64 公钥
      * @return 加密值
@@ -190,7 +217,7 @@ public class KeyController {
     }
 
     /**
-     * SM2解密(GB/T 0009)
+     * SM2解密(GM/T 0009)
      * @param encryptB64 加密值
      * @param privateKeyB64 私钥
      * @return 原文
@@ -204,14 +231,14 @@ public class KeyController {
         byte[] decrypt = SM2Util.decryptWith0009(encrypt, privateKey);
 
         CommonResTo commonTo = new CommonResTo();
-        commonTo.setResult(new String(decrypt));
+        commonTo.setResult(StringUtil.getString(decrypt));
         return ResponseTo.success(commonTo);
     }
 
     /**
      * SM2 0003->0009
-     * @param encB64 GB/T 0003的加密值
-     * @param cipherMode GB/T 0003的密文格式，0:C1C2C3，1:C1C3C2  | 0 | 1
+     * @param encB64 GM/T 0003的加密值
+     * @param cipherMode GM/T 0003的密文格式，0:C1C2C3，1:C1C3C2  | 0 | 1
      * @return
      * @throws Exception
      */
@@ -227,8 +254,8 @@ public class KeyController {
 
     /**
      * SM2 0009->0003
-     * @param encB64 GB/T 0009的加密值
-     * @param cipherMode GB/T 0003的密文格式 | 0 | 1
+     * @param encB64 GM/T 0009的加密值
+     * @param cipherMode GM/T 0003的密文格式 | 0 | 1
      * @param c1with04 C1部分是否带04 | true
      * @return
      * @throws Exception
@@ -252,7 +279,7 @@ public class KeyController {
      * @throws Exception
      */
     @PostMapping("/makeEnvelop")
-    public ResponseTo<CommonResTo> makeEnvelop(@RequestParam("file") MultipartFile pfxFile, String password,
+    public ResponseTo<CommonResTo> makeEnvelop(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
                                                @NotNull String plain) throws  Exception {
         byte[] certData = KeyStoreUtil.getCertFromPfx(password, pfxFile.getBytes());
         X509Certificate cert = CertUtil.getX509Certificate(certData);
@@ -273,7 +300,7 @@ public class KeyController {
      * @throws Exception
      */
     @PostMapping("/parseEnvelop")
-    public ResponseTo<CommonResTo> parseEnvelop(@RequestParam("file") MultipartFile pfxFile, String password,
+    public ResponseTo<CommonResTo> parseEnvelop(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
                                                 @NotNull String envB64) throws Exception {
         byte[] envData = Base64Util.decode(envB64);
         // 解数字信封
@@ -281,7 +308,7 @@ public class KeyController {
         byte[] bytes = PKCS7Envelope.verifyP7(envData, privateKey);
 
         CommonResTo commonTo = new CommonResTo();
-        commonTo.setResult(new String(bytes));
+        commonTo.setResult(StringUtil.getString(bytes));
         return ResponseTo.success(commonTo);
     }
 
