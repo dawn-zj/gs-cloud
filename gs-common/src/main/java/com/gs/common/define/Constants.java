@@ -54,18 +54,40 @@ public class Constants {
 	public static final String Email_Authz_Password = "wxpqpjeklcsvbgag";//zj19970818 授权码
 
 	// 算法标识
-	public static final String EC = "EC";
-	public static final String SM2 = "SM2";
-	public static final String SM3 = "SM3";
-	public static final String SM4 = "SM4";
-	public static final String SM3_SM2 = "SM3WITHSM2";
 	public static final String RSA = "RSA";
+	public static final String SM2 = "SM2";
+
+	public static final String DSA = "DSA";
+
+	public static final String SM1 = "SM1";
+	public static final String SM4 = "SM4";
+	public static final String SM7 = "SM7";
+
+	public static final String SM5 = "SM5";
+	public static final String SM6 = "SM6";
+	public static final String SM8 = "SM8";
+	public static final String SM9 = "SM9";
+
+	public static final String SM3 = "SM3";
 	public static final String SHA1 = "SHA1";
 	public static final String SHA224 = "SHA224";
 	public static final String SHA256 = "SHA256";
 	public static final String SHA384 = "SHA384";
 	public static final String SHA512 = "SHA512";
-	public static final String SHA1_RSA = "SHA1WITHRSA";
-	public static final String SHA256_RSA = "SHA256WITHRSA";
+
+
+	public static final String MD2_RSA = "MD2withRSA";
+	public static final String MD4_RSA = "MD4withRSA";
+	public static final String MD5_RSA = "MD5withRSA";
+	public static final String SHA1_RSA = "SHA1withRSA";
+	public static final String SHA256_RSA = "SHA256withRSA";
+	public static final String SHA384_RSA = "SHA384withRSA";
+	public static final String SHA512_RSA = "SHA512withRSA";
+	public static final String SHA224_RSA = "SHA224withRSA";
+	public static final String SM3_RSA = "SM3withRSA";
+	public static final String SM3_SM2 = "SM3withSM2";
+	public static final String SHA1_SM2 = "SHA1withSM2";
+	public static final String SHA256_SM2 = "SHA256withSM2";
+
 
 }

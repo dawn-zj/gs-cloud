@@ -16,6 +16,8 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECParameterSpec;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -324,7 +326,7 @@ public class SM2Util {
      */
     public static byte[] signByPrivateKey(byte[] data, PrivateKey privateKey) throws Exception {
         // Signature sig = Signature.getInstance(GMObjectIdentifiers.sm2sign_with_sm3.toString(), BouncyCastleProvider.PROVIDER_NAME);
-        Signature sig = Signature.getInstance(OidUtil.OID_SM3withSM2, BouncyCastleProvider.PROVIDER_NAME);
+        Signature sig = Signature.getInstance(OidUtil.getOid(Constants.SM3_SM2), BouncyCastleProvider.PROVIDER_NAME);
         sig.initSign(privateKey);
         sig.update(data);
         byte[] ret = sig.sign();
