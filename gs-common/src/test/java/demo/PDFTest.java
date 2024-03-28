@@ -3,11 +3,11 @@ package demo;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.HexUtil;
 import com.gs.common.util.ImageUtil;
+import com.gs.common.util.pdf.ExtImageRenderListener;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.parser.*;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -125,32 +125,4 @@ public class PDFTest {
         }
     }
 
-    class ExtImageRenderListener implements RenderListener {
-        public PdfImageObject image = null;
-        @Override
-        public void beginTextBlock() {
-
-        }
-
-        @Override
-        public void renderText(TextRenderInfo renderInfo) {
-
-        }
-
-        @Override
-        public void endTextBlock() {
-
-        }
-
-        @Override
-        public void renderImage(ImageRenderInfo renderInfo) {
-            try {
-                image = renderInfo.getImage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
 }
