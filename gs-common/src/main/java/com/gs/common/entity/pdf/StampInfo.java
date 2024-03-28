@@ -38,6 +38,10 @@ public class StampInfo {
      * 签章位置
      */
     private List signLocation;
+    /**
+     * 签章图片
+     */
+    private String signPhotoB64;
 
     public boolean isResult() {
         return result;
@@ -101,5 +105,13 @@ public class StampInfo {
 
     public void setSignLocation(List signLocation) {
         this.signLocation = signLocation;
+    }
+
+    public String getSignPhotoB64() {
+        return signPhotoB64;
+    }
+
+    public void setSignPhotoB64(String signPhotoB64) {
+        this.signPhotoB64 = signPhotoB64;
     }
 }
