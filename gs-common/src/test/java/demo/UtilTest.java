@@ -20,6 +20,7 @@ import com.gs.common.util.pdf.PdfUtil;
 import com.gs.common.util.pdf.RemovePdfStampUtil;
 import com.gs.common.util.pkcs.KeyStoreUtil;
 import com.gs.common.util.seal.SealUtil;
+import com.gs.common.util.seal.StampUtil;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -618,6 +619,13 @@ public class UtilTest {
 		SealUtil.analysisSeal(FileUtil.getFile(path1));
 		String path2 = Constants.FILE_PATH + "seal/电子印章_GB38540.seal";
 		SealUtil.analysisSeal(FileUtil.getFile(path2));
+
+		String path3 = Constants.FILE_PATH + "seal/电子签章_GM0031.asn1";
+		StampUtil.analysisStamp(FileUtil.getFile(path3));
+        String path4 = Constants.FILE_PATH + "seal/电子签章_GB38540.asn1";
+        StampUtil.analysisStamp(FileUtil.getFile(path4));
+
+
 	}
 
 }
