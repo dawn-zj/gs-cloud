@@ -105,6 +105,12 @@
             <artifactId>validation-api</artifactId>
         </dependency>
 
+        <!-- lombok，使用注解@Slf4j输出日志 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
