@@ -1,5 +1,6 @@
 package com.gs.common.util.pdf;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,10 @@ import com.gs.common.util.date.DateUtil;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+
+import javax.imageio.ImageIO;
 
 public class PdfUtil {
 
@@ -253,6 +258,24 @@ public class PdfUtil {
 		return pdfData;
 	}
 
+	public static List<byte[]> pdfToImg(byte[] pdfData) throws Exception {
+		ArrayList<byte[]> list = new ArrayList<>();
+
+		PDDocument document = PDDocument.load(pdfData);
+		int numberOfPages = document.getNumberOfPages();
+		for (int i = 0; i < numberOfPages; i++) {
+			PDFRenderer pdfRenderer = new PDFRenderer(document);
+			BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(i, 96);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(bufferedImage, "png", baos);
+			list.add(baos.toByteArray());
+			baos.flush();
+		}
+
+		return list;
+	}
+
 	public static void main(String[] args) throws Exception {
 		// 根据模板制作pdf
 		// byte[] pdfData = genPdfTest(Constants.FILE_PATH + "req_con.pdf");
@@ -262,8 +285,12 @@ public class PdfUtil {
 		// byte[] addImagePdf = pdfAddImage(pdfData, photoData, 1, 100, 100, 100, 100);
 		// FileUtil.storeFile(Constants.FILE_OUT_PATH + "个人信息_addImage.pdf", addImagePdf);
 
-		List list = getTemplateFields(FileUtil.getFile(Constants.FILE_PATH + "req_con.pdf"));
-		System.out.println(list);
+		// 要求jdk >= 1.8.0_191 or >= 9.0.4，自己是1.8.0_181
+		System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
+		List<byte[]> list = pdfToImg(FileUtil.getFile(Constants.FILE_PATH + "req_con.pdf"));
+		for (int i = 0; i < list.size(); i++) {
+			FileUtil.storeFile("F:/temp/pdfParse/" + i + ".png", list.get(i));
+		}
 
 	}
 }
