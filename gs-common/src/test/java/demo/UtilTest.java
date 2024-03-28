@@ -19,6 +19,7 @@ import com.gs.common.util.pdf.PdfStampUtil;
 import com.gs.common.util.pdf.PdfUtil;
 import com.gs.common.util.pdf.RemovePdfStampUtil;
 import com.gs.common.util.pkcs.KeyStoreUtil;
+import com.gs.common.util.seal.SealUtil;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -36,8 +37,8 @@ import java.util.Properties;
 
 public class UtilTest {
 	private String password = "11111111";
-	private String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
-	private String pfxCertPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer";
+	private String pfxPath = Constants.FILE_PATH + "/key/rsa/server.pfx";
+	private String pfxCertPath = Constants.FILE_PATH + "/key/rsa/server.cer";
 
 	@Test
 	public void genDerASN1() throws Exception {
@@ -118,7 +119,10 @@ public class UtilTest {
 	@Test
 	public void cleanBGColorTest() throws Exception {
 		// cleanBGColor内部针对指定RGB进行处理，适用于大部分图片
-		byte[] photoData = ImageUtil.cleanBGColor(FileUtil.getFile(Constants.FILE_PATH + "bg_white.png"));
+//		byte[] photoData = ImageUtil.cleanBGColor(FileUtil.getFile(Constants.FILE_PATH + "bg_white.png"));
+		byte[] photoData = ImageUtil.cleanBGColor(FileUtil.getFile("C:/Users/Administator/Desktop/PDFImage.png"),
+				71, 112, 76);
+
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "bg_white_去底色.png", photoData);
 		System.out.println("图片处理完毕！");
 	}
@@ -314,7 +318,7 @@ public class UtilTest {
 	 */
 	@Test
 	public void parseCertChainTest() throws Exception {
-		byte[] file = FileUtil.getFile("E:\\zj\\file\\cert\\p7b\\1.p7b");
+		byte[] file = FileUtil.getFile("E:/zj/file/cert/p7b/1.p7b");
 		List<X509Certificate> list = CertUtil.parseCertChain(Base64Util.decode(file));
 		for (X509Certificate cert : list) {
 			BigInteger serialNumber = cert.getSerialNumber();
@@ -330,8 +334,8 @@ public class UtilTest {
 	@Test
 	public void genCertChainTest() throws Exception {
 		ArrayList<X509Certificate> list = new ArrayList<>();
-		list.add(CertUtil.getX509Certificate(FileUtil.getFile("E:\\zj\\file\\cert\\ca61gm\\ca61gm.cer")));
-		list.add(CertUtil.getX509Certificate(FileUtil.getFile("E:\\zj\\file\\cert\\ca61gm\\SM2_cert.cer")));
+		list.add(CertUtil.getX509Certificate(FileUtil.getFile("F:/infosec/cert/CA61gm/ca61gm.cer")));
+		list.add(CertUtil.getX509Certificate(FileUtil.getFile("F:/infosec/cert/CA61gm/SM2_cert.cer")));
 
 		byte[] bytes = CertUtil.genCertChain(list);
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "p7b/1.p7b", bytes);
@@ -496,23 +500,23 @@ public class UtilTest {
 
 	@Test
 	public void jks2pfx() throws  Exception {
-		String jksPath = Constants.FILE_PATH + "/key/rsa/zj.jks";
-		String pfxPath = Constants.FILE_PATH + "/key/rsa/zj.pfx";
-		KeyStoreUtil.jks2pfx(jksPath, pfxPath, password);
-//		KeyStoreUtil.jks2pfx(jksPath, pfxPath, "68683556", "11111111");
+		String jksPath = Constants.FILE_PATH + "/key/rsa/server.jks";
+		String pfxPath = Constants.FILE_PATH + "/key/rsa/server.pfx";
+//		KeyStoreUtil.jks2pfx(jksPath, pfxPath, password);
+		KeyStoreUtil.jks2pfx(jksPath, pfxPath, "68683556", "11111111");
 	}
 
 
 	@Test
 	public void getCertFromPfx() throws  Exception {
 		byte[] cert = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
-		FileUtil.storeFile(Constants.FILE_OUT_PATH + "pfx.cer", cert);
+		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/zj.cer", cert);
 
 	}
 
 	@Test
 	public void readJsonTest() {
-		String jsonPath = "F:\\infosec\\za\\v8\\自测\\case.json";
+		String jsonPath = "F:/infosec/za/v8/自测/case.json";
 
 		byte[] file = FileUtil.getFile(jsonPath);
 		Object jsonObject = JSON.parse(file);
@@ -607,4 +611,13 @@ public class UtilTest {
 		byte[] decrypt = SM2Util.decryptWith0009(bytes, privateKey);
 		System.out.println("解密出原文：" + new String(decrypt));
 	}
+
+	@Test
+	public void analysisAsn1() throws  Exception {
+		String path1 = Constants.FILE_PATH + "seal/电子印章_GM0031.seal";
+		SealUtil.analysisSeal(FileUtil.getFile(path1));
+		String path2 = Constants.FILE_PATH + "seal/电子印章_GB38540.seal";
+		SealUtil.analysisSeal(FileUtil.getFile(path2));
+	}
+
 }
