@@ -6,6 +6,7 @@ public class OidUtil {
     public static Hashtable algorithms = new Hashtable();
     public static Hashtable oids = new Hashtable();
 
+    // 参考链接：https://blog.csdn.net/A_Lonely_Smile/article/details/121273134
     static {
         algorithms.put("SHA1", "1.3.14.3.2.26");
         algorithms.put("SHA256", "2.16.840.1.101.3.4.2.1");
@@ -84,6 +85,8 @@ public class OidUtil {
         algorithms.put("PKCS#7ENVELOPEDDATA", "1.2.156.10197.6.1.4.2.3");
         algorithms.put("RSA", "1.2.840.113549.1.1.1");
         algorithms.put("DSA", "1.2.840.10040.4.1");
+
+
         oids.put("1.3.14.3.2.26", "SHA1");
         oids.put("2.16.840.1.101.3.4.2.1", "SHA256");
         oids.put("1.2.840.113549.1.1.2", "MD2withRSA");
@@ -161,14 +164,44 @@ public class OidUtil {
         oids.put("1.2.156.10197.6.1.4.2.3", "PKCS#7ENVELOPEDDATA");
         oids.put("1.2.840.113549.1.1.1", "RSA");
         oids.put("1.2.840.10040.4.1", "DSA");
+
+        // 对称加密
+        oids.put("2.16.840.1.101.3.4.1.2", "AES128_CBC");
+
+        // pkcs7 对象标识符
+        oids.put("1.2.840.113549.1.7.1", "data");
+        oids.put("1.2.840.113549.1.7.2", "signedData");
+        oids.put("1.2.840.113549.1.7.3", "envelopedData");
+        oids.put("1.2.840.113549.1.7.4", "signedAndEnvelopedData");
+        oids.put("1.2.840.113549.1.7.5", "digestedData");
+        oids.put("1.2.840.113549.1.7.6", "encryptedData");
+
+        // 证书
+        oids.put("2.5.4.3", "CN");
+        oids.put("2.5.4.4", "Surname");
+        oids.put("2.5.4.6", "C");
+        oids.put("2.5.4.7", "Locality");
+        oids.put("2.5.4.8", "State");
+        oids.put("2.5.4.9", "StreetAddress");
+        oids.put("2.5.4.10", "O");
+        oids.put("2.5.4.10", "OU");
+
     }
 
     public static String getSignHash(String oid) {
-        return oids.get(oid).toString();
+        Object obj = oids.get(oid);
+        if (obj != null) {
+            return obj.toString();
+        }
+        return "";
     }
 
     public static String getOid(String signHash) {
-        return algorithms.get(signHash).toString();
+        Object obj = algorithms.get(signHash);
+        if (obj != null) {
+            return obj.toString();
+        }
+        return "";
     }
 
 }

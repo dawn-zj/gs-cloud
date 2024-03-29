@@ -1,15 +1,24 @@
-package com.gs.common.util.crypto;
+package com.gs.common.util.analysis.impl;
+
+import com.gs.common.util.StringUtil;
+import com.gs.common.util.analysis.AnalysisUtil;
+import com.gs.common.util.seal.SealUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Author Zhang Juan
- * @Date 2024/1/15 9:50
+ * @Date 2024/3/29 16:59
  */
-public class AnalysisUtil {
-    /**
-     * 凯撒密码破解
-     */
-    public static void decryptCaesar(String cipherText) {
-        System.out.println(String.format("开始尝试凯撒密码破解"));
+@Slf4j
+public class AnalysisCaesar extends AnalysisUtil {
+
+    @Override
+    public void analysis(byte[] data) throws Exception {
+        decryptCaesar(StringUtil.getString(data));
+    }
+
+    public void decryptCaesar(String cipherText) {
+        log.debug("开始尝试凯撒密码破解");
 
         // 对照码 String codeRefer="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (int key = 1; key <= 25; key++) {
@@ -40,14 +49,15 @@ public class AnalysisUtil {
                 }
                 es += c;
             }
-            System.out.println(String.format("密钥：%s(或%s)，破解后原文：%s", key, key - 26, es));
+            log.debug("密钥：{}(或{})，破解后原文：{}", key, key - 26, es);
         }
 
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // Hello World!
-        decryptCaesar("Lipps Asvph!");
+        AnalysisUtil analysisUtil = new AnalysisCaesar();
+        analysisUtil.analysis("Lipps Asvph!".getBytes());
     }
 }
