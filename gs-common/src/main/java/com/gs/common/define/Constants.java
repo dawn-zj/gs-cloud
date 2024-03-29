@@ -89,5 +89,8 @@ public class Constants {
 	public static final String SHA1_SM2 = "SHA1withSM2";
 	public static final String SHA256_SM2 = "SHA256withSM2";
 
+	public static final String PKCS7_SIGNED_DATA = "signedData";
+	public static final String PKCS7_ENVELOPED_DATA = "envelopedData";
+
 
 }
