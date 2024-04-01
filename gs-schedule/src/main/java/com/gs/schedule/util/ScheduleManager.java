@@ -2,6 +2,7 @@ package com.gs.schedule.util;
 
 import com.alibaba.fastjson.JSON;
 import com.gs.common.util.ConfigUtil;
+import com.gs.common.util.StringUtil;
 import com.gs.schedule.config.ScheduleRunnable;
 import com.gs.schedule.config.entity.ScheduleTask;
 import lombok.extern.slf4j.Slf4j;
@@ -86,6 +87,9 @@ public class ScheduleManager implements DisposableBean {
      */
     public Map<ScheduleRunnable, ScheduleTask> registerScheduledTasks(String scheduleTask) {
         // scheduleTask = [{"beanName":"com.gs.schedule.task.TestTask","methodName":"test1","params":"","cron":"0/15 * * * * ?"}]
+        if (StringUtil.isBlank(scheduleTask)) {
+            return scheduledTasksMap;
+        }
         List<ScheduleTask> list = JSON.parseArray(scheduleTask, ScheduleTask.class);
 
         // 已注册任务列表为空，全部注册
