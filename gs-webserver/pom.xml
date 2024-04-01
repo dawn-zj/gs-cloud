@@ -60,8 +60,25 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+<!--				<configuration>-->
+<!--					&lt;!&ndash;war包地址&ndash;&gt;-->
+<!--					<outputDirectory>${project.basedir}/../NetTool/tomcat_web/webapps</outputDirectory>-->
+<!--				</configuration>-->
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.0.0</version>
 				<configuration>
-					<!--war包地址-->
+					<webResources>
+						<resource>
+							<!--将依赖的外部jar打到war包里 -->
+							<directory>${project.basedir}/../gs-common/lib</directory>
+							<targetPath>WEB-INF/lib</targetPath>
+							<includes>
+								<include>**/*.jar</include>
+							</includes>
+						</resource>
+					</webResources>
 					<outputDirectory>${project.basedir}/../NetTool/tomcat_web/webapps</outputDirectory>
 				</configuration>
 			</plugin>
