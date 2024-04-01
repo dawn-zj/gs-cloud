@@ -4,6 +4,7 @@ import com.gs.common.entity.KeyStoreIo;
 import com.gs.common.util.HexUtil;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
+import com.gs.common.util.crypto.OidUtil;
 import com.gs.common.util.p10.P10Util;
 import com.gs.webserver.entity.to.response.CommonResTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.security.cert.X509Certificate;
 
 /**
@@ -79,6 +81,36 @@ public class CertController {
         return ResponseTo.success(certRequestTo);
     }
 
+    /**
+     * 获取算法的oid值
+     * @param alg 算法 |RSA
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/getOid")
+    public ResponseTo<CommonResTo> getOid(@NotNull String alg) throws  Exception {
+        alg = alg.trim().toUpperCase().replace("WITH", "with");
+        String oid = OidUtil.getOid(alg);
+
+        CommonResTo commonResTo = new CommonResTo();
+        commonResTo.setResult(oid);
+        return ResponseTo.success(commonResTo);
+    }
+
+    /**
+     * 获取算法名
+     * @param oid 算法oid |1.2.840.113549.1.1.1
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/getAlg")
+    public ResponseTo<CommonResTo> getAlg(@NotNull String oid) throws  Exception {
+        String alg = OidUtil.getSignHash(oid.trim());
+
+        CommonResTo commonResTo = new CommonResTo();
+        commonResTo.setResult(alg);
+        return ResponseTo.success(commonResTo);
+    }
 
 
 }
