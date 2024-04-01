@@ -25,7 +25,7 @@ import java.util.List;
 public class OfdUtil {
     private static int DEFAULT_DPI = 96;
     /**
-     * 将ofd转换为图片
+     * 将ofd转换为图片， 默认DPI=96
      * @param originPath 源文件路径
      * @param imgPath 目标文件路径
      */

@@ -13,7 +13,6 @@ import com.gs.common.util.pkcs.KeyStoreUtil;
 import com.gs.webserver.entity.to.response.CommonResTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.entity.to.response.key.KeyResTo;
-import org.junit.Test;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -123,6 +122,13 @@ public class KeyController {
         return ResponseTo.success(result);
     }
 
+    /**
+     * RSA detached签名
+     * @param certFile
+     * @param plain
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/rsaDetachedSign")
     public ResponseTo<CommonResTo> detachedSignTest(@RequestParam("certFile") MultipartFile certFile, @NotNull String plain) throws Exception {
         X509Certificate cert = CertUtil.getX509Certificate(certFile.getBytes());
@@ -134,6 +140,13 @@ public class KeyController {
         return ResponseTo.success(commonTo);
     }
 
+    /**
+     * RSA 验detached签名
+     * @param certFile
+     * @param plain
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/rsaDetachedVerify")
     public ResponseTo<CommonResTo> detachedVerifyTest(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
                                  @NotNull String signB64) throws Exception {
