@@ -1,6 +1,7 @@
 package com.gs.common.util.base64;
 
 import com.gs.common.util.StringUtil;
+import com.gs.common.util.crypto.RSAUtil;
 
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -56,6 +57,8 @@ public class Base64Util {
 	 * @return 已解码的byte[]
 	 */
 	public static byte[] decode(String str) {
+		str = RSAUtil.clearPemPubKey(str);
+		str = RSAUtil.clearPemPriKey(str);
 		Decoder dec = Base64.getMimeDecoder();
 		return dec.decode(str.getBytes());
 	}

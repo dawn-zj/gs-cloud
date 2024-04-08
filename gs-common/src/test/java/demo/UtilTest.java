@@ -354,9 +354,29 @@ public class UtilTest {
 		//得到base64编码的公钥/私钥字符串
 		String publicKeyString = Base64Util.encode(publicKey.getEncoded());
 		String privateKeyString = Base64Util.encode(privateKey.getEncoded());
+
+		boolean checkKeyPair = RSAUtil.checkKeyPair(publicKeyString, privateKeyString);
+		System.out.println("公私钥是否匹配：" + checkKeyPair);
+
+		publicKeyString = RSAUtil.getPemPubKey(publicKeyString);
+		privateKeyString = RSAUtil.getPemPriKey(privateKeyString);
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt", publicKeyString.getBytes());
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt", privateKeyString.getBytes());
 		System.out.println("RSA密钥对存储成功！");
+	}
+
+	@Test
+	public void clearPemTest() throws Exception {
+		byte[] file = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt");
+		String string = StringUtil.getString(file);
+		System.out.println(string);
+		System.out.println(RSAUtil.clearPemPubKey(string));
+
+		byte[] file2 = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt");
+		String string2 = StringUtil.getString(file2);
+		System.out.println(string2);
+		System.out.println(RSAUtil.clearPemPriKey(string2));
+		System.out.println("解析成功！");
 	}
 
 	/**

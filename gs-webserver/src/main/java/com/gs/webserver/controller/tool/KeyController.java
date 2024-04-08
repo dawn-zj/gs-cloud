@@ -32,7 +32,7 @@ import java.security.cert.X509Certificate;
 public class KeyController {
 
     /**
-     * 生成RSA密钥对
+     * 生成RSA密钥对，PKCS#8格式
      * @param keySize 密钥长度 | 1024 | 2048
      * @return
      * @throws Exception
@@ -42,6 +42,71 @@ public class KeyController {
         KeyPair kayPair = RSAUtil.genRSAKeyPair(keySize);
         KeyResTo keyResTo = genKeyResTo(kayPair);
         return ResponseTo.success(keyResTo);
+    }
+
+    /**
+     * 生成RSA密钥对，PKCS#8格式,以PEM/Base64格式输出
+     * @param keySize 密钥长度 | 1024 | 2048
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/genRsaKeyPairPem")
+    public ResponseTo<KeyResTo> genRsaKeyPairPemTest(@NotNull int keySize) throws Exception {
+        KeyPair kayPair = RSAUtil.genRSAKeyPair(keySize);
+        KeyResTo keyResTo = genKeyResTo(kayPair, true);
+        return ResponseTo.success(keyResTo);
+    }
+
+    /**
+     * 校验RSA密钥对
+     * @param pubKeyB64 公钥base64
+     * @param priKeyB64 私钥base64
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/rsaCheckKeyPair")
+    public ResponseTo<Boolean> rsaCheckKeyPairTest(@NotNull String pubKeyB64, @NotNull String priKeyB64) throws Exception {
+        boolean checkKeyPair = RSAUtil.checkKeyPair(pubKeyB64, priKeyB64);
+        return ResponseTo.success(checkKeyPair);
+    }
+
+    /**
+     * 从私钥中提取公钥
+     * @param pubKeyB64 公钥base64
+     * @param priKeyB64 私钥base64
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/genRSAPubKeyByPriKey")
+    public ResponseTo<String> genRSAPubKeyByPriKeyTest(@NotNull String priKeyB64) throws Exception {
+        PublicKey publicKey = RSAUtil.genPublicKeyByPrivateKey(priKeyB64);
+        String pubKeyB64 = Base64Util.encode(publicKey.getEncoded());
+        return ResponseTo.success(pubKeyB64);
+    }
+
+    /**
+     * base64格式公钥转pem格式
+     * @param pubKeyB64 公钥base64
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/pubKeyB64ToPem")
+    public ResponseTo<String> pubKeyB64ToPemTest(@NotNull String pubKeyB64) throws Exception {
+        String pemPubKey = RSAUtil.getPemPubKey(pubKeyB64);
+        return ResponseTo.success(pemPubKey);
+    }
+
+    /**
+     * base64格式私钥转pem格式
+     * @param priKeyB64
+     * @param keyType 密钥类型，1:PKCS#1, 8:PKCS#8 |8
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/priKeyB64ToPem")
+    public ResponseTo<String> priKeyB64ToPemTest(@NotNull String priKeyB64, @NotNull int keyType) throws Exception {
+        String pemPriKey = RSAUtil.getPemPriKey(priKeyB64,true, keyType);
+        return ResponseTo.success(pemPriKey);
     }
 
     /**
@@ -326,15 +391,26 @@ public class KeyController {
     }
 
     private KeyResTo genKeyResTo(KeyPair kayPair) {
+        return genKeyResTo(kayPair, false);
+    }
+
+    private KeyResTo genKeyResTo(KeyPair kayPair, boolean isPem) {
         PublicKey publicKey = kayPair.getPublic();
         PrivateKey privateKey = kayPair.getPrivate();
         //得到base64编码的公钥/私钥字符串
         String publicKeyString = Base64Util.encode(publicKey.getEncoded());
         String privateKeyString = Base64Util.encode(privateKey.getEncoded());
 
+        if (isPem) {
+            // RFC1421，一种基于 base64 的编码格式，带头尾注释且每64个为一行
+            publicKeyString = RSAUtil.getPemPubKey(publicKeyString);
+            privateKeyString = RSAUtil.getPemPriKey(privateKeyString);
+        }
+
         KeyResTo keyResTo = new KeyResTo();
         keyResTo.setPublicKeyB64(publicKeyString);
         keyResTo.setPrivateKeyB64(privateKeyString);
         return keyResTo;
+
     }
 }
