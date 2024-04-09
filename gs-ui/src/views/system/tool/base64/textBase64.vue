@@ -168,7 +168,7 @@ export default {
     handleFormat() {
       var base64 = this.formDataFormat.contentB64
       var str = ''
-      if (base64.indexOf('\n') === -1) {
+      if (base64.indexOf('\\n') === -1) {
         for (var i = 0; i < base64.length; i++) {
           if ((i + 1) % 64 === 0) {
             str += base64.charAt(i) + '\n'
