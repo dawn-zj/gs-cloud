@@ -176,9 +176,6 @@ export default {
             str += base64.charAt(i)
           }
         }
-        if (base64.length % 64 !== 0) {
-          str += '\n'
-        }
         this.formDataFormat.content = str
       } else {
         this.formDataFormat.content = this.formDataFormat.contentB64.replaceAll('\\n', '\n')
@@ -189,11 +186,6 @@ export default {
 </script>
 <style>
 textarea {
-  font-family: 'Courier New', Courier, monospace;
-  width: 400px;
-  height: 100px;
-  white-space: nowrap;
-  overflow: hidden;
-  resize: none;
+  font-family: 'Courier New', Courier, monospace !important;
 }
 </style>
