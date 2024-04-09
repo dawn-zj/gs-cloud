@@ -6,6 +6,8 @@ public class Constants {
 	public static final String UTF_8 = "UTF-8"; // 系统编码
 	public static final String SPLIT_1 = ","; // 分割符1
 	public static final String SPLIT_2 = ";"; // 分割符2
+	public static final String SPLIT_3 = "\n"; // 分割符3
+	public static final String SPLIT_PEM = "-----"; // PEM格式分隔符
 	public static final String SPLIT_DIR = "/"; // 目录分割符
 	public static final String SPOT = ".";
 	public static final String DEFAULT_STRING = "";
@@ -39,6 +41,7 @@ public class Constants {
 	public static final String NATIVELIB_PATH = "appserver/nativelib"; //libsigar-amd64-linux.so
 
 	public static final int RSA_KEY_SIZE_1024 = 1024;
+	public static final int RSA_KEY_SIZE_2048 = 2048;
 
 	public static final long LENGTH_5MB = 5 * 1024 * 1024L; // 5MB
 

@@ -49,15 +49,24 @@ public class CertController {
      * 生成证书请求
      * @param alg 签名算法 |RSA
      * @param subjectDn 证书主题 |CN=Test
+     * @param type 输出类型，1:Base64,2:PEM/Base64
      * @return
      * @throws Exception
      */
     @PostMapping("/genP10")
-    public ResponseTo<CommonResTo> genP10(String alg, String subjectDn) throws  Exception {
+    public ResponseTo<CommonResTo> genP10(String alg, String subjectDn, int type) throws  Exception {
         KeyStoreIo keyStoreIo = P10Util.genP10(".pri", alg, subjectDn);
         String p10 = keyStoreIo.getP10();
 
         CommonResTo commonResTo = new CommonResTo();
+        switch (type) {
+            case 1:
+                break;
+            case 2:
+            default:
+                p10 = P10Util.getPemP10(p10, true);
+                break;
+        }
         commonResTo.setResult(p10);
         return ResponseTo.success(commonResTo);
     }

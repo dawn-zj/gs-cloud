@@ -553,13 +553,18 @@ public class UtilTest {
 		String p10Path = Constants.FILE_OUT_PATH + "p10.p10";
 		String priKeyPath = Constants.FILE_OUT_PATH + "p10.pri";
 
-		KeyStoreIo keyStoreIo = P10Util.genP10(".pri", "RSA", "CN=Test");
+		KeyStoreIo keyStoreIo = P10Util.genP10(".pri", "RSA", "CN=Test,O=GS,C=CN");
 		FileUtil.storeFile(p10Path, keyStoreIo.getP10().getBytes());
 		FileUtil.storeFile(priKeyPath, keyStoreIo.getPriKeyData());
 		System.out.println("p10和私钥存储完成");
 
+		String pemP10 = P10Util.getPemP10(keyStoreIo.getP10(), true);
+		System.out.println(pemP10);
 
 		byte[] p10Data = Base64Util.decode(FileUtil.getFile(p10Path));
+		byte[] pubKeyFormP10 = P10Util.getPubKeyFormP10(p10Data);
+		System.out.println(RSAUtil.getPemPubKey(Base64Util.encode(pubKeyFormP10), true));
+
 		boolean verifyP10 = P10Util.verifyP10(p10Data);
 		System.out.println("验证p10: " + verifyP10);
 
