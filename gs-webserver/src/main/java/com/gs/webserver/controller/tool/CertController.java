@@ -49,7 +49,7 @@ public class CertController {
      * 生成证书请求
      * @param alg 签名算法 |RSA
      * @param subjectDn 证书主题 |CN=Test
-     * @param type 输出类型，1:Base64,2:PEM/Base64
+     * @param type 输出类型，1:Base64,2:PEM/Base64 |1
      * @return
      * @throws Exception
      */
