@@ -73,6 +73,17 @@
             "icon": "build",
             "noCache": false
           }
+        },
+        {
+          "name": "ManageForm",
+          "path": "manageForm",
+          "hidden": false,
+          "component": "tool/manageForm/index",
+          "meta": {
+            "title": "表单管理",
+            "icon": "build",
+            "noCache": false
+          }
         }
       ]
     },
