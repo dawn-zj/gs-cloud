@@ -28,6 +28,11 @@ import Pagination from "@/components/Pagination";
 //自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
 
+// 表单设计器
+import formCreate from '@form-create/element-ui'
+import FcDesigner from '@form-create/designer'
+Vue.use(formCreate)
+Vue.use(FcDesigner)
 // 全局方法挂载
 Vue.prototype.getDictValue = getDictValue
 Vue.prototype.getConfigKey = getConfigKey
