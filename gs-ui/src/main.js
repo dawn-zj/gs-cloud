@@ -27,6 +27,7 @@ import { download, downloadBase64 } from "@/utils/file";
 import Pagination from "@/components/Pagination";
 //自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
+import { newFunction } from "@/utils/func";
 
 // 表单设计器
 import formCreate from '@form-create/element-ui'
@@ -44,6 +45,7 @@ Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.downloadBase64 = downloadBase64
 Vue.prototype.handleTree = handleTree
+Vue.prototype.newFunction = newFunction
 Vue.prototype.publicPath = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : ''
 
 Vue.prototype.msgSuccess = function (msg) {

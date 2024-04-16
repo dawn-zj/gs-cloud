@@ -17,7 +17,7 @@
                 :title="col.cardTitle"
                 :show-button="col.showButton"
                 :button-text="col.buttonText"
-                @function="callMethod(col.buttonFunction)"
+                @function="callMethod(col.buttonFunction, 'formData测试')"
               >
                 <component :is="col.componentName" />
               </card-component>
@@ -55,6 +55,7 @@ import drag from './drag/index2'
 import dynamicTable from './dynamic/index'
 import CryptoSm3 from './crypto/sm3'
 import CryptoCaesar from './crypto/caesar'
+import { list } from '@/api/tool/tool'
 
 export default {
   name: 'Index',
@@ -73,16 +74,27 @@ export default {
     }
   },
   created() {
-    this.tabPaneArr = window.gs.tabPaneArr
+    // this.tabPaneArr = window.gs.tabPaneArr
+    this.list()
   },
   methods: {
-    callMethod(methodName) {
-      if (typeof this[methodName] === 'function') {
-        this[methodName]()
-      }
+    list() {
+      list().then(res => {
+        this.tabPaneArr = res.data.tabPaneArr
+        this.tabPaneArr.forEach((item, index) => {
+          var event = item.event
+          if (event) {
+            event.forEach((item, index) => {
+              this.newFunction(item.funcName, item.funcParams, item.funcScript)
+            })
+          }
+        })
+      })
     },
-    handleEditLink() {
-      console.log(111)
+    callMethod(methodName, formData) {
+      if (typeof this[methodName] === 'function') {
+        this[methodName](formData)
+      }
     }
   }
 }
