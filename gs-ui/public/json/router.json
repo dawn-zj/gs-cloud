@@ -84,6 +84,17 @@
             "icon": "build",
             "noCache": false
           }
+        },
+        {
+          "name": "FormCreate",
+          "path": "formCreate",
+          "hidden": false,
+          "component": "tool/manageForm/index2",
+          "meta": {
+            "title": "formCreate示例",
+            "icon": "build",
+            "noCache": false
+          }
         }
       ]
     },
