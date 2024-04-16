@@ -7,11 +7,13 @@
         :label="item.tabLabel"
         :name="index.toString()"
       >
+        <!-- todo 这种注册组件方式，不适合事件注入功能，待动态化       -->
         <form-create
           v-model="item.formData"
           :rule="item.rules"
           :option="item.options"
           @submit="onSubmit"
+          @prefix1-change="onChange"
         />
       </el-tab-pane>
     </el-tabs>
@@ -33,9 +35,13 @@ export default {
   },
   methods: {
     onSubmit(formData, fapi) {
-      console.log('submit事件')
-      console.log(formData)
+      this.msgInfo('submit:' + JSON.stringify(formData))
       console.log(fapi)
+    },
+    onChange(inject) {
+      console.log(inject)
+      this.msgInfo(`change: ${inject.inject}[${inject.$f.getValue('inputField')}]`)
+      this.handleChange(inject.$f.form)
     },
     list() {
       listTab().then(res => {

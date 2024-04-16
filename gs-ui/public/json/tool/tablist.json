@@ -9,7 +9,7 @@
         "event": [{
           "funcName": "handleChange",
           "funcParams": "formData",
-          "funcScript": "console.log('change事件')\nconsole.log(formData)"
+          "funcScript": "console.log('handleChange事件')\nconsole.log(formData)"
         }],
         "rules": [
           {
@@ -26,8 +26,39 @@
                 "children": [
                   {
                     "type": "input",
-                    "field": "Fcek1oq5urc5h2",
-                    "title": "输入框",
+                    "field": "inputField",
+                    "title": "输入框1-注入事件",
+                    "info": "",
+                    "_fc_drag_tag": "input",
+                    "hidden": false,
+                    "display": true,
+                    "props": {
+                      "type": "text",
+                      "maxlength": 20,
+                      "minlength": 1,
+                      "showWordLimit": true,
+                      "clearable": true
+                    },
+                    "$required": "测试必填项",
+                    "validate": [
+                      {
+                        "trigger": "change",
+                        "mode": "required",
+                        "message": "",
+                        "required": true,
+                        "type": "string"
+                      }
+                    ],
+                    "emit": [{
+                      "name": "change",
+                      "inject": ["自定义数据"]
+                    }],
+                    "emitPrefix": "prefix1"
+                  },
+                  {
+                    "type": "input",
+                    "field": "inputField2",
+                    "title": "输入框2",
                     "info": "",
                     "_fc_drag_tag": "input",
                     "hidden": false,
