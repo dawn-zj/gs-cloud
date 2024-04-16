@@ -22,8 +22,12 @@ window.gs = {
       url: 'http://tool.chacuo.net/cryptrsapubkey'
     },
     {
-      describe: 'form-create表单设计器',
-      url: 'https://form-create.com/designer/'
+      describe: 'form-generator 表单设计器',
+      url: 'https://mrhj.gitee.io/form-generator/#/'
+    },
+    {
+      describe: 'form-create 表单设计器',
+      url: 'https://www.form-create.com/v2/guide/'
     },
     {
       describe: 'jnpf 快速代码开发平台',
@@ -35,127 +39,5 @@ window.gs = {
     },
 
   ],
-  tabPaneConfig: [],
-  tabPaneArr: [
-    {
-      tabLabel: 'Base64',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: '文字编码', componentName: 'textBase64' }
-          ]
-        },
-        {
-          col: [
-            { span: 24, cardTitle: '文件编码', componentName: 'fileBase64' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: '制作二维码',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: '制作二维码', componentName: 'barcodeIndex' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: '像素尺寸转换',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: '像素尺寸转换', componentName: 'px2cmIndex' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: '水印(外链项目)',
-      row: [
-        {
-          col: [
-            { span: 12, cardTitle: '外链项目', componentName: 'linkProject', showButton: true, buttonText: '修改', buttonFunction: 'handleEditLink' },
-            { span: 12, cardTitle: '水印', componentName: 'watermark' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: '加解密',
-      row: [
-        {
-          col: [
-            { span: 12, cardTitle: '摘要', componentName: 'CryptoSm3' },
-            { span: 12, cardTitle: '凯撒密码', componentName: 'CryptoCaesar' }
-
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: 'PDF预览',
-      row: [{
-        col: [{ span: 24, cardTitle: 'PDF预览', componentName: 'pdfView' }]
-      }]
-    },
-    {
-      tabLabel: 'PDF域预览',
-      row: [{
-        col: [{ span: 24, cardTitle: 'PDF域预览', componentName: 'pdfViewField' }]
-      }]
-    },
-    {
-      tabLabel: 'PDF签名',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: 'PDF签名', componentName: 'pdfSign' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: 'PDF验签',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: 'PDF验签', componentName: 'pdfVerify' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: '获取PDF签章数据',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: '获取PDF签章数据', componentName: 'pdfGetStamp' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: '拖拽组件',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: '拖拽组件', componentName: 'drag' }
-          ]
-        }
-      ]
-    },
-    {
-      tabLabel: '动态表格',
-      row: [
-        {
-          col: [
-            { span: 24, cardTitle: '动态表格', componentName: 'dynamicTable' }
-          ]
-        }
-      ]
-    }
-  ]
+  tabPaneConfig: []
 }
