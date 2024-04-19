@@ -89,7 +89,7 @@
           "name": "FormCreate",
           "path": "formCreate",
           "hidden": false,
-          "component": "tool/manageForm/index2",
+          "component": "tool/manageForm/eg",
           "meta": {
             "title": "formCreate示例",
             "icon": "build",
