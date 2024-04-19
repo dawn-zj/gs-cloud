@@ -7,13 +7,15 @@
         :label="item.tabLabel"
         :name="index.toString()"
       >
-        <!-- todo 这种注册组件方式，不适合事件注入功能，待动态化       -->
+        <!-- 自定义注入事件，名称固定：gs-change,gs-blur等，具体脚本通过inject指定       -->
         <form-create
           v-model="item.formData"
+          :value.sync="item.formData"
           :rule="item.rules"
           :option="item.options"
           @submit="onSubmit"
-          @prefix1-change="onChange"
+          @gs-change="onChange"
+          @gs-blur="onBlur"
         />
       </el-tab-pane>
     </el-tabs>
@@ -35,24 +37,26 @@ export default {
   },
   methods: {
     onSubmit(formData, fapi) {
-      this.msgInfo('submit:' + JSON.stringify(formData))
-      console.log(fapi)
+      // eslint-disable-next-line no-eval
+      const func = eval(fapi.options.submitEvent)
+      func(formData)
     },
-    onChange(inject) {
-      console.log(inject)
-      this.msgInfo(`change: ${inject.inject}[${inject.$f.getValue('inputField')}]`)
-      this.handleChange(inject.$f.form)
+    onChange(inject, val) {
+      // 具体脚本通过inject指定，格式为 "inject": [{"change":"(data, formData)=>{// 自定义}"}]
+      // eslint-disable-next-line no-eval
+      const func = eval(inject.inject[0].change)
+      func(inject.self.value, inject.$f.form)
+    },
+    onBlur(inject) {
+      // eslint-disable-next-line no-eval
+      const func = eval(inject.inject[0].blur)
+      func(inject.self.value, inject.$f.form)
     },
     list() {
       listTab().then(res => {
         const config = res.data.tabPaneConfig
         config.forEach((item, index) => {
           this.tabPaneArr.push(item)
-
-          var event = item.event
-          event.forEach((item, index) => {
-            this.newFunction(item.funcName, item.funcParams, item.funcScript)
-          })
         })
       })
     }
