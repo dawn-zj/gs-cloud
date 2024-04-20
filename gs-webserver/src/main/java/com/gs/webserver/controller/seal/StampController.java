@@ -1,6 +1,5 @@
 package com.gs.webserver.controller.seal;
 
-import com.alibaba.fastjson.JSONObject;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.entity.to.response.pdf.PdfStampVerifyResTo;
 import com.gs.webserver.service.IStampService;
@@ -13,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @Description 签章
+ * 签章
+ * @author Administator
  */
 @RestController
 @RequestMapping("/seal/stamp")

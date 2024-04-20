@@ -122,8 +122,6 @@
 #                   signals. Default is "false" unless running on HP-UX in which
 #                   case the default is "true"
 # -----------------------------------------------------------------------------
-export JPDA_ADDRESS=8000
-export JPDA_TRANSPORT=dt_socket
 
 # OS specific support.  $var _must_ be set to either true or false.
 cygwin=false

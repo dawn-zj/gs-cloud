@@ -1,16 +1,23 @@
 package com.gs.common.util.pdf;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.pdf.StampInfo;
 import com.gs.common.entity.pdf.StampVerify;
+import com.gs.common.exception.BaseException;
 import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.common.util.ImageUtil;
 import com.gs.common.util.StringUtil;
+import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.cert.CertUtil;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.parser.ContentByteUtils;
+import com.itextpdf.text.pdf.parser.PdfContentStreamProcessor;
+import com.itextpdf.text.pdf.parser.PdfImageObject;
 import com.itextpdf.text.pdf.security.*;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.ByteArrayOutputStream;
@@ -24,6 +31,7 @@ import java.util.*;
  * 参考文章：https://blog.csdn.net/tomatocc/article/details/80762507
  * @author Administator
  */
+@Slf4j
 public class PdfStampUtil {
 
     static {
@@ -90,6 +98,25 @@ public class PdfStampUtil {
 
     }
 
+    public byte[] getSignImg(PdfDictionary signDictionary) {
+        try {
+            // 获取 /Annots ->/AP的值
+            PdfDictionary apDictionary = signDictionary.getAsDict(PdfName.AP);
+            PdfStream normalAppearance = apDictionary.getAsStream(PdfName.N);
+            PdfDictionary resourcesDic = normalAppearance.getAsDict(PdfName.RESOURCES);
+
+            ExtImageRenderListener listener = new ExtImageRenderListener();
+            PdfContentStreamProcessor processor = new PdfContentStreamProcessor(listener);
+            processor.processContent(ContentByteUtils.getContentBytesFromContentObject(normalAppearance), resourcesDic);
+            PdfImageObject image = listener.image;
+
+            byte[] cleanBGColor = ImageUtil.cleanBGColor(image.getImageAsBytes());
+            return cleanBGColor;
+        } catch (Exception e) {
+            throw new BaseException("get sign img error");
+        }
+    }
+
     /**
      * PDF验签名
      * @param pdfData
@@ -99,6 +126,7 @@ public class PdfStampUtil {
     public StampVerify verifySign(byte[] pdfData) throws Exception {
         StampVerify object = new StampVerify();
 
+        log.debug("读取文件");
         PdfReader reader = new PdfReader(pdfData);
         AcroFields fields = reader.getAcroFields();
         ArrayList<String> names = fields.getSignatureNames();
@@ -108,35 +136,61 @@ public class PdfStampUtil {
         }
 
         List<StampInfo> signList = new ArrayList<>();
-        for (int i = 0, size = names.size(); i < size; i++) {
-            String signName = (String) names.get(i);
-            PdfDictionary dictionary = fields.getSignatureDictionary(signName);
 
-            PdfName sub = dictionary.getAsName(PdfName.SUBFILTER);
-            if (PdfName.ETSI_CADES_DETACHED.equals(sub)
-                    || PdfName.ADBE_PKCS7_DETACHED.equals(sub)
-                    || PdfName.ADBE_X509_RSA_SHA1.equals(sub)) {
-                PdfPKCS7 pkcs7 = fields.verifySignature(signName);
+        int numberOfPages = reader.getNumberOfPages();
+        log.debug("共{}页", numberOfPages);
+        for (int n = 1; n <= numberOfPages; n++) {
+            log.debug("开始解析第{}页", n);
+            PdfDictionary pageN = reader.getPageN(n);
+            PdfArray annotArray = pageN.getAsArray(PdfName.ANNOTS);
+            if (annotArray == null) {
+                log.debug("不存在签名域");
+                continue;
+            }
+            log.debug("存在{}个签名域", annotArray.size());
+            for (int i = 0; i < annotArray.size(); ++i) {
+                // 获取 /Annots ->/T的值
+                PdfDictionary signDictionary = annotArray.getAsDict(i);
+                String signName = signDictionary.getAsString(PdfName.T).toString();
+                log.debug("签名域名称：{}", signName);
+                // 获取 /Annots ->/AP的值
+                String photoB64 = "";
+                try {
+                    byte[] cleanBGColor = getSignImg(signDictionary);
+                    photoB64 = Base64Util.encode(cleanBGColor);
+                } catch (Throwable e) {}
 
-                X509Certificate x509Certificate = pkcs7.getSigningCertificate();
+                // 获取 /Annots ->/V
+                PdfDictionary dictionary = fields.getSignatureDictionary(signName);
+                PdfName sub = dictionary.getAsName(PdfName.SUBFILTER);
+                if (PdfName.ETSI_CADES_DETACHED.equals(sub)
+                        || PdfName.ADBE_PKCS7_DETACHED.equals(sub)
+                        || PdfName.ADBE_X509_RSA_SHA1.equals(sub)) {
+                    PdfPKCS7 pkcs7 = fields.verifySignature(signName);
 
-                boolean verify = pkcs7.verify();
-                if (!verify) {
-                    result = false;
+                    X509Certificate x509Certificate = pkcs7.getSigningCertificate();
+
+                    boolean verify = pkcs7.verify();
+                    if (!verify) {
+                        result = false;
+                    }
+
+                    StampInfo signObj = new StampInfo();
+                    signObj.setResult(verify);
+                    signObj.setCertDn(x509Certificate.getSubjectDN().getName());
+                    signObj.setCertNotBefore(x509Certificate.getNotBefore().getTime());
+                    signObj.setCertNotAfter(x509Certificate.getNotAfter().getTime());
+                    signObj.setSignTime(pkcs7.getSignDate().getTimeInMillis());
+                    signObj.setSignSubFilter(pkcs7.getFilterSubtype().toString());
+                    signObj.setSignHashAlg(pkcs7.getDigestAlgorithm());
+                    signObj.setSignLocation(fields.getFieldPositions(signName));
+                    signObj.setSignPhotoB64(photoB64);
+                    signList.add(signObj);
+
+                    log.debug("签名域信息：{}", JSON.toJSON(signObj));
+                } else {
+                    throw new NetGSRuntimeException("暂不支持的SubFilter类型：" + sub);
                 }
-
-                StampInfo signObj = new StampInfo();
-                signObj.setResult(verify);
-                signObj.setCertDn(x509Certificate.getSubjectDN().getName());
-                signObj.setCertNotBefore(x509Certificate.getNotBefore().getTime());
-                signObj.setCertNotAfter(x509Certificate.getNotAfter().getTime());
-                signObj.setSignTime(pkcs7.getSignDate().getTimeInMillis());
-                signObj.setSignSubFilter(pkcs7.getFilterSubtype().toString());
-                signObj.setSignHashAlg(pkcs7.getDigestAlgorithm());
-                signObj.setSignLocation(fields.getFieldPositions(signName));
-                signList.add(signObj);
-            } else {
-                throw new NetGSRuntimeException("暂不支持的SubFilter类型：" + sub);
             }
         }
 

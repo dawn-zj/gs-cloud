@@ -73,6 +73,28 @@
             "icon": "build",
             "noCache": false
           }
+        },
+        {
+          "name": "ManageForm",
+          "path": "manageForm",
+          "hidden": false,
+          "component": "tool/manageForm/index",
+          "meta": {
+            "title": "表单管理",
+            "icon": "build",
+            "noCache": false
+          }
+        },
+        {
+          "name": "FormCreate",
+          "path": "formCreate",
+          "hidden": false,
+          "component": "tool/manageForm/eg",
+          "meta": {
+            "title": "formCreate示例",
+            "icon": "build",
+            "noCache": false
+          }
         }
       ]
     },

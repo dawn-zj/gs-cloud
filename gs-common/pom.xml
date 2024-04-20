@@ -11,6 +11,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gs-common</artifactId>
+    <properties>
+        <ofdrw.version>2.2.10</ofdrw.version>
+    </properties>
 
     <dependencies>
         <!--java自带security，暂只支持RSA证书，所以使用第三方BouncyCastle作为提供者，支持RSA和国密证书-->
@@ -103,6 +106,207 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
+        </dependency>
+
+        <!-- lombok，使用注解@Slf4j输出日志 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- ofd转图片:如遇Maven下载特别慢时，使用src同级的lib目录 -->
+        <!--<dependency>
+            <groupId>org.ofdrw</groupId>
+            <artifactId>ofdrw-converter</artifactId>
+            <version>${ofdrw.version}</version>
+            <exclusions>
+                &lt;!&ndash;与自己的bc版本冲突，不引入这个&ndash;&gt;
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcpkix-jdk18on</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcpkix-jdk15on</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                </exclusion>
+                &lt;!&ndash;由于依赖的jar过多，本次不使用ofd转svg、html功能，暂不引入&ndash;&gt;
+                <exclusion>
+                    <groupId>org.apache.xmlgraphics</groupId>
+                    <artifactId>batik-codec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.xmlgraphics</groupId>
+                    <artifactId>batik-transcoder</artifactId>
+                </exclusion>
+
+            </exclusions>
+        </dependency>-->
+
+        <!-- 共依赖20个jar，其中本项目已经使用了一部分，故不再引入：
+        bcpkix-jdk15on-1.60.jar、bcprov-jdk15on-1.60.jar -->
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/commons-compress-1.26.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/commons-io-2.8.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/commons-logging-1.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/dom4j-2.1.4.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>fontbox</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/fontbox-2.0.27.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>io</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/io-7.1.13.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>jbig2-imageio</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jbig2-imageio-3.0.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>kernel</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/kernel-7.1.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-converter</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-converter-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-core</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-core-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-font</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-font-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-gm</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-gm-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-graphics2d</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-graphics2d-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-gv</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-gv-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-layout</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-layout-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-pkg</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-pkg-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ofdrw-reader</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ofdrw-reader-2.2.10.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/pdfbox-2.0.27.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/slf4j-api-1.7.30.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.gs</groupId>
+            <artifactId>ujmp-core</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ujmp-core-0.3.0.jar</systemPath>
         </dependency>
 
     </dependencies>

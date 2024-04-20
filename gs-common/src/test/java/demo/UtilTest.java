@@ -19,6 +19,8 @@ import com.gs.common.util.pdf.PdfStampUtil;
 import com.gs.common.util.pdf.PdfUtil;
 import com.gs.common.util.pdf.RemovePdfStampUtil;
 import com.gs.common.util.pkcs.KeyStoreUtil;
+import com.gs.common.util.seal.SealUtil;
+import com.gs.common.util.seal.StampUtil;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -36,8 +38,8 @@ import java.util.Properties;
 
 public class UtilTest {
 	private String password = "11111111";
-	private String pfxPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.pfx";
-	private String pfxCertPath = Constants.FILE_PATH + "/key/rsa/rsapfx3des-sha1.cer";
+	private String pfxPath = Constants.FILE_PATH + "/key/rsa/server.pfx";
+	private String pfxCertPath = Constants.FILE_PATH + "/key/rsa/server.cer";
 
 	@Test
 	public void genDerASN1() throws Exception {
@@ -58,7 +60,7 @@ public class UtilTest {
 		// 从字节流中获取最终数据
 		byte[] result = outputStream.toByteArray();
 		FileUtil.storeFile(Constants.FILE_OUT_PATH  + "sequence.asn1", result);
-		System.out.println("DER编码生成完毕：" + HexUtil.byte2Hex(result)); // 300b02010a0c06737472696e67
+		System.out.println("DER编码生成完毕：" + HexUtil.format(HexUtil.byte2Hex(result))); // 300b02010a0c06737472696e67
 
 		/*
 		 * 30 0b 02 01 0a 0c 06 73 74 72 69 6e 67
@@ -118,7 +120,10 @@ public class UtilTest {
 	@Test
 	public void cleanBGColorTest() throws Exception {
 		// cleanBGColor内部针对指定RGB进行处理，适用于大部分图片
-		byte[] photoData = ImageUtil.cleanBGColor(FileUtil.getFile(Constants.FILE_PATH + "bg_white.png"));
+//		byte[] photoData = ImageUtil.cleanBGColor(FileUtil.getFile(Constants.FILE_PATH + "bg_white.png"));
+		byte[] photoData = ImageUtil.cleanBGColor(FileUtil.getFile("C:/Users/Administator/Desktop/PDFImage.png"),
+				71, 112, 76);
+
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "bg_white_去底色.png", photoData);
 		System.out.println("图片处理完毕！");
 	}
@@ -314,7 +319,7 @@ public class UtilTest {
 	 */
 	@Test
 	public void parseCertChainTest() throws Exception {
-		byte[] file = FileUtil.getFile("E:\\zj\\file\\cert\\p7b\\1.p7b");
+		byte[] file = FileUtil.getFile("E:/zj/file/cert/p7b/1.p7b");
 		List<X509Certificate> list = CertUtil.parseCertChain(Base64Util.decode(file));
 		for (X509Certificate cert : list) {
 			BigInteger serialNumber = cert.getSerialNumber();
@@ -330,8 +335,8 @@ public class UtilTest {
 	@Test
 	public void genCertChainTest() throws Exception {
 		ArrayList<X509Certificate> list = new ArrayList<>();
-		list.add(CertUtil.getX509Certificate(FileUtil.getFile("E:\\zj\\file\\cert\\ca61gm\\ca61gm.cer")));
-		list.add(CertUtil.getX509Certificate(FileUtil.getFile("E:\\zj\\file\\cert\\ca61gm\\SM2_cert.cer")));
+		list.add(CertUtil.getX509Certificate(FileUtil.getFile("F:/infosec/cert/CA61gm/ca61gm.cer")));
+		list.add(CertUtil.getX509Certificate(FileUtil.getFile("F:/infosec/cert/CA61gm/SM2_cert.cer")));
 
 		byte[] bytes = CertUtil.genCertChain(list);
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "p7b/1.p7b", bytes);
@@ -349,9 +354,29 @@ public class UtilTest {
 		//得到base64编码的公钥/私钥字符串
 		String publicKeyString = Base64Util.encode(publicKey.getEncoded());
 		String privateKeyString = Base64Util.encode(privateKey.getEncoded());
+
+		boolean checkKeyPair = RSAUtil.checkKeyPair(publicKeyString, privateKeyString);
+		System.out.println("公私钥是否匹配：" + checkKeyPair);
+
+		publicKeyString = RSAUtil.getPemPubKey(publicKeyString);
+		privateKeyString = RSAUtil.getPemPriKey(privateKeyString);
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt", publicKeyString.getBytes());
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt", privateKeyString.getBytes());
 		System.out.println("RSA密钥对存储成功！");
+	}
+
+	@Test
+	public void clearPemTest() throws Exception {
+		byte[] file = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt");
+		String string = StringUtil.getString(file);
+		System.out.println(string);
+		System.out.println(RSAUtil.clearPemPubKey(string));
+
+		byte[] file2 = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/priKey.txt");
+		String string2 = StringUtil.getString(file2);
+		System.out.println(string2);
+		System.out.println(RSAUtil.clearPemPriKey(string2));
+		System.out.println("解析成功！");
 	}
 
 	/**
@@ -496,21 +521,23 @@ public class UtilTest {
 
 	@Test
 	public void jks2pfx() throws  Exception {
-		String jksPath = Constants.FILE_PATH + "/key/rsa/zj.jks";
-		String pfxPath = Constants.FILE_PATH + "/key/rsa/zj.pfx";
-		KeyStoreUtil.jks2pfx(jksPath, pfxPath, password);
+		String jksPath = Constants.FILE_PATH + "/key/rsa/server.jks";
+		String pfxPath = Constants.FILE_PATH + "/key/rsa/server.pfx";
+//		KeyStoreUtil.jks2pfx(jksPath, pfxPath, password);
+		KeyStoreUtil.jks2pfx(jksPath, pfxPath, "68683556", "11111111");
 	}
+
 
 	@Test
 	public void getCertFromPfx() throws  Exception {
 		byte[] cert = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
-		FileUtil.storeFile(Constants.FILE_OUT_PATH + "pfx.cer", cert);
+		FileUtil.storeFile(Constants.FILE_PATH + "/key/rsa/zj.cer", cert);
 
 	}
 
 	@Test
 	public void readJsonTest() {
-		String jsonPath = "F:\\infosec\\za\\v8\\自测\\case.json";
+		String jsonPath = "F:/infosec/za/v8/自测/case.json";
 
 		byte[] file = FileUtil.getFile(jsonPath);
 		Object jsonObject = JSON.parse(file);
@@ -526,13 +553,18 @@ public class UtilTest {
 		String p10Path = Constants.FILE_OUT_PATH + "p10.p10";
 		String priKeyPath = Constants.FILE_OUT_PATH + "p10.pri";
 
-		KeyStoreIo keyStoreIo = P10Util.genP10(".pri", "RSA", "CN=Test");
+		KeyStoreIo keyStoreIo = P10Util.genP10(".pri", "RSA", "CN=Test,O=GS,C=CN");
 		FileUtil.storeFile(p10Path, keyStoreIo.getP10().getBytes());
 		FileUtil.storeFile(priKeyPath, keyStoreIo.getPriKeyData());
 		System.out.println("p10和私钥存储完成");
 
+		String pemP10 = P10Util.getPemP10(keyStoreIo.getP10(), true);
+		System.out.println(pemP10);
 
 		byte[] p10Data = Base64Util.decode(FileUtil.getFile(p10Path));
+		byte[] pubKeyFormP10 = P10Util.getPubKeyFormP10(p10Data);
+		System.out.println(RSAUtil.getPemPubKey(Base64Util.encode(pubKeyFormP10), true));
+
 		boolean verifyP10 = P10Util.verifyP10(p10Data);
 		System.out.println("验证p10: " + verifyP10);
 
@@ -605,4 +637,20 @@ public class UtilTest {
 		byte[] decrypt = SM2Util.decryptWith0009(bytes, privateKey);
 		System.out.println("解密出原文：" + new String(decrypt));
 	}
+
+	@Test
+	public void analysisAsn1() throws  Exception {
+		String path1 = Constants.FILE_PATH + "seal/电子印章_GM0031.seal";
+		SealUtil.analysisSeal(FileUtil.getFile(path1));
+		String path2 = Constants.FILE_PATH + "seal/电子印章_GB38540.seal";
+		SealUtil.analysisSeal(FileUtil.getFile(path2));
+
+		String path3 = Constants.FILE_PATH + "seal/电子签章_GM0031.asn1";
+		StampUtil.analysisStamp(FileUtil.getFile(path3));
+        String path4 = Constants.FILE_PATH + "seal/电子签章_GB38540.asn1";
+        StampUtil.analysisStamp(FileUtil.getFile(path4));
+
+
+	}
+
 }

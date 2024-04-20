@@ -109,4 +109,22 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.shalousun</groupId>
+				<artifactId>smart-doc-maven-plugin</artifactId>
+				<version>2.6.4</version>
+				<configuration>
+					<!--多模块父子项目，插件定义在父项目，配置文件放在各个模块下，
+					常见的导出类型：smart-doc:html、smart-doc:markdown、smart-doc:postman
+					gs-webserver模块导出html文档 命令示例：
+					mvn clean package -DskipTests=true -Dfile.encoding=UTF-8 smart-doc:html -pl :gs-webserver -am -->
+					<configFile>./src/main/resources/smart-doc.json</configFile>
+					<projectName>接口文档</projectName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

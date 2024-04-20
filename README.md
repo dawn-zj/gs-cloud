@@ -2,6 +2,10 @@
 
 项目基于SpringCloud、maven等技术。
 
+# 命令
+打包：mvn clean package -DskipTests=true 
+gs-webserver模块生成html文档：mvn clean package -DskipTests=true -Dfile.encoding=UTF-8 smart-doc:html -pl :gs-webserver -am
+
 # 在线浏览地址
 https://101.43.242.145:8443/tool
 

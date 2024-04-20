@@ -4,6 +4,7 @@ import com.gs.common.define.Constants;
 import com.gs.common.exception.BaseException;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.util.FileUtil;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -62,21 +63,35 @@ public class KeyStoreUtil {
      * jks转pfx
      * @param jksPath
      * @param pfxPath
-     * @param keyPwd
+     * @param keyPwd jks密码，pfx也使用此密码
      * @throws Exception
      */
     public static void jks2pfx(String jksPath, String pfxPath, String keyPwd) throws Exception {
-        char[] pwd = keyPwd.toCharArray();
+        jks2pfx(jksPath, pfxPath, keyPwd, keyPwd);
+    }
+
+    /**
+     *
+     * jks转pfx
+     * @param jksPath
+     * @param pfxPath
+     * @param jksKeyPwd jks密码
+     * @param pfxKeyPwd pfx密码
+     * @throws Exception
+     */
+    public static void jks2pfx(String jksPath, String pfxPath, String jksKeyPwd, String pfxKeyPwd) throws Exception {
+        char[] jksPwd = jksKeyPwd.toCharArray();
 
         // 加载jks
         KeyStore inputKeyStore = KeyStore.getInstance("JKS");
         FileInputStream fis = new FileInputStream(jksPath);
-        inputKeyStore.load(fis, pwd);
+        inputKeyStore.load(fis, jksPwd);
         fis.close();
 
         // 查找相关信息，写入pfx
-        KeyStore outputKeyStore = KeyStore.getInstance("PKCS12");
-        outputKeyStore.load(null, pwd);
+        char[] pfxPwd = pfxKeyPwd.toCharArray();
+        KeyStore outputKeyStore = KeyStore.getInstance("PKCS12", new BouncyCastleProvider());
+        outputKeyStore.load(null, pfxPwd);
 
         Enumeration enums = inputKeyStore.aliases();
         while (enums.hasMoreElements()) {
@@ -84,15 +99,15 @@ public class KeyStoreUtil {
             System.out.println("alias=[" + keyAlias + "]");
 
             if (inputKeyStore.isKeyEntry(keyAlias)) {
-                Key key = inputKeyStore.getKey(keyAlias, pwd);
+                Key key = inputKeyStore.getKey(keyAlias, jksPwd);
                 Certificate[] certChain = inputKeyStore.getCertificateChain(keyAlias);
-                outputKeyStore.setKeyEntry(keyAlias, key, pwd, certChain);
+                outputKeyStore.setKeyEntry(keyAlias, key, jksPwd, certChain);
             }
 
         }
 
         FileOutputStream out = new FileOutputStream(pfxPath);
-        outputKeyStore.store(out, pwd);
+        outputKeyStore.store(out, pfxPwd);
 
         out.close();
     }

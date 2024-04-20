@@ -287,6 +287,26 @@ public class StringUtil {
 		return !isEmpty(objects);
 	}
 
+	/**
+	 * 格式化Base64，以每64个为一行
+	 * @param base64
+	 * @return
+	 */
+	public static String formatB64(String base64) {
+		StringBuilder str = new StringBuilder();
+		for (int i = 0; i < base64.length(); i++) {
+			if ( (i + 1) % 64 == 0) {
+				str.append(base64.charAt(i) + "\n");
+			} else {
+				str.append(base64.charAt(i));
+			}
+		}
+		if (base64.length() % 64 != 0) {
+			str.append("\n");
+		}
+		return str.toString();
+	}
+
 	public static String format(String pattern, Object... params) {
 		if (isEmpty(params) || isEmpty(params)) {
 			return pattern;

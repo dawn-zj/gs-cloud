@@ -1,5 +1,6 @@
 package com.gs.common.util.base64;
 
+import com.gs.common.define.Constants;
 import com.gs.common.util.StringUtil;
 
 import java.util.Base64;
@@ -56,6 +57,11 @@ public class Base64Util {
 	 * @return 已解码的byte[]
 	 */
 	public static byte[] decode(String str) {
+		if (str.indexOf(Constants.SPLIT_PEM) != -1) {
+			str = str.replaceAll("\n", "").trim();
+			String[] split = str.split(Constants.SPLIT_PEM);
+			str = split[2];
+		}
 		Decoder dec = Base64.getMimeDecoder();
 		return dec.decode(str.getBytes());
 	}

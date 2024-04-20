@@ -2,7 +2,7 @@
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>{{ title }}</span>
-      <el-button v-if="showButton" style="float: right; padding: 3px 0" type="text" @click="click">{{ buttonText }}</el-button>
+      <el-button v-if="showButton" style="float: right; padding: 3px 0" type="text" @click="handleEvent('function')">{{ buttonText }}</el-button>
     </div>
     <slot />
   </el-card>
@@ -34,8 +34,8 @@ export default {
     }
   },
   methods: {
-    click() {
-      this.$emit('success', false)
+    handleEvent(functionName) {
+      this.$emit(functionName)
     }
   }
 }

@@ -1,17 +1,30 @@
 <template>
-  <div>
-    <draggable>
-      <div class="components-body">拖拽组件</div>
-    </draggable>
+  <div class="container">
+    <div class="left-board">
+      <drag-src />
+    </div>
+
+    <div class="center-board">
+      <drag-dest />
+    </div>
+
   </div>
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+import dragSrc from '@/views/system/tool/drag/drag-src'
+import dragDest from '@/views/system/tool/drag/drag-desc'
+
 export default {
   name: 'Index2',
   components: {
-    draggable
+    dragSrc, dragDest
+  },
+  data() {
+    return {
+    }
+  },
+  methods: {
   }
 }
 </script>
@@ -20,24 +33,19 @@ export default {
 $selectedColor: #f6f7ff;
 $lighterBlue: #409EFF;
 
-.components-body {
-  width: 120px;
-  padding: 8px 10px;
-  background: $selectedColor;
-  font-size: 12px;
-  cursor: move;
-  border: 1px dashed $selectedColor;
-  border-radius: 3px;
-  .svg-icon{
-    color: #777;
-    font-size: 15px;
-  }
-  &:hover {
-     border: 1px dashed #787be8;
-     color: #787be8;
-    .svg-icon {
-      color: #787be8;
-    }
-  }
+.left-board {
+  width: 260px;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  border: 1px solid red;
+  float: left;
+}
+
+.center-board {
+  height: 100vh;
+  width: auto;
+  margin: 0 350px 0 260px;
+  box-sizing: border-box;
 }
 </style>

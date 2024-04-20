@@ -16,6 +16,8 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECParameterSpec;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -167,7 +169,7 @@ public class SM2Util {
      * @return 0009规范密文，der编码
      * @throws Exception
      */
-    private static byte[] genSM2EncryptedWith0009(byte[] data, int cipherMode) throws Exception {
+    public static byte[] genSM2EncryptedWith0009(byte[] data, int cipherMode) throws Exception {
         // 兼容C1公钥部分带04
         byte[] encData = new byte[data.length];
         if (data[0] == 0x04) {
@@ -252,7 +254,7 @@ public class SM2Util {
      * @return 指定模式的密文
      * @throws Exception
      */
-    private static byte[] getSM2DecryptedBy0009(byte[] encData, int cipherMode, boolean c1with04) throws Exception {
+    public static byte[] getSM2DecryptedBy0009(byte[] encData, int cipherMode, boolean c1with04) throws Exception {
         try {
             ASN1InputStream asn1InputStream = new ASN1InputStream(encData);
             ASN1Primitive asn1Primitive = asn1InputStream.readObject();
@@ -324,7 +326,7 @@ public class SM2Util {
      */
     public static byte[] signByPrivateKey(byte[] data, PrivateKey privateKey) throws Exception {
         // Signature sig = Signature.getInstance(GMObjectIdentifiers.sm2sign_with_sm3.toString(), BouncyCastleProvider.PROVIDER_NAME);
-        Signature sig = Signature.getInstance(OidUtil.OID_SM3withSM2, BouncyCastleProvider.PROVIDER_NAME);
+        Signature sig = Signature.getInstance(OidUtil.getOid(Constants.SM3_SM2), BouncyCastleProvider.PROVIDER_NAME);
         sig.initSign(privateKey);
         sig.update(data);
         byte[] ret = sig.sign();

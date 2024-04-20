@@ -3,6 +3,7 @@ package com.gs.common.util.p10;
 import com.gs.common.define.Constants;
 import com.gs.common.entity.KeyStoreIo;
 import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.common.util.StringUtil;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.crypto.KeyUtil;
 import com.gs.common.util.crypto.OidUtil;
@@ -38,7 +39,7 @@ public class P10Util {
                     // 生成密钥对
                     KeyPair keyPair = null;
                     if (Constants.RSA.equals(alg)) {
-                        keyPair = RSAUtil.genRSAKeyPair(Constants.RSA_KEY_SIZE_1024);
+                        keyPair = RSAUtil.genRSAKeyPair(Constants.RSA_KEY_SIZE_2048);
                     } else {
                         throw new NetGSRuntimeException("not support alg: " + alg);
                     }
@@ -77,6 +78,16 @@ public class P10Util {
         } catch (Exception e) {
             throw new NetGSRuntimeException("gen certificate request error", e);
         }
+    }
+
+    public static String getPemP10(String p10B64, boolean withBeginEnd) {
+        String str = "-----BEGIN CERTIFICATE REQUEST-----\n";
+        String key = StringUtil.formatB64(p10B64);
+        if (withBeginEnd) {
+            str += key;
+            str += "-----END CERTIFICATE REQUEST-----\n";
+        }
+        return str;
     }
 
     /**

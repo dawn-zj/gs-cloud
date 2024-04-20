@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 系统监控
+ * @author Administator
  */
 @RestController
 @RequestMapping("/monitor")
@@ -19,8 +20,8 @@ public class MonitorController {
 
     /**
      * 服务信息
-     * @return
-     * @throws Exception
+     * @return 服务信息
+     * @throws Exception 异常
      */
     @GetMapping
     public ResponseTo<ServerTo> server() throws Exception {

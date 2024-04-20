@@ -6,6 +6,8 @@ public class Constants {
 	public static final String UTF_8 = "UTF-8"; // 系统编码
 	public static final String SPLIT_1 = ","; // 分割符1
 	public static final String SPLIT_2 = ";"; // 分割符2
+	public static final String SPLIT_3 = "\n"; // 分割符3
+	public static final String SPLIT_PEM = "-----"; // PEM格式分隔符
 	public static final String SPLIT_DIR = "/"; // 目录分割符
 	public static final String SPOT = ".";
 	public static final String DEFAULT_STRING = "";
@@ -39,6 +41,7 @@ public class Constants {
 	public static final String NATIVELIB_PATH = "appserver/nativelib"; //libsigar-amd64-linux.so
 
 	public static final int RSA_KEY_SIZE_1024 = 1024;
+	public static final int RSA_KEY_SIZE_2048 = 2048;
 
 	public static final long LENGTH_5MB = 5 * 1024 * 1024L; // 5MB
 
@@ -54,18 +57,43 @@ public class Constants {
 	public static final String Email_Authz_Password = "wxpqpjeklcsvbgag";//zj19970818 授权码
 
 	// 算法标识
-	public static final String EC = "EC";
-	public static final String SM2 = "SM2";
-	public static final String SM3 = "SM3";
-	public static final String SM4 = "SM4";
-	public static final String SM3_SM2 = "SM3WITHSM2";
 	public static final String RSA = "RSA";
+	public static final String SM2 = "SM2";
+
+	public static final String DSA = "DSA";
+
+	public static final String SM1 = "SM1";
+	public static final String SM4 = "SM4";
+	public static final String SM7 = "SM7";
+
+	public static final String SM5 = "SM5";
+	public static final String SM6 = "SM6";
+	public static final String SM8 = "SM8";
+	public static final String SM9 = "SM9";
+
+	public static final String SM3 = "SM3";
 	public static final String SHA1 = "SHA1";
 	public static final String SHA224 = "SHA224";
 	public static final String SHA256 = "SHA256";
 	public static final String SHA384 = "SHA384";
 	public static final String SHA512 = "SHA512";
-	public static final String SHA1_RSA = "SHA1WITHRSA";
-	public static final String SHA256_RSA = "SHA256WITHRSA";
+
+
+	public static final String MD2_RSA = "MD2withRSA";
+	public static final String MD4_RSA = "MD4withRSA";
+	public static final String MD5_RSA = "MD5withRSA";
+	public static final String SHA1_RSA = "SHA1withRSA";
+	public static final String SHA256_RSA = "SHA256withRSA";
+	public static final String SHA384_RSA = "SHA384withRSA";
+	public static final String SHA512_RSA = "SHA512withRSA";
+	public static final String SHA224_RSA = "SHA224withRSA";
+	public static final String SM3_RSA = "SM3withRSA";
+	public static final String SM3_SM2 = "SM3withSM2";
+	public static final String SHA1_SM2 = "SHA1withSM2";
+	public static final String SHA256_SM2 = "SHA256withSM2";
+
+	public static final String PKCS7_SIGNED_DATA = "signedData";
+	public static final String PKCS7_ENVELOPED_DATA = "envelopedData";
+
 
 }
