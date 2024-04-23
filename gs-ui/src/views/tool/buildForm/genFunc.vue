@@ -55,8 +55,6 @@ export default {
         { label: 'click', value: 'click' }
       ],
       cmOptions: {
-        // autoRefresh: true, // 重点是这句，为true
-        // value: '', // 初始内容
         mode: 'text/javascript', // 实现javascript代码高亮
         tabSize: 4, // tab的空格宽度
         styleActiveLine: true, // 设置光标所在行高亮true/false
@@ -96,12 +94,4 @@ export default {
 </script>
 
 <style scoped>
-.ace_editor,
-.ace_editor * {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Droid Sans Mono', 'Consolas',
-  monospace !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  letter-spacing: 0 !important;
-}
 </style>
