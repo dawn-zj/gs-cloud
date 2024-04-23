@@ -83,16 +83,15 @@ export default {
       this.egData.options = this.$refs.designer.getOption()
     },
     setRule(newCode) {
-      console.log(newCode)
       this.$refs.designer.setRule(newCode)
     },
     setOption(newCode) {
       this.$refs.designer.setOption(newCode)
     },
-    handleImportRule(newCode) {
+    handleImportRule() {
       this.importRule = true
     },
-    handleImportOption(newCode) {
+    handleImportOption() {
       this.importOption = true
     },
     handleGenRule() {
@@ -112,7 +111,6 @@ export default {
     handleEvent() {
       var activeRule = this.$refs.designer._self.activeRule
       this.activeRule = activeRule
-      console.log(activeRule)
       if (activeRule == null || activeRule.type === 'FcRow' || activeRule.type === 'col') {
         this.msgError('请选中一个表单组件')
         return
@@ -123,8 +121,6 @@ export default {
       // 用户手动输入事件脚本后，回传到最终数据里
       var rule = this.$refs.designer.getRule()
       var activeRule = this.$refs.designer._self.activeRule
-      console.log(rule)
-      console.log(activeRule)
       // 遍历找到当前选中的表单组件，赋值
       var firstElement = rule[0]
       if (firstElement.type === 'FcRow') {

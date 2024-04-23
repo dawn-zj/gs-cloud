@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      value: JSON.stringify(this.code, null, 2),
+      value: {},
       cmOptions: {
         // autoRefresh: true, // 重点是这句，为true
         // value: '', // 初始内容
@@ -69,6 +69,13 @@ export default {
           'CodeMirror-foldgutter' // 展开折叠
         ]
       }
+    }
+  },
+  created() {
+    if (this.mode === 'application/json') {
+      this.value = JSON.stringify(this.code, null, 2)
+    } else {
+      this.value = this.code
     }
   },
   methods: {
