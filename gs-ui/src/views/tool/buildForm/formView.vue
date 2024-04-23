@@ -8,6 +8,7 @@
       @submit="onSubmit"
       @gs-change="onChange"
       @gs-blur="onBlur"
+      @gs-click="onClick"
     />
   </div>
 </template>
@@ -36,12 +37,17 @@ export default {
       // 具体脚本通过inject指定，格式为 "inject": ["(data, formData)=>{// 自定义}"]
       // eslint-disable-next-line no-eval
       const func = eval(inject.inject[0])
-      func(inject.self.value, inject.$f.form)
+      func(inject.$f.form, inject.self.value, inject)
     },
     onBlur(inject) {
       // eslint-disable-next-line no-eval
       const func = eval(inject.inject[0])
-      func(inject.self.value, inject.$f.form)
+      func(inject.$f.form, inject.self.value, inject)
+    },
+    onClick(inject) {
+      // eslint-disable-next-line no-eval
+      const func = eval(inject.inject[0])
+      func(inject.$f.form, inject.self.value, inject)
     }
   }
 }
