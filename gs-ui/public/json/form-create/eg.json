@@ -42,7 +42,7 @@
                 {
                   "name": "change",
                   "inject": [
-                    "(data, formData) => {\n // 在此编写代码\n alert('change已输入：' + data)\n}"
+                    "(formData, data) => {\n // 在此编写代码\n alert('change已输入：' + data)\n}"
                   ]
                 }
               ]
