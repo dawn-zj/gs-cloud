@@ -42,15 +42,15 @@ export default {
     },
     onChange(inject, val) {
       console.log(inject)
-      // 具体脚本通过inject指定，格式为 "inject": [{"change":"(data, formData)=>{// 自定义}"}]
+      // 具体脚本通过inject指定，格式为 "inject": ["(data, formData)=>{// 自定义}"]
       // eslint-disable-next-line no-eval
-      const func = eval(inject.inject[0].change)
+      const func = eval(inject.inject[0])
       func(inject.self.value, inject.$f.form)
     },
     onBlur(inject) {
       console.log(inject)
       // eslint-disable-next-line no-eval
-      const func = eval(inject.inject[0].blur)
+      const func = eval(inject.inject[0])
       func(inject.self.value, inject.$f.form)
     }
   }
