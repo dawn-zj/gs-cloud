@@ -47,6 +47,17 @@
             "icon": "user",
             "noCache": false
           }
+        },
+        {
+          "name": "ToolForm",
+          "path": "toolForm",
+          "hidden": false,
+          "component": "system/tool/indexFormCreate",
+          "meta": {
+            "title": "表单合集",
+            "icon": "user",
+            "noCache": false
+          }
         }
       ]
     },
