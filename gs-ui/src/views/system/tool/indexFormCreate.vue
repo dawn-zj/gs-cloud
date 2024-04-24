@@ -28,19 +28,8 @@ export default {
   components: { FormView, CardComponent },
   data() {
     return {
-      showEdit: false,
       activeName: '0',
-      showButton: true,
-      buttonText: '修改',
       tabPaneArr: []
-    }
-  },
-  watch: {
-    showEdit(val) {
-      if (!val) {
-        this.$refs.myDesigner.setRule([])
-        this.$refs.myDesigner.setOption({})
-      }
     }
   },
   created() {
@@ -49,15 +38,13 @@ export default {
   methods: {
     list(filePath) {
       list(filePath).then(res => {
-        this.tabPaneArr = res.data
-      })
-    },
-    handleEditForm(item) {
-      this.msgInfo('修改表单')
-      this.showEdit = true
-      this.$nextTick(() => {
-        this.$refs.myDesigner.setRule(item.rule)
-        this.$refs.myDesigner.setOption(item.options)
+        var data = res.data
+        this.tabPaneArr = []
+        data.forEach(item => {
+          if (item.visiable === 1) {
+            this.tabPaneArr.push(item)
+          }
+        })
       })
     }
   }
