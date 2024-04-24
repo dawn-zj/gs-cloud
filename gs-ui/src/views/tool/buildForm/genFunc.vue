@@ -12,6 +12,12 @@
         </el-select>
       </el-form-item>
     </el-form>
+    <div class="mb20">
+      提示：支持使用this.$request向后台发请求，示例：<br>
+      this.$request.post('/tool/base64/encode', formData).then(res=>{
+      console.log(res)
+      })
+    </div>
     <codemirror
       ref="myCodeMirror"
       v-model="code"
