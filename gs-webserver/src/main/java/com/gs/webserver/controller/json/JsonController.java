@@ -10,6 +10,8 @@ import com.gs.webserver.entity.to.request.JsonTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+
 /**
  * JSON处理
  * @author Administator
@@ -33,6 +35,10 @@ public class JsonController {
     @PostMapping("/add")
     public ResponseTo<Object> add(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         JSONArray arr = getJSONArray(filePath);
         arr.add(jsonTo.getData());
 
@@ -62,7 +68,11 @@ public class JsonController {
 
     public JSONArray getJSONArray(String filePath) {
         String content = StringUtil.getString(FileUtil.getFile(filePath));
-        return JSON.parseArray(content);
+        JSONArray arr = JSON.parseArray(content);
+        if (arr == null) {
+            arr = new JSONArray();
+        }
+        return arr;
     }
 
     public JSONObject getJSONObject(String filePath) {
