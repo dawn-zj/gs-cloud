@@ -1,120 +1,108 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeName" type="card" @edit="handleTabsEdit">
-      <el-tab-pane
-        v-for="(item, index) in tabPaneArr"
-        :key="index.toString()"
-        :label="item.tabLabel"
-        :name="index.toString()"
-      >
-        <div v-if="activeName == index">
-          <el-row v-for="(row, index) in item.row" :key="index" class="mb20" :gutter="20">
-            <el-col v-for="(col, index) in row.col" :key="index" :span="col.span" :offset="col.offset">
-              <card-component
-                :title="col.cardTitle"
-                :show-button="col.showButton"
-                :button-text="col.buttonText"
-                @function="handleEditForm(item)"
-              >
-                <from-create-component :data="col.data" />
-              </card-component>
-            </el-col>
-          </el-row>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+    <el-table :data="tabPaneArr">
+      <el-table-column label="tab名称" align="left" prop="tabLabel" />
+      <el-table-column label="是否上架" align="left" prop="visiable">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.visiable == 1" type="success" size="mini">已上架</el-tag>
+          <el-tag v-else size="mini">未上架</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="320">
+        <template slot-scope="scope">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleEditForm(scope)">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope)">删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope)">预览</el-button>
+          <el-button size="mini" type="text" icon="el-icon-upload2" :disabled="scope.row.visiable === 1" @click="handleShow(scope)">上架</el-button>
+          <el-button size="mini" type="text" icon="el-icon-download" :disabled="scope.row.visiable === 0" @click="handleUnShow(scope)">下架</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <dialog-component v-if="showEdit" title="修改" :open.sync="showEdit" width="1200px">
+      <form-designer ref="myDesigner" @save="handleSave" />
+    </dialog-component>
+    <dialog-component v-if="showView" title="预览" :open.sync="showView">
+      <form-view :data="currentData" />
+    </dialog-component>
   </div>
 </template>
 
 <script>
-import CardComponent from '@/views/components/CardComponent'
-import FromCreateComponent from '@/views/components/FromCreateComponent'
+import FormView from '@/views/tool/buildForm/formView'
+import DialogComponent from '@/views/components/DialogComponent'
+import FormDesigner from '@/views/tool/buildForm/formDesigner'
+import { list, update, del } from '@/api/tool/tool'
 export default {
-  components: { CardComponent, FromCreateComponent },
+  components: { DialogComponent, FormView, FormDesigner },
   data() {
     return {
+      showView: false,
+      showEdit: false,
       activeName: '0',
-      egTab: {
-        tabLabel: '标签页示例',
-        row: [{
-          col: [{ span: 24, cardTitle: '功能示例',
-            data: [
-              {
-                type: 'input',
-                field: 'f1',
-                title: '输入框1',
-                props: {
-                  type: 'text'
-                },
-                info: '',
-                value: '111',
-                hidden: false,
-                display: false
-              },
-              {
-                type: 'button',
-                title: '按钮',
-                btnScript: 'this.msgInfo(\'按钮2\')\n' +
-                  '      console.log(this.formData)',
-                hidden: false,
-                display: false
-              }
-            ]
-          }]
-        }]
-      },
-      tabPaneArr: []
+      showButton: true,
+      buttonText: '修改',
+      tabPaneArr: [],
+      currentIndex: 0,
+      currentData: {}
     }
   },
+  watch: {
+  },
   created() {
-    const config = window.gs.tabPaneConfig
-    this.tabPaneArr = []
-    this.tabPaneArr.push(JSON.parse(JSON.stringify(this.egTab)))
-
-    config.forEach((item, index) => {
-      this.tabPaneArr.push(item)
-    })
+    this.list()
   },
   methods: {
-    handleTabsEdit(targetName, action) {
-      if (action === 'add') {
-        const newTabName = this.tabPaneArr.length + ''
-        this.tabPaneArr.push({
-          tabLabel: 'New Tab',
-          name: newTabName,
-          row: [{
-            col: [{ span: 24, cardTitle: '功能示例', showButton: true, buttonText: '修改表单', data: [] }]
-          }]
-        })
-        this.activeName = newTabName
-      }
-      if (action === 'remove') {
-        const tabs = this.tabPaneArr
-        let activeName = this.activeName
-        if (activeName == '0') {
-          this.msgInfo('示例数据，不可删除')
-          return
-        }
-        if (activeName === targetName) {
-          tabs.forEach((tab, index) => {
-            if (index == targetName) {
-              const nextTab = tabs[index + 1]
-              if (nextTab) {
-                activeName = index + ''
-              } else {
-                activeName = index - 1 + ''
-              }
-            }
-          })
-        }
-
-        this.tabPaneArr = tabs.filter((tab, index) => index != targetName)
-        this.activeName = activeName
-      }
+    list() {
+      list().then(res => {
+        this.tabPaneArr = res.data
+        console.log(res.data)
+      })
     },
-    handleEditForm(item) {
-      this.msgInfo('修改表单')
-      console.log(item)
+    handleEditForm(scope) {
+      this.showEdit = true
+      this.currentData = scope.row
+      this.currentIndex = scope.$index
+      this.$nextTick(() => {
+        this.$refs.myDesigner.setRule(scope.row.rule)
+        this.$refs.myDesigner.setOption(scope.row.options)
+      })
+    },
+    handleSave(data) {
+      data.tabLabel = this.currentData.tabLabel
+      data.visiable = 0
+      data.formData = {}
+      update(this.currentIndex, data).then(res => {
+        this.msgSuccess('发布成功')
+        this.showEdit = false
+        this.list()
+      })
+    },
+    handleView(scope) {
+      this.currentData = scope.row
+      this.showView = true
+    },
+    handleShow(scope) {
+      const data = scope.row
+      data.visiable = 1
+      update(scope.$index, data).then(res => {
+        this.msgSuccess('上架成功')
+        this.list()
+      })
+    },
+    handleUnShow(scope) {
+      const data = scope.row
+      data.visiable = 0
+      update(scope.$index, data).then(res => {
+        this.msgSuccess('下架成功')
+        this.list()
+      })
+    },
+    handleDelete(scope) {
+      del(scope.$index).then(res => {
+        this.msgSuccess('删除成功')
+        this.list()
+      })
     }
   }
 }
