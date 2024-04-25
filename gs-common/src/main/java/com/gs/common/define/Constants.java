@@ -37,6 +37,7 @@ public class Constants {
 	public static final String TMP_PATH = ROOT_PATH + "tmp/";
 	public static final String PDF_PATH = ROOT_PATH + "pdf/";
 	public static final String PDF_TEMPLATE_PATH = ROOT_PATH + "pdfTemplate/";
+	public static final String JSON_PATH = ROOT_PATH + "json/";
 
 	public static final String NATIVELIB_PATH = "appserver/nativelib"; //libsigar-amd64-linux.so
 
