@@ -33,7 +33,7 @@ export default {
     }
   },
   created() {
-    this.list('formCreate/list.json')
+    this.list()
   },
   methods: {
     list(filePath) {
