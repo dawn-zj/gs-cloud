@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeName" type="card">
+    <el-radio-group v-model="tabPosition" class="mb30">
+      <el-radio-button label="top">top</el-radio-button>
+      <el-radio-button label="right">right</el-radio-button>
+      <el-radio-button label="bottom">bottom</el-radio-button>
+      <el-radio-button label="left">left</el-radio-button>
+    </el-radio-group>
+    <el-tabs v-model="activeName" :tab-position="tabPosition" class="mt20">
       <el-tab-pane
         v-for="(item, index) in tabPaneArr"
         :key="index.toString()"
@@ -28,6 +34,7 @@ export default {
   components: { FormView, CardComponent },
   data() {
     return {
+      tabPosition: 'top',
       activeName: '0',
       tabPaneArr: []
     }
