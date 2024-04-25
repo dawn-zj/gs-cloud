@@ -706,6 +706,23 @@ public class FileUtil {
 			throw new NetGSRuntimeException("path not exist, path is " + filePath);
 	}
 
+	public static void checkPath(String filePath, boolean checkExist, boolean createFile) throws Exception {
+		if (StringUtil.isBlank(filePath))
+			throw new NetGSRuntimeException("path invaild, path is " + filePath);
+
+		String dirPath = filePath.substring(0, filePath.lastIndexOf(Constants.SPLIT_DIR));
+		File dir = new File(dirPath);
+		File file = new File(filePath);
+		if (!dir.exists()) {
+			dir.mkdirs();
+			file.createNewFile();
+		} else {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		System.out.println(FileUtil.getContextPath());
 	}

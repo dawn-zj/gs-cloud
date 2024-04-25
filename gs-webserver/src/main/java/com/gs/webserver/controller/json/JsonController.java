@@ -32,13 +32,17 @@ public class JsonController {
         return ResponseTo.success(obj);
     }
 
+    /**
+     * 添加
+     * @param jsonTo 数据
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/add")
     public ResponseTo<Object> add(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
-        File file = new File(filePath);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
+        FileUtil.checkPath(filePath, true, true);
+
         JSONArray arr = getJSONArray(filePath);
         arr.add(jsonTo.getData());
 
@@ -46,6 +50,12 @@ public class JsonController {
         return ResponseTo.success();
     }
 
+    /**
+     * 修改
+     * @param jsonTo 数据
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/update")
     public ResponseTo<Object> update(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
@@ -56,6 +66,12 @@ public class JsonController {
         return ResponseTo.success();
     }
 
+    /**
+     * 删除
+     * @param jsonTo 数据
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/delete")
     public ResponseTo<Object> delete(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
