@@ -126,6 +126,11 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
+
+          if (this.loginForm.username === 'admin@zj') {
+            Cookies.set('username', this.loginForm.username, { expires: 30 })
+          }
+
           this.$store
             .dispatch('Login', this.loginForm)
             .then(() => {

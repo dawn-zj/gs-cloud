@@ -2,7 +2,7 @@ import { constantRoutes } from '@/router'
 import { getRouters } from '@/api/menu'
 import Layout from '@/layout/index'
 import axios from "axios";
-import store from '@/store'
+import Cookies from 'js-cookie'
 
 const permission = {
   state: {
@@ -19,7 +19,7 @@ const permission = {
     // 生成路由
     GenerateRoutes({ commit }) {
       return new Promise(resolve => {
-        var userName = store.state.user.name
+        var userName = Cookies.get('username')
         var isSuper = false
         if (userName == 'admin@zj') {
           isSuper = true
