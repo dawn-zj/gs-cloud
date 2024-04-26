@@ -47,7 +47,7 @@ public class LogAspect {
 			String url = ServletUtil.getRequest().getRequestURI();
 			Object[] args = proceedingJoinPoint.getArgs();
 
-			if (!"/log/get".equals(url)) {
+			if (url.indexOf("/log/get") == 0) {
 				String msg = "操作成功";
 				try {
 					String jsonString = JSON.toJSONString(args);
