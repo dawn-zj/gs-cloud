@@ -47,15 +47,16 @@ public class LogAspect {
 			String url = ServletUtil.getRequest().getRequestURI();
 			Object[] args = proceedingJoinPoint.getArgs();
 
-			String msg = "操作成功";
-			try {
-				String jsonString = JSON.toJSONString(args);
-				// 结果
-				logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, jsonString);
-			} catch (Throwable ex) {
-				logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, "");
+			if (!"/log/get".equals(url)) {
+				String msg = "操作成功";
+				try {
+					String jsonString = JSON.toJSONString(args);
+					// 结果
+					logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, jsonString);
+				} catch (Throwable ex) {
+					logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, "");
+				}
 			}
-
 			result = proceedingJoinPoint.proceed();
 		} catch (Throwable ex) {
 			logger.error(ex.getMessage(), ex);
