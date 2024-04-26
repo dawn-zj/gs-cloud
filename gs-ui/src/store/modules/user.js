@@ -41,6 +41,8 @@ const user = {
           const token = "TestToken"
           setToken(token)
           commit('SET_TOKEN', token)
+          // todo 前端控制菜单的展示，登录用户名称为判断条件，所以此处赋值
+          commit('SET_NAME', username)
           resolve()
         // }).catch(error => {
         //   reject(error)
@@ -60,7 +62,9 @@ const user = {
           } else {
             commit('SET_ROLES', ['ROLE_DEFAULT'])
           }
-          commit('SET_NAME', user.userName)
+          // todo 前端控制菜单的展示，登录用户名称为判断条件，所以此处暂且注掉，
+          //  改为在login方法内赋值
+          // commit('SET_NAME', user.userName)
           commit('SET_AVATAR', avatar)
           resolve(res)
         }).catch(error => {

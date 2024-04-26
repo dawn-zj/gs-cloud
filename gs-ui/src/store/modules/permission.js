@@ -2,6 +2,7 @@ import { constantRoutes } from '@/router'
 import { getRouters } from '@/api/menu'
 import Layout from '@/layout/index'
 import axios from "axios";
+import store from '@/store'
 
 const permission = {
   state: {
@@ -18,8 +19,13 @@ const permission = {
     // 生成路由
     GenerateRoutes({ commit }) {
       return new Promise(resolve => {
+        var userName = store.state.user.name
+        var isSuper = false
+        if (userName == 'admin@zj') {
+          isSuper = true
+        }
         // 向后端请求路由数据
-        getRouters().then(res => {
+        getRouters(isSuper).then(res => {
           const accessedRoutes = filterAsyncRouter(res.data)
           accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
           commit('SET_ROUTES', accessedRoutes)
