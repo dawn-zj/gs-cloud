@@ -21,14 +21,26 @@ import java.io.File;
 public class JsonController {
 
     /**
+     * 获取列表
+     * @return
+     */
+    @PostMapping("/list")
+    public ResponseTo<Object> list(@RequestBody JsonTo jsonTo) throws Exception {
+        String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
+        String content = StringUtil.getString(FileUtil.getFile(filePath));
+        Object obj = JSON.parse(content);
+        return ResponseTo.success(obj);
+    }
+
+    /**
      * 获取
      * @return 测试结果
      */
     @PostMapping("/get")
     public ResponseTo<Object> get(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
-        String content = StringUtil.getString(FileUtil.getFile(filePath));
-        Object obj = JSON.parse(content);
+        JSONArray arr = getJSONArray(filePath);
+        Object obj = arr.get(jsonTo.getIndex());
         return ResponseTo.success(obj);
     }
 

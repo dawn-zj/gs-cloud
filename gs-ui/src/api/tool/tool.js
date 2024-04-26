@@ -5,7 +5,7 @@ const filePath = 'formCreate/list.json'
 // 获取
 export const list = () => {
   return request({
-    url: '/json/get',
+    url: '/json/list',
     method: 'post',
     data: {
       filePath: filePath
