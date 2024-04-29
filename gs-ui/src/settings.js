@@ -22,6 +22,11 @@ module.exports = {
   sidebarLogo: true,
 
   /**
+   * 主题颜色
+   */
+  theme: '#409EFF',
+
+  /**
    * @type {string | array} 'production' | ['production', 'development']
    * @description Need show err logs component.
    * The default is only used in the production env
