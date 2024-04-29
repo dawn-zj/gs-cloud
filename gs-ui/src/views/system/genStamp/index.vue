@@ -74,6 +74,14 @@
           <el-form-item label="单位名称字体大小" prop="companyFontSize">
             <el-input-number v-model="stampForm.companyFontSize" :disabled="disabledCompany" style="width: 100%" />
           </el-form-item>
+          <el-form-item label="颜色" prop="color">
+            <el-color-picker
+              v-model="stampForm.color"
+              color-format="hex"
+              :show-alpha="false"
+              :predefine="predefineColors"
+            />
+          </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章编码(预览)" prop="number">
@@ -121,7 +129,13 @@ export default {
       stampPath: '',
       zipFile: '',
       title: '图章下载',
+      predefineColors: [
+        '#FF0000',
+        '#000000',
+        '#1e90ff'
+      ],
       stampForm: {
+        color: '#FF0000',
         width: '150',
         height: '150',
         fontType: '',

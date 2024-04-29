@@ -24,6 +24,9 @@ public class RectangleUtil extends Base{
         this(photo.getWidth(), photo.getHeight(), photo.getName(), photo.getNameFontSize(), photo.getNameMarginBottom(),
                 photo.getLabel(), photo.getLabelFontSize(), photo.getLabelMarginBottom(),
                 photo.getNumber(), photo.getNumberFontSize(), photo.getNumberMarginBottom());
+        if (StringUtil.isNotBlank(photo.getColor())) {
+            this.setColor(photo.getColor());
+        }
     }
 
     public RectangleUtil(int width, int height, String name, Integer nameSize, Integer nameMarginBottom,

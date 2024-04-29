@@ -64,6 +64,36 @@ public class Base {
     protected Color numberColor = Color.RED;
     protected Integer numberMarginBottom = 5;
 
+    public Color hexToColor(String hex) {
+        if (hex.startsWith("#")) {
+            hex = hex.substring(1);
+        }
+
+        // 确保颜色代码的长度为6或8（对于带有alpha通道的颜色）
+        if (hex.length() != 6 && hex.length() != 8) {
+            throw new IllegalArgumentException("Invalid hex color: " + hex);
+        }
+
+        // 将16进制字符串转换为整数
+        int r = Integer.parseInt(hex.substring(0, 2), 16);
+        int g = Integer.parseInt(hex.substring(2, 4), 16);
+        int b = Integer.parseInt(hex.substring(4, 6), 16);
+
+        // 如果有alpha通道，则解析它
+        int alpha = hex.length() == 8 ? Integer.parseInt(hex.substring(6, 8), 16) : 255;
+
+        return new Color(r, g, b, alpha);
+    }
+
+    public void setColor(String colorHex) {
+        Color color = hexToColor(colorHex);
+        this.borderColor = color;
+        this.starColor = color;
+        this.companyColor = color;
+        this.nameColor = color;
+        this.labelColor = color;
+        this.numberColor = color;
+    }
     /**
      * 以图中心点为对称点，横向画名称，起点是文字左下角
      * @param g2d
