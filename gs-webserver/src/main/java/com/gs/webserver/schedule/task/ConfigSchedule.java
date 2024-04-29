@@ -30,7 +30,7 @@ public class ConfigSchedule {
     }
 
     /**
-     * 同步config信息
+     * 加载定时器
      */
     @Scheduled(cron = "* 0/1 * * * ?")
     private void loadSchedule() {
