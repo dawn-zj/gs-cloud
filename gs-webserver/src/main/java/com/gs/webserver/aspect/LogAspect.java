@@ -1,6 +1,9 @@
 package com.gs.webserver.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.gs.common.exception.BaseException;
+import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.util.IpUtil;
 import com.gs.webserver.util.ServletUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -60,6 +63,16 @@ public class LogAspect {
 			result = proceedingJoinPoint.proceed();
 		} catch (Throwable ex) {
 			logger.error(ex.getMessage(), ex);
+
+			String errMsg = "系统内部错误";
+			if (ex instanceof BaseException) {
+				BaseException be = (BaseException) ex;
+				errMsg = be.getErrMsg();
+			} else if (ex instanceof NetGSRuntimeException) {
+				NetGSRuntimeException be = (NetGSRuntimeException) ex;
+				errMsg = be.getErrMsg();
+			}
+			result = ResponseTo.error(errMsg);
 		}
 		return result;
 
