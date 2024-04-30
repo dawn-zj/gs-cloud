@@ -56,48 +56,22 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['monitor:logininfor:remove']"
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['monitor:logininfor:remove']"
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          @click="handleClean"
-        >清空</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['system:logininfor:export']"
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出</el-button>
-      </el-col>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
-    <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="访问编号" align="center" prop="infoId" />
-      <el-table-column label="用户名称" align="center" prop="userName" />
+    <el-table
+      v-loading="loading"
+      :data="list"
+      :default-sort="{prop: 'loginTime', order: 'descending'}"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column label="编号" align="center" prop="index" sortable />
+      <el-table-column label="用户名称" align="center" prop="username" />
       <el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
       <el-table-column label="浏览器" align="center" prop="browser" />
       <el-table-column label="操作系统" align="center" prop="os" />
       <el-table-column label="登录状态" align="center" prop="status" :formatter="statusFormat" />
-      <el-table-column label="操作信息" align="center" prop="msg" />
-      <el-table-column label="登录日期" align="center" prop="loginTime" width="180">
+      <el-table-column label="登录日期" align="center" prop="loginTime" width="180" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.loginTime) }}</span>
         </template>
@@ -115,8 +89,8 @@
 </template>
 
 <script>
-import { list, delLogininfor, cleanLogininfor, exportLogininfor } from '@/api/monitor/logininfor'
-
+import { delLogininfor, cleanLogininfor, exportLogininfor } from '@/api/monitor/logininfor'
+import { list } from '@/api/log/loginLog'
 export default {
   name: 'Logininfor',
   data() {
@@ -128,7 +102,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 表格数据
@@ -148,7 +122,7 @@ export default {
     }
   },
   created() {
-    // this.getList()
+    this.getList()
     // this.getDicts('sys_common_status').then(response => {
     //   this.statusOptions = response.data
     // })
@@ -157,16 +131,21 @@ export default {
     /** 查询登录日志列表 */
     getList() {
       this.loading = true
-      list(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-        this.list = response.rows
-        this.total = response.total
+      list(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
+        this.list = res.data
+        if (res.data !== undefined) {
+          this.total = res.data.length
+          for (var i = 0; i < this.total; i++) {
+            this.list[i].index = i
+          }
+        }
         this.loading = false
       }
       )
     },
     // 登录状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status)
+      return row.status === '0' ? '成功' : '失败'
     },
     /** 搜索按钮操作 */
     handleQuery() {

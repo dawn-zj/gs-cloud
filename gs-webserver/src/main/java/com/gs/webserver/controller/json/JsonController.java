@@ -8,6 +8,8 @@ import com.gs.common.util.FileUtil;
 import com.gs.common.util.StringUtil;
 import com.gs.webserver.entity.to.request.JsonTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
+import com.gs.webserver.service.IJsonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -19,6 +21,8 @@ import java.io.File;
 @RestController
 @RequestMapping("/json")
 public class JsonController {
+    @Autowired
+    private IJsonService jsonService;
 
     /**
      * 获取列表
@@ -39,7 +43,7 @@ public class JsonController {
     @PostMapping("/get")
     public ResponseTo<Object> get(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
-        JSONArray arr = getJSONArray(filePath);
+        JSONArray arr = jsonService.getJSONArray(filePath);
         Object obj = arr.get(jsonTo.getIndex());
         return ResponseTo.success(obj);
     }
@@ -52,13 +56,7 @@ public class JsonController {
      */
     @PostMapping("/add")
     public ResponseTo<Object> add(@RequestBody JsonTo jsonTo) throws Exception {
-        String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
-        FileUtil.checkPath(filePath, true, true);
-
-        JSONArray arr = getJSONArray(filePath);
-        arr.add(jsonTo.getData());
-
-        FileUtil.storeFile(filePath, arr.toJSONString().getBytes());
+        jsonService.add(jsonTo);
         return ResponseTo.success();
     }
 
@@ -71,7 +69,7 @@ public class JsonController {
     @PostMapping("/update")
     public ResponseTo<Object> update(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
-        JSONArray arr = getJSONArray(filePath);
+        JSONArray arr = jsonService.getJSONArray(filePath);
         arr.set(jsonTo.getIndex(), jsonTo.getData());
 
         FileUtil.storeFile(filePath, arr.toJSONString().getBytes());
@@ -87,25 +85,11 @@ public class JsonController {
     @PostMapping("/delete")
     public ResponseTo<Object> delete(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
-        JSONArray arr = getJSONArray(filePath);
+        JSONArray arr = jsonService.getJSONArray(filePath);
         arr.remove(jsonTo.getIndex());
 
         FileUtil.storeFile(filePath, arr.toJSONString().getBytes());
         return ResponseTo.success();
-    }
-
-    public JSONArray getJSONArray(String filePath) {
-        String content = StringUtil.getString(FileUtil.getFile(filePath));
-        JSONArray arr = JSON.parseArray(content);
-        if (arr == null) {
-            arr = new JSONArray();
-        }
-        return arr;
-    }
-
-    public JSONObject getJSONObject(String filePath) {
-        String content = StringUtil.getString(FileUtil.getFile(filePath));
-        return JSON.parseObject(content);
     }
 
 }

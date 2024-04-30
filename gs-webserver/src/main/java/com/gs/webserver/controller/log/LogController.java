@@ -7,7 +7,7 @@ import com.gs.webserver.entity.to.response.ResponseTo;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * JSON处理
+ * 系统日志
  * @author Administator
  */
 @RestController
