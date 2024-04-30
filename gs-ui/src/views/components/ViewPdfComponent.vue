@@ -97,7 +97,8 @@ export default {
     showLeft: { type: Boolean, required: false, default: false },
     showRight: { type: Boolean, required: false, default: false },
     isDrag: { type: Boolean, required: false, default: true },
-    url: { type: String, required: false, default: '' }
+    url: { type: String, required: false, default: '' },
+    showDefaultPdf: { type: Boolean, required: false, default: true }
   },
   data() {
     return {
@@ -199,7 +200,9 @@ export default {
       } else if (fileBase64) {
         this.pdfUrl = window.URL.createObjectURL(base642blob(fileBase64))
       } else {
-        this.pdfUrl = this.publicPath + '/show.pdf'
+        if (this.showDefaultPdf) {
+          this.pdfUrl = this.publicPath + '/show.pdf'
+        }
       }
       this._loadFile(this.pdfUrl)
     },

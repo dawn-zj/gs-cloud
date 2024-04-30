@@ -9,10 +9,21 @@ export function viewStamp(data) {
   })
 }
 
+
+// 签章
+export function pdfStamp(data) {
+  return request({
+    url: '/tool/pdf/pdfStamp',
+    method: 'post',
+    data: data,
+    responseType: 'blob'
+  })
+}
+
 // 验签章
 export function verify(data) {
   return request({
-    url: '/seal/stamp/verify',
+    url: '/tool/pdf/pdfVerify',
     method: 'post',
     data: data
   })

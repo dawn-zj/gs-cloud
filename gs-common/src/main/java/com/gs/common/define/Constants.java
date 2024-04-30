@@ -38,6 +38,9 @@ public class Constants {
 	public static final String PDF_PATH = ROOT_PATH + "pdf/";
 	public static final String PDF_TEMPLATE_PATH = ROOT_PATH + "pdfTemplate/";
 	public static final String JSON_PATH = ROOT_PATH + "json/";
+	public static final String PFX_DEFAULT_PATH = ROOT_PATH + "/key/server/server.pfx";
+	public static final String PFX_CERT_PATH = ROOT_PATH + "/key/server/server.cer";
+	public static final String PFX_PASSWORD = "11111111";
 
 	public static final String NATIVELIB_PATH = "appserver/nativelib"; //libsigar-amd64-linux.so
 

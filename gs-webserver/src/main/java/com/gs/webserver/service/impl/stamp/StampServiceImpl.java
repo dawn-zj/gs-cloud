@@ -1,6 +1,7 @@
 package com.gs.webserver.service.impl.stamp;
 
 import com.alibaba.fastjson.JSONObject;
+import com.gs.webserver.entity.to.request.StampTo;
 import com.gs.webserver.entity.to.response.pdf.PdfStampVerifyResTo;
 import com.gs.webserver.service.IStampService;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,11 @@ import java.util.Map;
 
 @Service
 public class StampServiceImpl implements IStampService {
+    @Override
+    public byte[] stamp(byte[] pdfData, String pfxFilePath, String pfxFilePassword, List<StampTo> list) throws Exception {
+        return new byte[0];
+    }
+
     @Override
     public PdfStampVerifyResTo verify(MultipartFile file) {
         // 交给子类具体实现

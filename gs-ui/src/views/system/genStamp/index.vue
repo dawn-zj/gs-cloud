@@ -43,31 +43,6 @@
 
       <el-row>
         <el-col :xs="24" :sm="24" :md="12" :lg="12">
-          <el-form-item label="图章名称(预览)" prop="name">
-            <el-input v-model="stampForm.name" />
-          </el-form-item>
-          <el-form-item label="图章名称字体大小" prop="nameFontSize">
-            <el-input-number v-model="stampForm.nameFontSize" style="width: 100%" />
-          </el-form-item>
-          <el-form-item label="图章名称底部距离" prop="nameMarginBottom">
-            <el-input-number v-model="stampForm.nameMarginBottom" style="width: 100%" />
-          </el-form-item>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12">
-          <el-form-item label="图章副名(预览)" prop="label">
-            <el-input v-model="stampForm.label" />
-          </el-form-item>
-          <el-form-item label="图章副名字体大小" prop="labelFontSize">
-            <el-input-number v-model="stampForm.labelFontSize" style="width: 100%" />
-          </el-form-item>
-          <el-form-item label="图章副名底部距离" prop="labelMarginBottom">
-            <el-input-number v-model="stampForm.labelMarginBottom" style="width: 100%" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="单位名称(预览)" prop="company">
             <el-input v-model="stampForm.company" :disabled="disabledCompany" />
           </el-form-item>
@@ -84,6 +59,30 @@
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="24" :md="12" :lg="12">
+          <el-form-item label="图章名称(预览)" prop="name">
+            <el-input v-model="stampForm.name" />
+          </el-form-item>
+          <el-form-item label="图章名称字体大小" prop="nameFontSize">
+            <el-input-number v-model="stampForm.nameFontSize" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="图章名称底部距离" prop="nameMarginBottom">
+            <el-input-number v-model="stampForm.nameMarginBottom" style="width: 100%" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row v-if="showMore">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
+          <el-form-item label="图章副名(预览)" prop="label">
+            <el-input v-model="stampForm.label" />
+          </el-form-item>
+          <el-form-item label="图章副名字体大小" prop="labelFontSize">
+            <el-input-number v-model="stampForm.labelFontSize" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="图章副名底部距离" prop="labelMarginBottom">
+            <el-input-number v-model="stampForm.labelMarginBottom" style="width: 100%" />
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="12" :lg="12">
           <el-form-item label="图章编码(预览)" prop="number">
             <el-input v-model="stampForm.number" :disabled="disabledNumber" />
           </el-form-item>
@@ -96,6 +95,12 @@
         </el-col>
       </el-row>
 
+      <el-row>
+        <el-col :offset="22" :span="2">
+          <el-button v-if="!showMore" type="text" icon="el-icon-arrow-down" @click="()=>{ return this.showMore = !showMore}">展开</el-button>
+          <el-button v-else type="text" icon="el-icon-arrow-up" @click="()=>{ return this.showMore = !showMore}">收起</el-button>
+        </el-col>
+      </el-row>
       <el-form-item label="实时预览">
         <template slot="label" slot-scope="{}">
           <slot-label-component label="实时预览" tip="透明背景" />
@@ -120,6 +125,7 @@ export default {
   data() {
     return {
       loading: true,
+      showMore: false,
       disabledHeight: true,
       disabledCompany: false,
       disabledNumber: false,
