@@ -1,11 +1,22 @@
 <template>
   <div class="app-container">
-    <el-table :data="tabPaneArr">
+    <el-table :data="tabPaneArr" :default-sort="{prop: 'createTime', order: 'descending'}">
+      <el-table-column label="编号" align="center" prop="index" sortable />
       <el-table-column label="tab名称" align="left" prop="tabLabel" />
       <el-table-column label="是否上架" align="left" prop="visiable">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.visiable == 1" type="success" size="mini">已上架</el-tag>
           <el-tag v-else size="mini">未上架</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createTime" width="160" sortable>
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="修改时间" align="center" prop="updateTime" width="160" sortable>
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="320">
@@ -18,6 +29,8 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <dialog-component v-if="showEdit" title="修改" :open.sync="showEdit" width="1200px">
       <form-designer ref="myDesigner" @save="handleSave" />
@@ -42,6 +55,11 @@ export default {
       activeName: '0',
       showButton: true,
       buttonText: '修改',
+      // 总条数
+      total: 0,
+      queryParams: {
+        pageNum: 1
+      },
       tabPaneArr: [],
       currentIndex: 0,
       currentData: {}
@@ -56,13 +74,18 @@ export default {
     list() {
       list().then(res => {
         this.tabPaneArr = res.data
-        console.log(res.data)
+        if (res.data !== undefined) {
+          this.total = res.data.length
+          for (var i = 0; i < this.total; i++) {
+            this.tabPaneArr[i].index = i
+          }
+        }
       })
     },
     handleEditForm(scope) {
       this.showEdit = true
       this.currentData = scope.row
-      this.currentIndex = scope.$index
+      this.currentIndex = scope.row.index
       this.$nextTick(() => {
         this.$refs.myDesigner.setRule(scope.row.rule)
         this.$refs.myDesigner.setOption(scope.row.options)
@@ -72,6 +95,8 @@ export default {
       data.tabLabel = this.currentData.tabLabel
       data.visiable = 0
       data.formData = {}
+      const timestamp = new Date().getTime()
+      data.updateTime = timestamp
       update(this.currentIndex, data).then(res => {
         this.msgSuccess('发布成功')
         this.showEdit = false
@@ -85,7 +110,9 @@ export default {
     handleShow(scope) {
       const data = scope.row
       data.visiable = 1
-      update(scope.$index, data).then(res => {
+      const timestamp = new Date().getTime()
+      data.updateTime = timestamp
+      update(scope.row.index, data).then(res => {
         this.msgSuccess('上架成功')
         this.list()
       })
@@ -93,13 +120,15 @@ export default {
     handleUnShow(scope) {
       const data = scope.row
       data.visiable = 0
-      update(scope.$index, data).then(res => {
+      const timestamp = new Date().getTime()
+      data.updateTime = timestamp
+      update(scope.row.index, data).then(res => {
         this.msgSuccess('下架成功')
         this.list()
       })
     },
     handleDelete(scope) {
-      del(scope.$index).then(res => {
+      del(scope.row.index).then(res => {
         this.msgSuccess('删除成功')
         this.list()
       })

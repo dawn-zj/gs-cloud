@@ -26,6 +26,9 @@ export default {
         data.tabLabel = value
         data.visiable = 0
         data.formData = {}
+        const timestamp = new Date().getTime()
+        data.createTime = timestamp
+        data.updateTime = timestamp
         add(data).then(res => {
           this.msgSuccess('发布成功')
         })
