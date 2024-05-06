@@ -22,7 +22,7 @@
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column type="index" label="编号" align="center" />
+          <el-table-column label="编号" align="center" prop="index" />
           <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" />
           <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
           <!--          <el-table-column label="部门" align="center" prop="dept.deptName" :show-overflow-tooltip="true" />-->
@@ -192,7 +192,7 @@ export default {
       // 部门名称
       deptName: undefined,
       // 默认密码
-      initPassword: undefined,
+      initPassword: 123456,
       // 日期范围
       dateRange: [],
       // 状态数据字典
@@ -292,15 +292,19 @@ export default {
       listUser(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
           this.userList = response.data
-          if (response.data != undefined) {
+          if (response.data !== undefined) {
             this.total = response.data.length
             if (this.total > 0) {
-              this.currentId = this.userList[this.total - 1]
+              for (var i = 0; i < this.total; i++) {
+                this.userList[i].index = i
+              }
             }
           }
           this.loading = false
         }
-      )
+      ).catch(() => {
+        this.loading = false
+      })
     },
     /** 查询部门下拉树结构 */
     getTreeselect() {
@@ -384,13 +388,9 @@ export default {
     handleAdd() {
       this.reset()
       this.getTreeselect()
-      getUser().then((response) => {
-        this.postOptions = response.posts
-        this.roleOptions = response.roles
-        this.open = true
-        this.title = '添加用户'
-        this.form.password = this.initPassword
-      })
+      this.open = true
+      this.title = '添加用户'
+      this.form.password = this.initPassword
     },
     /** 修改按钮操作 */
     handleUpdate(scope) {
