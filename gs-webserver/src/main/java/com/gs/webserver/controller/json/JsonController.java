@@ -31,6 +31,7 @@ public class JsonController {
     @PostMapping("/list")
     public ResponseTo<Object> list(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
+        FileUtil.checkPath(filePath, true, true);
         String content = StringUtil.getString(FileUtil.getFile(filePath));
         Object obj = JSON.parse(content);
         return ResponseTo.success(obj);
@@ -43,6 +44,7 @@ public class JsonController {
     @PostMapping("/get")
     public ResponseTo<Object> get(@RequestBody JsonTo jsonTo) throws Exception {
         String filePath = Constants.JSON_PATH + jsonTo.getFilePath();
+        FileUtil.checkPath(filePath, true, true);
         JSONArray arr = jsonService.getJSONArray(filePath);
         Object obj = arr.get(jsonTo.getIndex());
         return ResponseTo.success(obj);

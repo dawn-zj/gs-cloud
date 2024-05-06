@@ -202,7 +202,7 @@ public class FileUtil {
 			return bs;
 		} catch (Exception e) {
 			throw new NetGSRuntimeException(
-					"get file data error, " + e.getMessage() + " file path is " + filePath);
+					"get file data error, " + e.getMessage() + ", file path is " + filePath);
 		} finally {
 			if (fis != null) {
 				try {
@@ -710,15 +710,22 @@ public class FileUtil {
 		if (StringUtil.isBlank(filePath))
 			throw new NetGSRuntimeException("path invaild, path is " + filePath);
 
-		String dirPath = filePath.substring(0, filePath.lastIndexOf(Constants.SPLIT_DIR));
-		File dir = new File(dirPath);
 		File file = new File(filePath);
-		if (!dir.exists()) {
-			dir.mkdirs();
-			file.createNewFile();
-		} else {
-			if (!file.exists()) {
-				file.createNewFile();
+
+		if (checkExist) {
+			if (createFile) {
+				String dirPath = filePath.substring(0, filePath.lastIndexOf(Constants.SPLIT_DIR));
+				File dir = new File(dirPath);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+			} else {
+				if (!file.exists()) {
+					throw new NetGSRuntimeException("path not exist, path is " + filePath);
+				}
 			}
 		}
 	}
