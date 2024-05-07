@@ -55,6 +55,8 @@ import DialogComponent from '@/views/components/DialogComponent'
 import CodeViewComponent from '@/views/components/CodeViewComponent'
 import FormView from '@/views/tool/buildForm/formView'
 import GenFunc from '@/views/tool/buildForm/genFunc'
+import link from '@/views/tool/buildForm/rules/link'
+
 export default {
   components: { GenFunc, FormView, DialogComponent, CodeViewComponent },
   data() {
@@ -77,6 +79,16 @@ export default {
   watch: {
   },
   created() {
+    this.$nextTick(() => {
+      console.log(this.$refs.designer)
+      this.$refs.designer.addMenu({
+        title: '自定义分组',
+        name: 'group1',
+        list: [link]
+      })
+      // 插入组件规则
+      this.$refs.designer.addComponent(link)
+    })
   },
   methods: {
     getValue() {
