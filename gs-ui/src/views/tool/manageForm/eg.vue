@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import requestVue from '@/utils/requestLocal'
 export default {
   data() {
     return {
@@ -30,8 +30,8 @@ export default {
   },
   methods: {
     getConfig() {
-      axios.get('/json/form-create/eg.json').then(res => {
-        this.egData = res.data
+      requestVue.get('/json/form-create/eg.json').then(res => {
+        this.egData = res
       })
     },
     onSubmit(formData, fapi) {
