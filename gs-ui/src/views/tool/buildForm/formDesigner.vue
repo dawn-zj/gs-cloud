@@ -83,7 +83,6 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      console.log(this.$refs.designer)
       this.$refs.designer.addMenu({
         title: '自定义分组',
         name: 'group1',
@@ -146,7 +145,6 @@ export default {
       if (obj.name === 'submit') {
         var options = JSON.parse(JSON.stringify(this.$refs.designer.getOption()))
         options.submitEvent = obj.inject[0]
-        console.log(options)
         this.$refs.designer.setOption(options)
       } else {
         // 用户手动输入事件脚本后，回传到最终数据里
@@ -157,19 +155,37 @@ export default {
         if (firstElement.type === 'FcRow') {
           var cols = firstElement.children
           cols.forEach(col => {
-            var formItem = col.children
-            if (formItem.field === activeRule.field) {
-              formItem.emitPrefix = 'gs'
-              formItem.emit = []
-              formItem.emit.push(obj)
-            }
+            var arr = col.children
+            arr.forEach(formItem => {
+              if (activeRule.type === 'el-button') {
+                if (formItem.type === 'el-button' && formItem.children[0] === activeRule.children[0]) {
+                  formItem.emitPrefix = 'gs'
+                  formItem.emit = []
+                  formItem.emit.push(obj)
+                }
+              } else {
+                if (formItem.field === activeRule.field) {
+                  formItem.emitPrefix = 'gs'
+                  formItem.emit = []
+                  formItem.emit.push(obj)
+                }
+              }
+            })
           })
         } else {
           rule.forEach(formItem => {
-            if (formItem.field === activeRule.field) {
-              formItem.emitPrefix = 'gs'
-              formItem.emit = []
-              formItem.emit.push(obj)
+            if (activeRule.type === 'el-button') {
+              if (formItem.type === 'el-button' && formItem.children[0] === activeRule.children[0]) {
+                formItem.emitPrefix = 'gs'
+                formItem.emit = []
+                formItem.emit.push(obj)
+              }
+            } else {
+              if (formItem.field === activeRule.field) {
+                formItem.emitPrefix = 'gs'
+                formItem.emit = []
+                formItem.emit.push(obj)
+              }
             }
           })
         }
