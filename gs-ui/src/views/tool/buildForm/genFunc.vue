@@ -48,7 +48,7 @@ import 'codemirror/addon/fold/brace-fold.js'
 export default {
   components: { codemirror },
   props: {
-    activeRule: {
+    activeEvent: {
       type: Object,
       required: true
     }
@@ -58,7 +58,8 @@ export default {
       eventList: [
         { label: 'blur', value: 'blur' },
         { label: 'change', value: 'change' },
-        { label: 'click', value: 'click' }
+        { label: 'click', value: 'click' },
+        { label: 'submit', value: 'submit' }
       ],
       cmOptions: {
         mode: 'text/javascript', // 实现javascript代码高亮
@@ -84,10 +85,9 @@ export default {
     }
   },
   mounted() {
-    var emit = this.activeRule.emit
-    if (emit) {
-      this.formData.name = emit[0].name
-      this.code = emit[0].inject[0]
+    this.formData.name = this.activeEvent.name
+    if (this.activeEvent.inject[0]) {
+      this.code = this.activeEvent.inject[0]
     }
   },
   methods: {

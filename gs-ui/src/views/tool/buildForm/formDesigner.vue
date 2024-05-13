@@ -17,7 +17,7 @@
     </dialog-component>
 
     <dialog-component v-if="showEvent" title="绑定事件" :open.sync="showEvent">
-      <gen-func :active-rule="activeRule" @success="setEvent" />
+      <gen-func :active-event="activeEvent" @success="setEvent" />
     </dialog-component>
 
     <dialog-component v-if="showRule" title="生成数据" :open.sync="showRule">
@@ -73,7 +73,10 @@ export default {
         rule: [],
         options: {}
       },
-      activeRule: {}
+      activeEvent: {
+        name: '',
+        inject: ['']
+      }
     }
   },
   watch: {
@@ -123,41 +126,56 @@ export default {
       this.showView = true
     },
     handleEvent() {
+      this.activeEvent.name = 'change'
+      this.activeEvent.inject = ['']
+      this.getValue()
       var activeRule = this.$refs.designer._self.activeRule
-      this.activeRule = activeRule
       if (activeRule == null || activeRule.type === 'FcRow' || activeRule.type === 'col') {
-        this.msgError('请选中一个表单组件')
-        return
+        this.activeEvent.name = 'submit'
+        this.activeEvent.inject = [this.egData.options.submitEvent]
+      } else {
+        var emit = activeRule.emit
+        if (emit) {
+          this.activeEvent.name = emit[0].name
+          this.activeEvent.inject = emit[0].inject
+        }
       }
       this.showEvent = true
     },
     setEvent(obj) {
-      // 用户手动输入事件脚本后，回传到最终数据里
-      var rule = this.$refs.designer.getRule()
-      var activeRule = this.$refs.designer._self.activeRule
-      // 遍历找到当前选中的表单组件，赋值
-      var firstElement = rule[0]
-      if (firstElement.type === 'FcRow') {
-        var cols = firstElement.children
-        cols.forEach(col => {
-          var formItem = col.children
-          if (formItem.field === activeRule.field) {
-            formItem.emitPrefix = 'gs'
-            formItem.emit = []
-            formItem.emit.push(obj)
-          }
-        })
+      if (obj.name === 'submit') {
+        var options = JSON.parse(JSON.stringify(this.$refs.designer.getOption()))
+        options.submitEvent = obj.inject[0]
+        console.log(options)
+        this.$refs.designer.setOption(options)
       } else {
-        rule.forEach(formItem => {
-          if (formItem.field === activeRule.field) {
-            formItem.emitPrefix = 'gs'
-            formItem.emit = []
-            formItem.emit.push(obj)
-          }
-        })
-      }
+        // 用户手动输入事件脚本后，回传到最终数据里
+        var rule = this.$refs.designer.getRule()
+        var activeRule = this.$refs.designer._self.activeRule
+        // 遍历找到当前选中的表单组件，赋值
+        var firstElement = rule[0]
+        if (firstElement.type === 'FcRow') {
+          var cols = firstElement.children
+          cols.forEach(col => {
+            var formItem = col.children
+            if (formItem.field === activeRule.field) {
+              formItem.emitPrefix = 'gs'
+              formItem.emit = []
+              formItem.emit.push(obj)
+            }
+          })
+        } else {
+          rule.forEach(formItem => {
+            if (formItem.field === activeRule.field) {
+              formItem.emitPrefix = 'gs'
+              formItem.emit = []
+              formItem.emit.push(obj)
+            }
+          })
+        }
 
-      this.$refs.designer.setRule(rule)
+        this.$refs.designer.setRule(rule)
+      }
       this.msgSuccess('添加成功')
       this.showEvent = false
     },
