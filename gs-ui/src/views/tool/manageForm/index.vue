@@ -30,7 +30,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="list" />
 
     <dialog-component v-if="showEdit" title="修改" :open.sync="showEdit" width="1200px">
       <form-designer ref="myDesigner" @save="handleSave" />
