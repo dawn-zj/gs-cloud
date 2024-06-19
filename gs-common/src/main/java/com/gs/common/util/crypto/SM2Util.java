@@ -190,7 +190,7 @@ public class SM2Util {
         if (cipherMode == 0) {// C1||C2||C3格式密文
             System.arraycopy(encData, kxData.length + kyData.length, cipherData, 0, cipherData.length);
             System.arraycopy(encData, kxData.length + kyData.length + cipherData.length, hashData, 0, hashData.length);
-        } else if (cipherMode == 0) {// C1||C3||C2格式密文
+        } else if (cipherMode == 1) {// C1||C3||C2格式密文
             System.arraycopy(encData, kxData.length + kyData.length, hashData, 0, hashData.length);
             System.arraycopy(encData, kxData.length + kyData.length + hashData.length, cipherData, 0, cipherData.length);
         } else {
