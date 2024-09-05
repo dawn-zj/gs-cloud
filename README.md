@@ -3,11 +3,14 @@
 项目基于SpringCloud、maven等技术。
 
 # 命令
-打包：mvn clean package -DskipTests=true 
+打包：mvn clean package -DskipTests=true
+
 gs-webserver模块生成html文档：mvn clean package -DskipTests=true -Dfile.encoding=UTF-8 smart-doc:html -pl :gs-webserver -am
 
 # 在线浏览地址
 https://101.43.242.145:8443/tool
+
+http://101.43.242.145:8080/tool
 
 ## 功能：
 1. 系统监控：获取系统、CPU、内存、硬盘等信息；
@@ -64,7 +67,9 @@ https://101.43.242.145:8443/tool
 
 ### 错误码设计
 [系统]-[模块]-[功能]-[错误类型]
+
 [xxx]-[xxx]-[x参数/增删改查]-[为空/超限/不存在]
+
 xxx模块-xxx参数-不能为空
 
 ### MVC架构设计
