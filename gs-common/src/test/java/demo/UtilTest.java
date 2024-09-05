@@ -365,6 +365,58 @@ public class UtilTest {
 		System.out.println("RSA密钥对存储成功！");
 	}
 
+	/**
+	 * 生成SM2密钥对
+	 * @throws Exception
+	 */
+	@Test
+	public void genSM2KeyPairTest() throws Exception {
+		KeyPair keyPair = SM2Util.genKeyPair();
+		PublicKey publicKey = keyPair.getPublic();
+		PrivateKey privateKey = keyPair.getPrivate();
+		//得到base64编码的公钥/私钥字符串
+		String publicKeyString = Base64Util.encode(publicKey.getEncoded());
+		String privateKeyString = Base64Util.encode(privateKey.getEncoded());
+
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "sm2/pubKey.txt", publicKeyString.getBytes());
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "sm2/priKey.txt", privateKeyString.getBytes());
+		System.out.println("SM2密钥对存储成功！");
+
+		// 运算测试
+		byte[] plain = "123456".getBytes();
+		byte[] encrypt = SM2Util.encrypt(plain, keyPair.getPublic());
+		byte[] decrypt = SM2Util.decrypt(encrypt, keyPair.getPrivate());
+		System.out.println("运算测试的原文：" + StringUtil.getString(decrypt));
+	}
+
+	/**
+	 * 生成SM2密钥对保护数据
+	 * @throws Exception
+	 */
+	@Test
+	public void genSM2KeyPairTest2() throws Exception {
+		// 制作
+		byte[] pubKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/pubKey.txt");
+		PublicKey publicKey = SM2Util.createPublicKey(StringUtil.getString(pubKeyData));
+		byte[] priKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/priKey.txt");
+		PrivateKey privateKey = SM2Util.createPrivateKey(StringUtil.getString(priKeyData));
+		DERSequence sequence = SM2Util.genSM2ProtectWith0009(publicKey, "SM4", privateKey);
+
+		FileUtil.storeFile(Constants.FILE_OUT_PATH + "sm2/protect.asn1", sequence.getEncoded());
+		System.out.println("SM2密钥对保护数据存储成功！");
+
+		// 解析
+//		byte[] priKeyData = FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/priKey.txt");
+//		PrivateKey privateKey = SM2Util.createPrivateKey(StringUtil.getString(priKeyData));
+//		KeyPair keyPair = SM2Util.parseSM2ProtectWith0009(privateKey, sequence);
+
+		// 运算测试
+//		byte[] plain = "123456".getBytes();
+//		byte[] encrypt = SM2Util.encrypt(plain, keyPair.getPublic());
+//		byte[] decrypt = SM2Util.decrypt(encrypt, keyPair.getPrivate());
+//		System.out.println("运算测试的原文：" + StringUtil.getString(decrypt));
+	}
+
 	@Test
 	public void clearPemTest() throws Exception {
 		byte[] file = FileUtil.getFile(Constants.FILE_OUT_PATH + "rsa/pubKey.txt");
@@ -628,7 +680,7 @@ public class UtilTest {
 		// 0009规范加密
 		String pubKey = new String(FileUtil.getFile(Constants.FILE_OUT_PATH + "sm2/pubKey.txt"));
 		PublicKey publicKey = SM2Util.createPublicKey(pubKey);
-		byte[] bytes = SM2Util.encryptWith0009(str.getBytes(), publicKey);
+		byte[] bytes = SM2Util.encryptWith0009(str.getBytes(), publicKey).getEncoded();
 		FileUtil.storeFile(Constants.FILE_OUT_PATH + "sm2/enc."+DateUtil.getCurrentTime()+".asn1", bytes);
 
 		// 0009规范解密
