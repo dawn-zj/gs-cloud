@@ -7,10 +7,16 @@
 
 gs-webserver模块生成html文档：mvn clean package -DskipTests=true -Dfile.encoding=UTF-8 smart-doc:html -pl :gs-webserver -am
 
+# 使用docker制作镜像
+1. mvn打包后，将webapps上传至/home/zj/docker_images；
+2. 进入/home/zj/docker_images，执行docker build -t gstool:1.0.1.0 .
+3. 创建容器：docker run -d -p 8080:8080 --name tomcat1 -v /opt/gs/NetTool_mount:/opt/gs/NetTool gstool:1.0.1.0
+4. http://101.43.242.145:8080/tool 访问
+5. （可选）（镜像迁移场景）导出镜像：docker save -o /home/zj/gstool_1.0.1.0.tar gstool:1.0.1.0
+6. （可选）（镜像迁移场景）导入镜像：docker load -i /home/zj/gstool_1.0.1.0.tar
+
 # 在线浏览地址
 https://101.43.242.145:8443/tool
-
-http://101.43.242.145:8080/tool
 
 ## 功能：
 1. 系统监控：获取系统、CPU、内存、硬盘等信息；
