@@ -11,7 +11,7 @@ window.gs = {
     },
     {
       describe: '接口文档',
-      url: 'https://101.43.242.145:8443/doc/debug-all.html'
+      url: 'http://101.43.242.145:8080/doc/debug-all.html'
     },
     {
       describe: '网络工具：csr解析验证',
