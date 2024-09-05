@@ -17,7 +17,7 @@ public class TestController {
      * 测试
      * @return 测试结果
      */
-    @GetMapping({"/test", "/"})
+    @GetMapping({"/"})
     public ResponseTo<String> test() {
         return ResponseTo.success("Welcome to spring boot!");
     }
