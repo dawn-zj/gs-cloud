@@ -23,7 +23,7 @@ public class LoginLogController {
     @Autowired
     private IJsonService jsonService;
     /**
-     * 获取
+     * 新增
      * @return
      */
     @PostMapping("/add")

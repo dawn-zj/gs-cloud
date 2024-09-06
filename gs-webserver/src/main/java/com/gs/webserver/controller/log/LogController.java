@@ -16,7 +16,9 @@ public class LogController {
 
     /**
      * 获取
+     * @param level 日志等级，info、error、debug |error
      * @return
+     * @throws Exception
      */
     @PostMapping("/get")
     public ResponseTo<String> get(@RequestParam String level) throws Exception {
