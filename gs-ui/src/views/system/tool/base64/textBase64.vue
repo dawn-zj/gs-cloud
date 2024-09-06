@@ -54,6 +54,7 @@
                 <el-radio v-model="fileType" label=".txt">txt</el-radio>
                 <el-radio v-model="fileType" label=".pdf">pdf</el-radio>
                 <el-radio v-model="fileType" label=".ofd">ofd</el-radio>
+                <el-radio v-model="fileType" label=".zip">zip</el-radio>
               </el-form-item>
             </el-col>
           </el-row>
