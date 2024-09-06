@@ -1,6 +1,7 @@
 package com.gs.common.util.crypto;
 
 import com.gs.common.define.Constants;
+import com.gs.common.entity.crypto.SM2PublicKey;
 import com.gs.common.exception.BaseException;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.HexUtil;
@@ -16,7 +17,6 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECParameterSpec;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
@@ -53,9 +53,14 @@ public class SM2Util {
      * @return 公钥对象
      */
     public static PublicKey createPublicKey(String publicKey) {
+        PublicKey publickey = createPublicKey(Base64.getDecoder().decode(publicKey));
+        return publickey;
+    }
+
+    public static PublicKey createPublicKey(byte[] publicKeyData) {
         PublicKey publickey = null;
         try {
-            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyData);
             KeyFactory keyFactory = KeyFactory.getInstance("EC", new BouncyCastleProvider());
             publickey = keyFactory.generatePublic(publicKeySpec);
         } catch (Exception e) {
@@ -71,9 +76,14 @@ public class SM2Util {
      * @return
      */
     public static PrivateKey createPrivateKey(String privateKey) {
+        PrivateKey publicKey = createPrivateKey(Base64.getDecoder().decode(privateKey));
+        return publicKey;
+    }
+
+    public static PrivateKey createPrivateKey(byte[] privateKeyData) {
         PrivateKey publicKey = null;
         try {
-            PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
+            PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKeyData);
             KeyFactory keyFactory = KeyFactory.getInstance("EC", new BouncyCastleProvider());
             publicKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
         } catch (Exception e) {
@@ -144,9 +154,9 @@ public class SM2Util {
      * @param publicKey 公钥
      * @return der编码的加密结果，符合0009规范
      */
-    public static byte[] encryptWith0009(byte[] data, PublicKey publicKey) throws Exception {
+    public static DERSequence encryptWith0009(byte[] data, PublicKey publicKey) throws Exception {
         byte[] encDataNoDer = encrypt(data, publicKey);
-        byte[] encData = genSM2EncryptedWith0009(encDataNoDer, 0);
+        DERSequence encData = genSM2EncryptedWith0009(encDataNoDer, 0);
         return encData;
     }
 
@@ -158,6 +168,7 @@ public class SM2Util {
      */
     public static byte[] decryptWith0009(byte[] encData, PrivateKey privateKey) throws Exception {
         byte[] encDataNoDer = getSM2DecryptedBy0009(encData, 0, true);
+        // todo 偶尔出错
         byte[] data = decrypt(encDataNoDer, privateKey);
         return data;
     }
@@ -169,7 +180,7 @@ public class SM2Util {
      * @return 0009规范密文，der编码
      * @throws Exception
      */
-    public static byte[] genSM2EncryptedWith0009(byte[] data, int cipherMode) throws Exception {
+    public static DERSequence genSM2EncryptedWith0009(byte[] data, int cipherMode) throws Exception {
         // 兼容C1公钥部分带04
         byte[] encData = new byte[data.length];
         if (data[0] == 0x04) {
@@ -210,7 +221,7 @@ public class SM2Util {
      * @return 0009规范密文
      * @throws Exception
      */
-    private static byte[] genSM2EncryptedWith0009(byte[] kxData, byte[] kyData, byte[] hashData, byte[] cipherData) throws Exception {
+    private static DERSequence genSM2EncryptedWith0009(byte[] kxData, byte[] kyData, byte[] hashData, byte[] cipherData) throws Exception {
         // 组装0009规范的asn1格式
         DERInteger kx,ky;
         DEROctetString derHash = new DEROctetString(hashData);
@@ -241,9 +252,8 @@ public class SM2Util {
         derVec.add(derHash);
         derVec.add(derCipher);
         DERSequence seq = new DERSequence(derVec);
-        byte[] enc = seq.getEncoded();
 
-        return enc;
+        return seq;
     }
 
     /**
@@ -273,27 +283,31 @@ public class SM2Util {
             DEROctetString cipher_obj = (DEROctetString)obj.getObjectAt(3);
             byte[] cipherData = cipher_obj.getOctets();
 
-            byte[] encData_no_der = new byte[kxData.length + kyData.length + hashData.length + cipherData.length];
+            byte[] encData_no_der = new byte[32 + 32 + 32 + cipherData.length];
             // 若xy分量发生了补位，就截掉
-            if (kxData.length == 33) {
-                System.arraycopy(kxData, 1, encData_no_der, 0, kxData.length - 1);
-            } else {
+            if (kxData.length == 33 && kxData[0] == 0) {
+                System.arraycopy(kxData, 1, encData_no_der, 0, 32);
+            } else if (kxData.length == 32) {
                 System.arraycopy(kxData, 0, encData_no_der, 0, kxData.length);
+            } else {
+                throw new BaseException("x分量长度为：" + kxData.length + ", 无法处理");
             }
 
-            if (kyData.length == 33) {
-                System.arraycopy(kyData, 1, encData_no_der, kxData.length, kyData.length - 1);
-            } else {
+            if (kyData.length == 33 && kyData[0] == 0) {
+                System.arraycopy(kyData, 1, encData_no_der, kxData.length, 32);
+            } else if (kyData.length == 32) {
                 System.arraycopy(kyData, 0, encData_no_der, kxData.length, kyData.length);
+            } else {
+                throw new BaseException("y分量长度为：" + kxData.length + ", 无法处理");
             }
 
             // 转换为指定模式的密文
             if (cipherMode == 0) { // 转为C1||C2||C3格式
-                System.arraycopy(cipherData, 0, encData_no_der, kxData.length + kyData.length, cipherData.length);
-                System.arraycopy(hashData, 0, encData_no_der, kxData.length + kyData.length + cipherData.length, hashData.length);
+                System.arraycopy(cipherData, 0, encData_no_der, 64, cipherData.length);
+                System.arraycopy(hashData, 0, encData_no_der, 64 + cipherData.length, hashData.length);
             } else if (cipherMode == 1) {// 转为C1||C3||C2格式
-                System.arraycopy(hashData, 0, encData_no_der, kxData.length + kyData.length, hashData.length);
-                System.arraycopy(cipherData, 0, encData_no_der, kxData.length + kyData.length + hashData.length, cipherData.length);
+                System.arraycopy(hashData, 0, encData_no_der, 64, hashData.length);
+                System.arraycopy(cipherData, 0, encData_no_der, 64 + hashData.length, cipherData.length);
             } else {
                 throw new BaseException("unknown cipherMode");
             }
@@ -315,6 +329,88 @@ public class SM2Util {
         }
     }
 
+    /**
+     * 生成SM2密钥对保护数据格式
+     * @param publicKey 外部公钥
+     * @param symmAlg 对称加密算法
+     * @return
+     * @throws Exception
+     */
+    public static DERSequence genSM2ProtectWith0009(PublicKey publicKey, String symmAlg, PrivateKey privateKey) throws Exception {
+        // 1. 生成SM2密钥对
+        KeyPair keyPair = genKeyPair();
+        byte[] priKeyData = keyPair.getPrivate().getEncoded();
+
+        byte[] pubKeyData = keyPair.getPublic().getEncoded();
+        SM2PublicKey sm2PublicKey = new SM2PublicKey(pubKeyData);
+        DERBitString derSM2PublicKey = new DERBitString(sm2PublicKey.getEncoded4ex());
+
+        // 2. 生成对称密钥
+        byte[] symmetricKey = null;
+        byte[] priKeyEncData = null;
+        ASN1ObjectIdentifier derSymmAlg = null;
+        DERSequence derSM2Cipher = null;
+        switch (symmAlg) {
+            case "SM4":
+            default:
+                symmAlg = "SM4";
+                // 2.1 将SM2私钥进行对称加密
+                symmetricKey = KeyUtil.genRandom(16);
+                priKeyEncData = SM4Util.ecb_encrypt(priKeyData, symmetricKey);
+
+                // 2.2 将对称密钥用外部公钥进行SM2加密
+                derSM2Cipher = encryptWith0009(symmetricKey, publicKey);
+                decryptWith0009(derSM2Cipher.getEncoded(), privateKey);
+
+        }
+        derSymmAlg = new ASN1ObjectIdentifier(OidUtil.getOid(symmAlg));
+        ASN1EncodableVector derAlgVec = new ASN1EncodableVector();
+        derAlgVec.add(derSymmAlg);
+        DERSequence algSequence = new DERSequence(derAlgVec);
+
+        DERBitString derBitString = new DERBitString(priKeyEncData);
+
+        // 组装0009规范的asn1格式
+        ASN1EncodableVector derVec = new ASN1EncodableVector();
+        derVec.add(algSequence);
+        derVec.add(derSM2Cipher);
+        derVec.add(derSM2PublicKey);
+        derVec.add(derBitString);
+        DERSequence seq = new DERSequence(derVec);
+
+        return seq;
+    }
+
+    public static KeyPair parseSM2ProtectWith0009(PrivateKey privateKey, DERSequence sequence) throws Exception {
+        ASN1Sequence algSequence = (ASN1Sequence) sequence.getObjectAt(0);
+        ASN1Sequence symEncryptedKey = (ASN1Sequence) sequence.getObjectAt(1);
+        ASN1BitString sm2PublicKey = (ASN1BitString) sequence.getObjectAt(2);
+        ASN1BitString sm2EncryptedPrivateKey = (ASN1BitString) sequence.getObjectAt(3);
+
+        // 1.SM2解密，解出对称密钥
+        byte[] symKey = SM2Util.decryptWith0009(symEncryptedKey.getEncoded(), privateKey);
+
+        // 2.对称加密算法
+        String algOid = algSequence.getObjectAt(0).toString();
+        System.out.println(algOid);
+        String signHash = OidUtil.getSignHash(algOid);
+
+        byte[] sm2PriKey = null;
+        switch (signHash) {
+            case "SM4":
+            default:
+                sm2PriKey = SM4Util.ecb_decrypt(sm2EncryptedPrivateKey.getEncoded(), symKey);
+        }
+
+        byte[] bytes = sm2PublicKey.getBytes();
+        System.out.println(sm2PublicKey.toString());
+        System.out.println(HexUtil.byte2Hex(bytes));
+        // 转为 BCECPublicKey BCECPrivateKey
+        PublicKey pubKey = createPublicKey(bytes);
+        PrivateKey priKey = createPrivateKey(sm2PriKey);
+        KeyPair keyPair = new KeyPair(pubKey, priKey);
+        return keyPair;
+    }
 
     /**
      * 私钥签名
