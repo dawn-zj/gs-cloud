@@ -76,7 +76,6 @@ https://101.43.242.145:8443/tool
 
 [xxx]-[xxx]-[x参数/增删改查]-[为空/超限/不存在]
 
-xxx模块-xxx参数-不能为空
 
 ### MVC架构设计
 1. 分为controller、service、mapper三层；
