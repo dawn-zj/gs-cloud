@@ -635,25 +635,25 @@ public class UtilTest {
 		System.out.println("解密完成，解密数据：" + new String(decrypt));
 	}
 
-	@Test
-	public void makeEnvelop() throws  Exception {
-		String plain = "plain";
-		byte[] certData = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
-		X509Certificate cert = CertUtil.getX509Certificate(certData);
-		// 制作数字信封
-		byte[] bytes = PKCS7Envelope.makeP7(plain.getBytes(), cert);
-		FileUtil.storeFile(Constants.FILE_OUT_PATH + "envelop.asn1", bytes);
-		System.out.println("数字信封内容：" + plain + "，制作完成");
-	}
+//	@Test
+//	public void makeEnvelop() throws  Exception {
+//		String plain = "plain";
+//		byte[] certData = KeyStoreUtil.getCertFromPfx(password, FileUtil.getFile(pfxPath));
+//		X509Certificate cert = CertUtil.getX509Certificate(certData);
+//		// 制作数字信封
+//		byte[] bytes = PKCS7Envelope.makeP7(plain.getBytes(), cert);
+//		FileUtil.storeFile(Constants.FILE_OUT_PATH + "envelop.asn1", bytes);
+//		System.out.println("数字信封内容：" + plain + "，制作完成");
+//	}
 
-	@Test
-	public void parseEnvelop() throws  Exception {
-		byte[] envData = FileUtil.getFile("E:/Idea/NetSeal/v6/netseal/netseal-app-demo/file/envelop/envelop.asn1");
-		// 解数字信封
-		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
-		byte[] bytes = PKCS7Envelope.verifyP7(envData, privateKey);
-		System.out.println("数字信封内容：" + new String(bytes));
-	}
+//	@Test
+//	public void parseEnvelop() throws  Exception {
+//		byte[] envData = FileUtil.getFile("E:/Idea/NetSeal/v6/netseal/netseal-app-demo/file/envelop/envelop.asn1");
+//		// 解数字信封
+//		PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, FileUtil.getFile(pfxPath));
+//		byte[] bytes = PKCS7Envelope.verifyP7(envData, privateKey);
+//		System.out.println("数字信封内容：" + new String(bytes));
+//	}
 
 	@Test
 	public void encryptWithBC() throws  Exception {

@@ -21,7 +21,7 @@ public class KeyUtil {
      * @throws Exception
      */
     public static byte[] detachedSign(byte[] plain, X509Certificate cert) throws Exception {
-        // todo 未传私钥，肯定不对
+        // todo 调用有误
         byte[] bytes = PKCS7Envelope.makeP7(plain, cert);
         return  bytes;
     }
@@ -34,6 +34,7 @@ public class KeyUtil {
      * @throws Exception
      */
     public static byte[] detachedVerify(byte[] signed, PrivateKey priKey) throws Exception {
+        // todo 调用有误
         byte[] bytes = PKCS7Envelope.verifyP7(signed, priKey);
         return  bytes;
     }

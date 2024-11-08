@@ -1,5 +1,6 @@
 package com.gs.webserver.manager;
 
+import com.gs.common.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class InitManager {
     public void serverInit() {
         try {
             log.info("初始化完成");
+            ConfigUtil.getInstance().addToOidUtil();
         } catch (Throwable e) {
             log.error("服务初始化发生错误", e);
         }

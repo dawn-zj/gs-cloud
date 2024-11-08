@@ -356,18 +356,19 @@ public class KeyController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/makeEnvelop")
-    public ResponseTo<CommonResTo> makeEnvelop(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
-                                               @NotNull String plain) throws  Exception {
-        byte[] certData = KeyStoreUtil.getCertFromPfx(password, pfxFile.getBytes());
-        X509Certificate cert = CertUtil.getX509Certificate(certData);
-        // 制作数字信封
-        byte[] bytes = PKCS7Envelope.makeP7(plain.getBytes(), cert);
-
-        CommonResTo commonTo = new CommonResTo();
-        commonTo.setResult(Base64Util.encode(bytes));
-        return ResponseTo.success(commonTo);
-    }
+//    @PostMapping("/makeEnvelop")
+//    public ResponseTo<CommonResTo> makeEnvelop(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
+//                                               @NotNull String plain) throws  Exception {
+//        // todo 数据有误
+//        byte[] certData = KeyStoreUtil.getCertFromPfx(password, pfxFile.getBytes());
+//        X509Certificate cert = CertUtil.getX509Certificate(certData);
+//        // 制作数字信封
+//        byte[] bytes = PKCS7Envelope.makeP7(plain.getBytes(), cert);
+//
+//        CommonResTo commonTo = new CommonResTo();
+//        commonTo.setResult(Base64Util.encode(bytes));
+//        return ResponseTo.success(commonTo);
+//    }
 
     /**
      * 解数字信封
@@ -377,18 +378,19 @@ public class KeyController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/parseEnvelop")
-    public ResponseTo<CommonResTo> parseEnvelop(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
-                                                @NotNull String envB64) throws Exception {
-        byte[] envData = Base64Util.decode(envB64);
-        // 解数字信封
-        PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, pfxFile.getBytes());
-        byte[] bytes = PKCS7Envelope.verifyP7(envData, privateKey);
-
-        CommonResTo commonTo = new CommonResTo();
-        commonTo.setResult(StringUtil.getString(bytes));
-        return ResponseTo.success(commonTo);
-    }
+//    @PostMapping("/parseEnvelop")
+//    public ResponseTo<CommonResTo> parseEnvelop(@RequestParam("pfxFile") MultipartFile pfxFile, String password,
+//                                                @NotNull String envB64) throws Exception {
+//        // todo 数据有误
+//        byte[] envData = Base64Util.decode(envB64);
+//        // 解数字信封
+//        PrivateKey privateKey = KeyStoreUtil.loadKey(password, Constants.PFX_SUFFIX, pfxFile.getBytes());
+//        byte[] bytes = PKCS7Envelope.verifyP7(envData, privateKey);
+//
+//        CommonResTo commonTo = new CommonResTo();
+//        commonTo.setResult(StringUtil.getString(bytes));
+//        return ResponseTo.success(commonTo);
+//    }
 
     private KeyResTo genKeyResTo(KeyPair kayPair) {
         return genKeyResTo(kayPair, false);
@@ -437,6 +439,7 @@ public class KeyController {
      */
     @PostMapping("/genSM2ProtectKeyPair")
     public ResponseTo<KeyResTo> parseSM2ProtectKeyPairTest(@NotNull String privateKeyB64) throws Exception {
+        // todo 数据有误
         KeyPair kayPair = SM2Util.genKeyPair();
         KeyResTo keyResTo = genKeyResTo(kayPair);
         return ResponseTo.success(keyResTo);

@@ -3,6 +3,7 @@ package com.gs.common.util;
 import com.gs.common.define.Constants;
 import com.gs.common.exception.NetGSRuntimeException;
 import com.gs.common.resource.ErrCode;
+import com.gs.common.util.crypto.OidUtil;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -11,6 +12,7 @@ import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,6 +27,8 @@ public class ConfigUtil {
 	private FileBasedConfigurationBuilder<FileBasedConfiguration> builder;
 	private String confPath = Constants.CONF_PATH + "config.properties";
 
+	private Configuration properties2;
+	private String oidPath = Constants.CONF_PATH + "oid.properties";
 	/**
 	 * 获取ConfigUtil实例
 	 *
@@ -55,6 +59,10 @@ public class ConfigUtil {
 //			builder.configure(params.properties().setFileName(confPath).setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
 			builder.configure(params.properties().setFileName(confPath));
 			properties = builder.getConfiguration();
+
+			builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class);
+			builder.configure(params.properties().setFileName(oidPath));
+			properties2 = builder.getConfiguration();
 		} catch (Exception e) {
 			throw new NetGSRuntimeException(ErrCode.LOAD_CONF_ERROR, e.getMessage());
 		}
@@ -68,6 +76,19 @@ public class ConfigUtil {
 			instance.load();
 		} catch (Exception e) {
 			throw new NetGSRuntimeException(ErrCode.RELOAD_CONF_ERROR, e.getMessage());
+		}
+	}
+
+	public void addToOidUtil() {
+		Iterator<String> keyIterator = properties2.getKeys();
+		OidUtil.algorithms.clear();
+		OidUtil.oids.clear();
+		while (keyIterator.hasNext()) {
+			String key = keyIterator.next();
+			Object value = properties2.getProperty(key);
+
+			OidUtil.algorithms.put(value, key);
+			OidUtil.oids.put(key, value);
 		}
 	}
 
