@@ -1,46 +1,63 @@
 import request from '@/utils/request'
-import requestVue from '@/utils/requestLocal'
 
+const filePath = 'user/userList.json'
 // 查询用户列表
-export function listUser(query) {
-  return requestVue({
-    url: '/json/user/userList.json',
-    method: 'get',
-    params: query
+export const listUser = () => {
+  return request({
+    url: '/json/list',
+    method: 'post',
+    data: {
+      filePath: filePath
+    }
   })
 }
 
 // 查询用户详细
-export function getUser(userId) {
-  return requestVue({
-    url: '/json/user/userInfo.json',
-    method: 'get'
+export function getUser(index) {
+  return request({
+    url: '/json/get',
+    method: 'post',
+    data: {
+      filePath: filePath,
+      index: index
+    }
   })
 }
 
 // 新增用户
 export function addUser(data) {
   return request({
-    url: '/system/user',
+    url: '/json/add',
     method: 'post',
-    data: data
+    data: {
+      filePath: filePath,
+      data: data
+    }
   })
 }
 
 // 修改用户
-export function updateUser(data) {
+export function updateUser(index, data) {
   return request({
-    url: '/system/user',
-    method: 'put',
-    data: data
+    url: '/json/update',
+    method: 'post',
+    data: {
+      filePath: filePath,
+      index: index,
+      data: data
+    }
   })
 }
 
 // 删除用户
-export function delUser(userId) {
+export function delUser(index) {
   return request({
-    url: '/system/user/' + userId,
-    method: 'delete'
+    url: '/json/delete',
+    method: 'post',
+    data: {
+      filePath: filePath,
+      index: index
+    }
   })
 }
 

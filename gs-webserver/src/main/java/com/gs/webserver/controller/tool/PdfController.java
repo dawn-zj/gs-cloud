@@ -2,25 +2,27 @@ package com.gs.webserver.controller.tool;
 
 import com.gs.common.define.Constants;
 import com.gs.common.entity.pdf.StampVerify;
+import com.gs.common.exception.BaseException;
 import com.gs.common.util.FileUtil;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.date.DateUtil;
 import com.gs.common.util.pdf.PdfStampUtil;
 import com.gs.common.util.pdf.PdfUtil;
 import com.gs.common.util.pdf.RemovePdfStampUtil;
+import com.gs.webserver.entity.to.request.PdfStampTo;
+import com.gs.webserver.entity.to.request.StampTo;
 import com.gs.webserver.entity.to.response.CommonResTo;
 import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.entity.to.response.pdf.PdfStampResTo;
+import com.gs.webserver.entity.to.response.pdf.PdfStampVerifyResTo;
 import com.gs.webserver.service.IStampService;
 import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -86,7 +88,7 @@ public class PdfController {
     }
 
     /**
-     * pdf坐标签章
+     * pdf坐标签章测试
      * @param pdfFile pdf文件
      * @param photoFile 印模图片
      * @param pfxFile pfx文件
@@ -97,7 +99,7 @@ public class PdfController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/pdfStamp")
+    @PostMapping("/pdfStampTest")
     public ResponseTo<CommonResTo> pdfStampTest(@RequestParam("pdfFile") MultipartFile pdfFile,
                                                 @RequestParam("photoFile") MultipartFile photoFile,
                                                 @RequestParam("file") MultipartFile pfxFile, String password,
@@ -125,15 +127,41 @@ public class PdfController {
     }
 
     /**
+     * pdf坐标签章测试
+     * @param pdfFile pdf文件
+     * @param photoFile 印模图片
+     * @param pfxFile pfx文件
+     * @param password pfx文件密码
+     * @param pageNumber 页码 | 1
+     * @param x x坐标，单位像素 | 100
+     * @param y y坐标，单位像素 | 100
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/pdfStamp")
+    public void pdfStamp(@RequestBody PdfStampTo stampTo, HttpServletResponse response) throws Exception {
+        //签章: PDF的RSA签章 = 图片+签名，没有印章和签章结构
+        byte[] pdfData = Base64Util.decode(stampTo.getPdfBase64());
+        List<StampTo> list = stampTo.getList();
+        byte[] signedData = stampService.stamp(pdfData, Constants.PFX_DEFAULT_PATH, Constants.PFX_PASSWORD, list);
+
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition", "attachment;fileName=stamp.pdf");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.getOutputStream().write(signedData);
+    }
+
+    /**
      * pdf验签章
      * @param pdfFile 签章文件
      * @return
      * @throws Exception
      */
     @PostMapping("/pdfVerify")
-    public ResponseTo<StampVerify> pdfVerifyTest(@RequestParam("pdfFile") MultipartFile pdfFile) throws Exception {
-        PdfStampUtil pdfUtil = new PdfStampUtil();
-        StampVerify verify = pdfUtil.verifySign(pdfFile.getBytes());
+    public ResponseTo<PdfStampVerifyResTo> pdfVerifyTest(@RequestParam("pdfFile") MultipartFile pdfFile) throws Exception {
+        PdfStampVerifyResTo verify = stampService.verify(pdfFile);
         return ResponseTo.success(verify);
     }
 

@@ -57,6 +57,7 @@
 import { getCodeImg } from '@/api/login'
 import Cookies from 'js-cookie'
 import { encrypt, decrypt } from '@/utils/jsencrypt'
+import { add } from '@/api/log/loginLog'
 
 export default {
   name: 'Login',
@@ -126,11 +127,22 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
+
+          if (this.loginForm.username === 'admin@zj') {
+            Cookies.set('username', this.loginForm.username, { expires: 30 })
+          }
+
           this.$store
             .dispatch('Login', this.loginForm)
             .then(() => {
               // 是否需要设置 token
               this.$router.push({ path: this.redirect || '/' })
+              // 无后端参与的伪登录，单独调用接口记录日志
+              const timestamp = new Date().getTime()
+              var data = {
+                username: this.loginForm.username
+              }
+              add(data).then(res => {})
             })
             .catch(() => {
               this.loading = false

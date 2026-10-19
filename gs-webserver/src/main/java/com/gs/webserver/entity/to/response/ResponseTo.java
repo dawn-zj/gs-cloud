@@ -67,6 +67,17 @@ public class ResponseTo<T> {
      * @param body 数据对象
      * @return 成功消息
      */
+    public static <T> ResponseTo<T> success() {
+        return getResult("200", "操作成功", null);
+    }
+
+    /**
+     * 返回成功消息
+     *
+     * @param msg  返回内容
+     * @param body 数据对象
+     * @return 成功消息
+     */
     public static <T> ResponseTo<T> success(String msg, T body) {
         return getResult("200", msg, body);
     }

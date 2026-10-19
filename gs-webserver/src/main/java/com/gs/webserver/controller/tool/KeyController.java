@@ -286,7 +286,7 @@ public class KeyController {
     public ResponseTo<CommonResTo> encryptWith0009(@NotNull String plain, @NotNull String publicKeyB64) throws Exception {
         // bc库sm2加密
         PublicKey publicKey = SM2Util.createPublicKey(publicKeyB64);
-        byte[] bytes = SM2Util.encryptWith0009(plain.getBytes(), publicKey);
+        byte[] bytes = SM2Util.encryptWith0009(plain.getBytes(), publicKey).getEncoded();
 
         CommonResTo commonTo = new CommonResTo();
         commonTo.setResult(Base64Util.encode(bytes));
@@ -323,7 +323,7 @@ public class KeyController {
     @PostMapping("/sm20003To0009")
     public ResponseTo<CommonResTo> sm20003To0009(@NotNull String encB64, @NotNull int cipherMode) throws Exception {
         byte[] encDataNoDer = Base64Util.decode(encB64);
-        byte[] encData = SM2Util.genSM2EncryptedWith0009(encDataNoDer, cipherMode);
+        byte[] encData = SM2Util.genSM2EncryptedWith0009(encDataNoDer, cipherMode).getEncoded();
 
         CommonResTo commonTo = new CommonResTo();
         commonTo.setResult(Base64Util.encode(encData));
@@ -412,5 +412,33 @@ public class KeyController {
         keyResTo.setPrivateKeyB64(privateKeyString);
         return keyResTo;
 
+    }
+
+    /**
+     * 生成SM2密钥对保护数据
+     * @param publicKeyB64 签名公钥
+     * @return SM2加密密钥对的保护数据
+     * @throws Exception
+     */
+//    @PostMapping("/genSM2ProtectKeyPair")
+//    public ResponseTo<CommonResTo> genSM2ProtectKeyPairTest(@NotNull String publicKeyB64) throws Exception {
+//        PublicKey publicKey = SM2Util.createPublicKey(publicKeyB64);
+//        DERSequence seq = SM2Util.genSM2ProtectWith0009(publicKey, "SM4");
+//
+//        CommonResTo commonTo = new CommonResTo();
+//        commonTo.setResult(Base64Util.encode(seq.getEncoded()));
+//        return ResponseTo.success(commonTo);
+//    }
+
+    /**
+     * 解析SM2密钥对保护数据
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/genSM2ProtectKeyPair")
+    public ResponseTo<KeyResTo> parseSM2ProtectKeyPairTest(@NotNull String privateKeyB64) throws Exception {
+        KeyPair kayPair = SM2Util.genKeyPair();
+        KeyResTo keyResTo = genKeyResTo(kayPair);
+        return ResponseTo.success(keyResTo);
     }
 }

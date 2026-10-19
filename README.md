@@ -3,8 +3,17 @@
 项目基于SpringCloud、maven等技术。
 
 # 命令
-打包：mvn clean package -DskipTests=true 
+打包：mvn clean package -DskipTests=true
+
 gs-webserver模块生成html文档：mvn clean package -DskipTests=true -Dfile.encoding=UTF-8 smart-doc:html -pl :gs-webserver -am
+
+# 使用docker制作镜像
+1. mvn打包后，将webapps上传至/home/zj/docker_images；
+2. 进入/home/zj/docker_images，执行docker build -t gstool:1.0.1.0 .
+3. 创建容器：docker run -d -p 8080:8080 --name tomcat1 -v /opt/gs/NetTool_mount:/opt/gs/NetTool gstool:1.0.1.0
+4. http://101.43.242.145:8080/tool 访问
+5. （可选）（镜像迁移场景）导出镜像：docker save -o /home/zj/gstool_1.0.1.0.tar gstool:1.0.1.0
+6. （可选）（镜像迁移场景）导入镜像：docker load -i /home/zj/gstool_1.0.1.0.tar
 
 # 在线浏览地址
 https://101.43.242.145:8443/tool
@@ -61,11 +70,14 @@ https://101.43.242.145:8443/tool
     - 后端pom中定义编译后的war存入NetTool里的tomcat中。
     - 在Jenkins里，执行根pom，然后将NetTool中所需信息传到腾讯云服务里，重启服务。
 2. 研究assembly自动打包，争取打出基线包和补丁包。
+3. 由于Jenkins环境丢失，此模块暂且搁置。
+4. 为了轻量的集群，以及学习docker，暂使用docker部署。
 
 ### 错误码设计
 [系统]-[模块]-[功能]-[错误类型]
+
 [xxx]-[xxx]-[x参数/增删改查]-[为空/超限/不存在]
-xxx模块-xxx参数-不能为空
+
 
 ### MVC架构设计
 1. 分为controller、service、mapper三层；

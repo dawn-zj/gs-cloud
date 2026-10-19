@@ -4,11 +4,11 @@
   "data": [
     {
       "id": 100,
-      "label": "若依科技",
+      "label": "GS简氏控股集团",
       "children": [
         {
           "id": 101,
-          "label": "深圳总公司",
+          "label": "北京总公司",
           "children": [
             {
               "id": 103,
@@ -34,7 +34,7 @@
         },
         {
           "id": 102,
-          "label": "长沙分公司",
+          "label": "上海分公司",
           "children": [
             {
               "id": 108,

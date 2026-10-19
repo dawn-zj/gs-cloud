@@ -30,6 +30,9 @@ public class Photo {
     private Integer numberFontSize;// 印章编号字体大小
     private Integer numberMarginBottom;// 印章编号距离底部距离
 
+    // 十六进制颜色
+    private String color;
+
     public Integer getStampStyle() {
         return stampStyle;
     }
@@ -148,5 +151,13 @@ public class Photo {
 
     public void setNumberMarginBottom(Integer numberMarginBottom) {
         this.numberMarginBottom = numberMarginBottom;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

@@ -62,7 +62,7 @@
 import userAvatar from './userAvatar'
 import userInfo from './userInfo'
 import resetPwd from './resetPwd'
-import { getUserProfile } from '@/api/system/user'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'Profile',
@@ -80,11 +80,12 @@ export default {
   },
   methods: {
     getUser() {
-      getUserProfile().then(response => {
-        this.user = response.data
-        this.roleGroup = response.roleGroup
-        this.postGroup = response.postGroup
-      })
+      this.user.userName = Cookies.get('username')
+      // getUserProfile().then(response => {
+      //   this.user = response.data
+      //   this.roleGroup = response.roleGroup
+      //   this.postGroup = response.postGroup
+      // })
     }
   }
 }

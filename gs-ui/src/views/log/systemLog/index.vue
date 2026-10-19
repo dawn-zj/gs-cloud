@@ -1,8 +1,13 @@
 <template>
   <div class="app-container">
     <h5>实时查看系统日志</h5>
+    <div class="mb20">
+      <el-radio v-model="level" label="info">info</el-radio>
+      <el-radio v-model="level" label="error">error</el-radio>
+      <el-radio v-model="level" label="debug">debug</el-radio>
+    </div>
     <div ref="logDiv" class="log" v-html="logText" />
-    <el-button type="primary" @click="add()">添加一行</el-button>
+    <!--    <el-button type="primary" @click="add()">添加一行</el-button>-->
   </div>
 
 </template>
@@ -16,7 +21,8 @@ export default {
   data() {
     return {
       logText: '',
-      timer: ''
+      timer: '',
+      level: 'error'
     }
   },
   watch: {
@@ -37,8 +43,8 @@ export default {
   },
   methods: {
     getSystemLog() {
-      list().then((response) => {
-        this.logText = response.replace(/\n/g, '<br>')
+      list(this.level).then((response) => {
+        this.logText = response.data.replace(/\n/g, '<br>')
       })
     },
     add() {
@@ -54,7 +60,8 @@ export default {
 .log{
   width: 100%;
   height: 500px;
-  background-color: #cccccc;
+  background-color: #f7f7f7;
+  color: rgba(0, 0, 0, 0.7470588235294118);
   overflow: scroll;
 }
 </style>

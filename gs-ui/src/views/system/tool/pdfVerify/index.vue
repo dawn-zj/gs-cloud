@@ -214,7 +214,7 @@ export default {
     },
     verify(file) {
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('pdfFile', file)
 
       verify(formData).then(res => {
         this.verifyResult = res.data.result

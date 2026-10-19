@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import requestVue from '@/utils/requestLocal'
 export default {
   data() {
     return {
@@ -30,8 +30,8 @@ export default {
   },
   methods: {
     getConfig() {
-      axios.get('/json/form-create/eg.json').then(res => {
-        this.egData = res.data
+      requestVue.get('/json/form-create/eg.json').then(res => {
+        this.egData = res
       })
     },
     onSubmit(formData, fapi) {
@@ -42,16 +42,16 @@ export default {
     },
     onChange(inject, val) {
       console.log(inject)
-      // 具体脚本通过inject指定，格式为 "inject": [{"change":"(data, formData)=>{// 自定义}"}]
+      // 具体脚本通过inject指定，格式为 "inject": ["(data, formData)=>{// 自定义}"]
       // eslint-disable-next-line no-eval
-      const func = eval(inject.inject[0].change)
-      func(inject.self.value, inject.$f.form)
+      const func = eval(inject.inject[0])
+      func(inject.$f.form, inject.self.value, inject)
     },
     onBlur(inject) {
       console.log(inject)
       // eslint-disable-next-line no-eval
-      const func = eval(inject.inject[0].blur)
-      func(inject.self.value, inject.$f.form)
+      const func = eval(inject.inject[0])
+      func(inject.$f.form, inject.self.value, inject)
     }
   }
 }

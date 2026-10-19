@@ -27,6 +27,10 @@ public class Circle extends Base {
                 photo.getName(), photo.getNameFontSize(), photo.getNameMarginBottom(),
                 photo.getLabel(), photo.getLabelFontSize(), photo.getLabelMarginBottom(),
                 photo.getNumber(), photo.getNumberFontSize());
+
+        if (StringUtil.isNotBlank(photo.getColor())) {
+            this.setColor(photo.getColor());
+        }
     }
 
     public Circle(int r, String company, Integer companySize,

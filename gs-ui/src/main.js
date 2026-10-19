@@ -60,6 +60,9 @@ Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
 }
 
+import request from '@/utils/request'
+Vue.prototype.$request = request
+
 // 全局组件挂载，自定义组件名，用Vue.component()引入
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)

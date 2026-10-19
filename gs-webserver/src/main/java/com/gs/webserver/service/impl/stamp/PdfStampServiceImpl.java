@@ -8,16 +8,23 @@ import com.gs.common.util.FileUtil;
 import com.gs.common.util.HexUtil;
 import com.gs.common.util.base64.Base64Util;
 import com.gs.common.util.pdf.PdfStampUtil;
+import com.gs.webserver.entity.to.request.StampTo;
 import com.gs.webserver.entity.to.response.pdf.PdfStampVerifyResTo;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.security.DigestAlgorithms;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +32,29 @@ import java.util.Map;
  */
 @Service
 public class PdfStampServiceImpl extends StampServiceImpl {
+
+    @Override
+    public byte[] stamp(byte[] pdfData, String pfxFilePath, String password, List<StampTo> list) throws Exception {
+        KeyStore ks = KeyStore.getInstance("PKCS12");
+        ks.load(new FileInputStream(pfxFilePath), password.toCharArray());
+        String alias = ks.aliases().nextElement();
+        PrivateKey pk = (PrivateKey) ks.getKey(alias, password.toCharArray());
+        // 得到证书链
+        Certificate[] chain = ks.getCertificateChain(alias);
+
+        //签章: PDF的RSA签章 = 图片+签名，没有印章和签章结构
+        byte[] signedData = null;
+
+        PdfStampUtil pdfUtil = new PdfStampUtil();
+        for (StampTo info: list ) {
+            String photoBase64 = info.getSealInfo().getBase64();
+            byte[] photoData = Base64Util.decode(photoBase64);
+            // todo 摘要算法从证书中取
+            signedData = pdfUtil.sign(pdfData, photoData, info.getPageNum(),info.getX(), info.getY(), chain, pk, DigestAlgorithms.SHA1);
+            pdfData = signedData;
+        }
+        return signedData;
+    }
 
     @Override
     public PdfStampVerifyResTo verify(MultipartFile file) {
@@ -36,7 +66,6 @@ public class PdfStampServiceImpl extends StampServiceImpl {
             }
 
             PdfStampUtil pdfUtil = new PdfStampUtil();
-            // todo 验签名，验签章待实现
             StampVerify verify = pdfUtil.verifySign(file.getBytes());
 
             PdfStampVerifyResTo to = new PdfStampVerifyResTo();

@@ -1,0 +1,65 @@
+{
+  "msg": "操作成功",
+  "code": 200,
+  "data": [
+    {
+      "name": "System",
+      "path": "/system",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统管理",
+        "icon": "system",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "User",
+          "path": "user",
+          "hidden": false,
+          "component": "system/user/index",
+          "meta": {
+            "title": "用户管理",
+            "icon": "user",
+            "noCache": false
+          }
+        },
+        {
+          "name": "GenStamp",
+          "path": "genStamp",
+          "hidden": false,
+          "component": "system/genStamp/index",
+          "meta": {
+            "title": "制图管理",
+            "icon": "user",
+            "noCache": false
+          }
+        },
+        {
+          "name": "Tool",
+          "path": "tool",
+          "hidden": false,
+          "component": "system/tool/index",
+          "meta": {
+            "title": "小工具合集",
+            "icon": "user",
+            "noCache": false
+          }
+        },
+        {
+          "name": "ToolForm",
+          "path": "toolForm",
+          "hidden": false,
+          "component": "system/tool/indexFormCreate",
+          "meta": {
+            "title": "表单合集",
+            "icon": "user",
+            "noCache": false
+          }
+        }
+      ]
+    }
+  ]
+}

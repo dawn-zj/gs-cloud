@@ -1,6 +1,9 @@
 package com.gs.webserver.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.gs.common.exception.BaseException;
+import com.gs.common.exception.NetGSRuntimeException;
+import com.gs.webserver.entity.to.response.ResponseTo;
 import com.gs.webserver.util.IpUtil;
 import com.gs.webserver.util.ServletUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -47,18 +50,29 @@ public class LogAspect {
 			String url = ServletUtil.getRequest().getRequestURI();
 			Object[] args = proceedingJoinPoint.getArgs();
 
-			String msg = "操作成功";
-			try {
-				String jsonString = JSON.toJSONString(args);
-				// 结果
-				logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, jsonString);
-			} catch (Throwable ex) {
-				logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, "");
+			if (url.indexOf("/log/get") == -1) {
+				String msg = "操作成功";
+				try {
+					String jsonString = JSON.toJSONString(args);
+					// 结果
+					logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, jsonString);
+				} catch (Throwable ex) {
+					logger.debug("[操作] [{}] [{}] [{}] [{}] [{}]", ip, url, className + "." + methodName + "()", msg, "");
+				}
 			}
-
 			result = proceedingJoinPoint.proceed();
 		} catch (Throwable ex) {
 			logger.error(ex.getMessage(), ex);
+
+			String errMsg = "系统内部错误";
+			if (ex instanceof BaseException) {
+				BaseException be = (BaseException) ex;
+				errMsg = be.getErrMsg();
+			} else if (ex instanceof NetGSRuntimeException) {
+				NetGSRuntimeException be = (NetGSRuntimeException) ex;
+				errMsg = be.getErrMsg();
+			}
+			result = ResponseTo.error(errMsg);
 		}
 		return result;
 

@@ -90,4 +90,8 @@ public class PhotoTo {
      */
     private Integer numberMarginBottom;
 
+    /**
+     * 十六进制颜色
+     */
+    private String color;
 }

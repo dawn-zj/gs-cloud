@@ -55,7 +55,7 @@ import drag from './drag/index2'
 import dynamicTable from './dynamic/index'
 import CryptoSm3 from './crypto/sm3'
 import CryptoCaesar from './crypto/caesar'
-import { list } from '@/api/tool/tool'
+import { listTool } from '@/api/tool/tool'
 
 export default {
   name: 'Index',
@@ -79,22 +79,9 @@ export default {
   },
   methods: {
     list() {
-      list().then(res => {
+      listTool().then(res => {
         this.tabPaneArr = res.data.tabPaneArr
-        this.tabPaneArr.forEach((item, index) => {
-          var event = item.event
-          if (event) {
-            event.forEach((item, index) => {
-              this.newFunction(item.funcName, item.funcParams, item.funcScript)
-            })
-          }
-        })
       })
-    },
-    callMethod(methodName, formData) {
-      if (typeof this[methodName] === 'function') {
-        this[methodName](formData)
-      }
     }
   }
 }
